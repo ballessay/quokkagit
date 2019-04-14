@@ -11,8 +11,8 @@ CLogModel::CLogModel(const qtgit::vLogEntries& log, QObject* pParent)
 
 void CLogModel::SetLog(const qtgit::vLogEntries& log)
 {
-  beginResetModel();
   m_log = log;
+  beginResetModel();
   endResetModel();
 }
 
@@ -120,9 +120,9 @@ CFileLogModel::CFileLogModel(const vFiles& log, QObject* pParent)
 
 void CFileLogModel::SetLog(const vFiles& log)
 {
-  //beginResetModel();
-  //m_log = log;
-  //endResetModel();
+  m_log = log;
+  beginResetModel();
+  endResetModel();
 }
 
 int CFileLogModel::rowCount(const QModelIndex&) const

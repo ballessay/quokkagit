@@ -39,7 +39,4 @@ CLogSearchContextMenu::CLogSearchContextMenu(QWidget* parent)
   AddAction(qtgit::SLogEntry::author, qtgit::SLogEntry::Author, true);
   AddAction(qtgit::SLogEntry::message, qtgit::SLogEntry::Message, false);
   AddAction(qtgit::SLogEntry::commitDate, qtgit::SLogEntry::CommitDate, true);
-
-  QList<QAction*> a = actions();
-  int i = a.size();
 }

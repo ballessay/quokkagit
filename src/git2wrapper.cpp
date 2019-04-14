@@ -72,23 +72,7 @@ CGit2Wrapper::vBranches CGit2Wrapper::Branches() const
 
 qtgit::vLogEntries CGit2Wrapper::Log(int branch) const
 {
-//  qtgit::vLogEntries entries;
-
   vBranches b = Branches();
-//  if (branch >= 0 && branch < b.size())
-//  {
-//    git_oid oid = b.at(branch).second;
-
-//    git::RevWalker walk =  m_repo.rev_walker();
-//    walk.sort(git::revwalker::sorting::topological /*|
-//              git::revwalker::sorting::reverse*/);
-//    //walk.push(oid);
-//    walk.push(oid);
-//    while (auto commit = walk.next())
-//    {
-//      entries.push_back(qtgit::SLogEntry::FromCommit(commit));
-//    }
-//  }
 
   return Log(branch, b);
 }
@@ -259,46 +243,39 @@ git::Diff CGit2Wrapper::find_diff(git::Repository const & repo, git::Tree & t1, 
 //  }
 //}
 
-void CGit2Wrapper::DiffWithParent(int index, const qtgit::vLogEntries& entries)
+CGit2Wrapper::vDeltas CGit2Wrapper::DiffWithParent(int index, const qtgit::vLogEntries& entries)
 {
+  vDeltas deltas;
+
   if(index > 0 ||
      static_cast<qtgit::vLogEntries::size_type>(index) < entries.size())
   {
-    m_currentEntry = entries.at(static_cast<qtgit::vLogEntries::size_type>(index));
+    qtgit::SLogEntry entry = entries.at(static_cast<qtgit::vLogEntries::size_type>(index));
 
-    git_oid oid = m_currentEntry.oid();
+    git_oid oid = entry.oid();
 
     git::Commit commit = m_repo.commit_lookup(oid);
 
-    //git::Object obj = git::revparse_single(m_repo, entry.sSha.toUtf8().constData());
-
-    git::Tree tree1 = commit.tree(); //resolve_to_tree(m_repo, entry.sSha);
+    git::Tree tree1 = commit.tree();
 
     size_t n = commit.parents_num();
-    if(n == 0) return;
+    if(n == 0) return deltas;
 
     git_oid parent_oid = commit.parent_id(0);
 
     git::Commit parentCommit = m_repo.commit_lookup(parent_oid);
 
-    //git::Object obj2 = git::revparse_single(m_repo, git::id_to_str(parentCommit.id()).data());
-
-    //QString parentId(QString::fromStdString(git::id_to_str(parentCommit.id())));
     git::Tree tree2 = parentCommit.tree(); // resolve_to_tree(m_repo, parentId);
 
     git_diff_options opts;
     git_diff_init_options(&opts, GIT_DIFF_OPTIONS_VERSION);
     git::Diff diff = m_repo.diff(tree1, tree2, opts);
-    //git::Diff::Stats stats = diff.stats();
-
 
     CFileLogModel::vFiles files;
 
-    auto callback = [this, &files](git_diff_delta const & delta, git_diff_hunk const &, git_diff_line const &) {
+    auto callback = [this, &files, &deltas](git_diff_delta const & delta, git_diff_hunk const &, git_diff_line const &) {
 
         QString sPath(QString::fromLocal8Bit(delta.new_file.path));
-
-        //m_files.append(sPath);
 
         QString status;
         switch (delta.status)
@@ -330,37 +307,24 @@ void CGit2Wrapper::DiffWithParent(int index, const qtgit::vLogEntries& entries)
 
         files.push_back(std::make_pair(status, sPath));
 
-        QString sId(git::id_to_str(delta.new_file.id).c_str());
-
-        m_currentDeltas.push_back(std::make_pair(delta, sPath));
-
-//        git::Object obj = m_repo.revparse_single(sId.toUtf8().constData());
-
-//        QString message = QString("%1 - %2")
-//                            .arg(git_object_type2string(obj.type()))
-//                            .arg(QString::fromStdString(git::id_to_str(obj.id())));
-
-//        emit Message(message);
-
-        //emit NewFile(m_files);
+        deltas.push_back(std::make_pair(delta, sPath));
     };
-
-    m_currentDeltas.clear();
-    //m_files.clear();
 
     diff.print(git::diff::format::name_only, callback);
 
     emit NewFiles(files);
   }
+
+  return deltas;
 }
 
-void CGit2Wrapper::DiffBlobs(int deltaIndex)
+void CGit2Wrapper::DiffBlobs(int deltaIndex, const vDeltas& deltas)
 {
   if(deltaIndex < 0) return;
 
   static const QString c_msgTempl("Size: %1");
-  git_diff_delta delta = m_currentDeltas.at(static_cast<size_t>(deltaIndex)).first;
-  const QString sPath = m_currentDeltas.at(static_cast<size_t>(deltaIndex)).second;
+  git_diff_delta delta = deltas.at(static_cast<size_t>(deltaIndex)).first;
+  const QString sPath = deltas.at(static_cast<size_t>(deltaIndex)).second;
 
   if (GIT_DELTA_MODIFIED == delta.status ||
       GIT_DELTA_RENAMED == delta.status)

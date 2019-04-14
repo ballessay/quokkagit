@@ -120,7 +120,7 @@ void CMainWindow::LogItemSelected(int index)
 
   m_pUi->logTableView->setCurrentIndex(m_pLogModel->index(index, 0));
 
-  m_git.DiffWithParent(index, m_pLogModel->Log());
+  m_deltas = m_git.DiffWithParent(index, m_pLogModel->Log());
 }
 
 void CMainWindow::LogItemSelected2(const QModelIndex& index)
@@ -135,7 +135,7 @@ void CMainWindow::FileSelected(const QModelIndex& index)
 {
   //QModelIndex i = m_logProxy->mapToSource(index);
 
-  m_git.DiffBlobs(index.row());
+  m_git.DiffBlobs(index.row(), m_deltas);
 }
 
 void CMainWindow::ToggleColumn(int id, bool enabled)

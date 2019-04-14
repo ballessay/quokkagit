@@ -32,6 +32,7 @@ private:
   qtgit::vLogEntries m_log;
   QFont m_font;
   int m_columnWidth;
+  int padding;
 };
 
 

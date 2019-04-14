@@ -45,7 +45,7 @@ class CGit2Wrapper : public QObject
 
 public:
   using vBranches = std::vector<std::pair<QString, git_oid>>;
-
+  using vDeltas = std::vector<std::pair<git_diff_delta, QString>>;
   CGit2Wrapper(const QString& sPath);
 
   bool Initialize();
@@ -55,14 +55,11 @@ public:
 
   vBranches Branches() const;
 
-  //qtgit::vLogEntries Log() const { return m_log; }
   qtgit::vLogEntries Log(int branch) const;
   qtgit::vLogEntries Log(int branch, const vBranches& b) const;
-  //void DiffWithParent(int index);
-  void DiffWithParent(int index, const qtgit::vLogEntries& entries);
-  //QStringList Files() const { return m_files; }
+  vDeltas DiffWithParent(int index, const qtgit::vLogEntries& entries);
 
-  void DiffBlobs(int deltaIndex);
+  void DiffBlobs(int deltaIndex, const vDeltas& deltas);
 
 signals:
   void NewFile(const QStringList& list);
@@ -75,10 +72,7 @@ private:
 
 private:
   git::Repository m_repo;
-  //qtgit::vLogEntries m_log;
-  //QStringList m_files;
-  qtgit::SLogEntry m_currentEntry;
-  std::vector<std::pair<git_diff_delta, QString>> m_currentDeltas;
+  //vDeltas m_currentDeltas;
   std::vector<CKdiff3> m_diffs;
 };
 

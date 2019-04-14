@@ -5,6 +5,7 @@
 #include <QMenu>
 #include "debuglogdialog.h"
 #include "logmodel.h"
+#include "git2wrapper.h"
 
 class CGit2Wrapper;
 class CLogModel;
@@ -51,6 +52,7 @@ private:
   CFileLogModel* m_logFileModel;
   CLogFilterProxyModel* m_logProxy;
   CDebugLogDialog m_dbgLogDialog;
+  CGit2Wrapper::vDeltas m_deltas;
 };
 
 #endif // MAINWINDOW_H
