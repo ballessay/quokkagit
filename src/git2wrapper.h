@@ -59,6 +59,7 @@ public:
   qtgit::vLogEntries Log(int branch) const;
   qtgit::vLogEntries Log(int branch, const vBranches& b) const;
   void DiffWithParent(int index);
+  void DiffWithParent(int index, const qtgit::vLogEntries& entries);
   QStringList Files() const { return m_files; }
 
   void DiffBlobs(int deltaIndex);

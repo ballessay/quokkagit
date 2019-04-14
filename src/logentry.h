@@ -2,6 +2,7 @@
 #define LOGENTRY_H
 
 //#include "git2cpp/commit.h"
+#include "git2cpp/id_to_str.h"
 #include <QString>
 #include <QStringList>
 #include <QDateTime>
@@ -39,6 +40,8 @@ namespace qtgit
     static const char* authorDate;
 
     static SLogEntry FromCommit(const git::Commit& commit);
+
+    git_oid oid() const;
 
     QString sSha;
     QString sSummary;

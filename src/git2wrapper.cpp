@@ -168,10 +168,106 @@ git::Diff CGit2Wrapper::find_diff(git::Repository const & repo, git::Tree & t1, 
 
 void CGit2Wrapper::DiffWithParent(int index)
 {
+  DiffWithParent(index, m_log);
+//  if(index > 0 ||
+//     static_cast<qtgit::vLogEntries::size_type>(index) < m_log.size())
+//  {
+//    m_currentEntry = m_log.at(static_cast<qtgit::vLogEntries::size_type>(index));
+
+//    git_oid oid = git::str_to_id(m_currentEntry.sSha.toUtf8().constData());
+
+//    git::Commit commit = m_repo.commit_lookup(oid);
+
+//    //git::Object obj = git::revparse_single(m_repo, entry.sSha.toUtf8().constData());
+
+//    git::Tree tree1 = commit.tree(); //resolve_to_tree(m_repo, entry.sSha);
+
+//    size_t n = commit.parents_num();
+//    if(n == 0) return;
+
+//    git_oid parent_oid = commit.parent_id(0);
+
+//    git::Commit parentCommit = m_repo.commit_lookup(parent_oid);
+
+//    //git::Object obj2 = git::revparse_single(m_repo, git::id_to_str(parentCommit.id()).data());
+
+//    //QString parentId(QString::fromStdString(git::id_to_str(parentCommit.id())));
+//    git::Tree tree2 = parentCommit.tree(); // resolve_to_tree(m_repo, parentId);
+
+//    git_diff_options opts;
+//    git_diff_init_options(&opts, GIT_DIFF_OPTIONS_VERSION);
+//    git::Diff diff = m_repo.diff(tree1, tree2, opts);
+//    //git::Diff::Stats stats = diff.stats();
+
+
+//    CFileLogModel::vFiles files;
+
+//    auto callback = [this, &files](git_diff_delta const & delta, git_diff_hunk const &, git_diff_line const &) {
+
+//        QString sPath(QString::fromLocal8Bit(delta.new_file.path));
+
+//        m_files.append(sPath);
+
+//        QString status;
+//        switch (delta.status)
+//        {
+//        case GIT_DELTA_UNMODIFIED:
+//          status = "unmodified"; break;
+//        case GIT_DELTA_ADDED:
+//          status = "added"; break;
+//        case GIT_DELTA_DELETED:
+//          status = "deleted"; break;
+//        case GIT_DELTA_MODIFIED:
+//          status = "modified"; break;
+//        case GIT_DELTA_RENAMED:
+//          status = "renamed"; break;
+//        case GIT_DELTA_COPIED:
+//          status = "copied"; break;
+//        case GIT_DELTA_IGNORED:
+//          status = "ignored"; break;
+//        case GIT_DELTA_UNTRACKED:
+//          status = "untracked"; break;
+//        case GIT_DELTA_TYPECHANGE:
+//          status = "typechange"; break;
+//        case GIT_DELTA_UNREADABLE:
+//          status = "UNREADABLE"; break;
+//        case GIT_DELTA_CONFLICTED:
+//          status = "conflict"; break;
+//          break;
+//        }
+
+//        files.push_back(std::make_pair(status, sPath));
+
+//        QString sId(QString::fromStdString(git::id_to_str(delta.new_file.id)));
+
+//        m_currentDeltas.push_back(std::make_pair(delta, sPath));
+
+////        git::Object obj = m_repo.revparse_single(sId.toUtf8().constData());
+
+////        QString message = QString("%1 - %2")
+////                            .arg(git_object_type2string(obj.type()))
+////                            .arg(QString::fromStdString(git::id_to_str(obj.id())));
+
+////        emit Message(message);
+
+//        emit NewFile(m_files);
+//    };
+
+//    m_currentDeltas.clear();
+//    m_files.clear();
+
+//    diff.print(git::diff::format::name_only, callback);
+
+//    emit NewFiles(files);
+//  }
+}
+
+void CGit2Wrapper::DiffWithParent(int index, const qtgit::vLogEntries& entries)
+{
   if(index > 0 ||
-     static_cast<qtgit::vLogEntries::size_type>(index) < m_log.size())
+     static_cast<qtgit::vLogEntries::size_type>(index) < entries.size())
   {
-    m_currentEntry = m_log.at(static_cast<qtgit::vLogEntries::size_type>(index));
+    m_currentEntry = entries.at(static_cast<qtgit::vLogEntries::size_type>(index));
 
     git_oid oid = git::str_to_id(m_currentEntry.sSha.toUtf8().constData());
 

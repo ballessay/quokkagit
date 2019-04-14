@@ -123,12 +123,16 @@ void CMainWindow::LogItemSelected(int index)
 
 void CMainWindow::LogItemSelected2(const QModelIndex& index)
 {
-  LogItemSelected(index.row());
+  QModelIndex i = m_logProxy->mapToSource(index);
+
+  LogItemSelected(i.row());
 }
 
 void CMainWindow::FileSelected(const QModelIndex& index)
 {
-  m_git.DiffBlobs(index.row());
+  QModelIndex i = m_logProxy->mapToSource(index);
+
+  m_git.DiffBlobs(i.row());
 }
 
 void CMainWindow::ToggleColumn(int id, bool enabled)
@@ -145,9 +149,6 @@ void CMainWindow::ToggleColumn(int id, bool enabled)
 
 void CMainWindow::AddFiles(const CFileLogModel::vFiles& files)
 {
-  //m_pUi->pFilesTableView->clear();
-  //m_pUi->pFilesListWidget->addItems(files);
-
   if(m_logFileModel)
     m_logFileModel->deleteLater();
   m_logFileModel = new CFileLogModel(files, this);

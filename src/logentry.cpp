@@ -41,4 +41,9 @@ namespace qtgit
 
     return entry;
   }
+
+  git_oid SLogEntry::oid() const
+  {
+    return git::str_to_id(sSha.toUtf8().constData());
+  }
 }
