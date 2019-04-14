@@ -51,3 +51,14 @@ target_link_libraries(${PROJECT_NAME}
     Qt5::Widgets
     Qt5::Core
 )
+
+#include(CPack)
+include(GNUInstallDirs)
+
+install(TARGETS ${PROJECT_NAME}
+  EXPORT ${PROJECT_NAME}-targets
+  ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+)
+

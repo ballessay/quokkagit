@@ -15,5 +15,5 @@ CDebugLogDialog::~CDebugLogDialog()
 
 void CDebugLogDialog::AddMessage(QString msg)
 {
-  m_ui->logTextEdit->append(msg + "\n");
+  m_ui->logTextEdit->append(msg);
 }

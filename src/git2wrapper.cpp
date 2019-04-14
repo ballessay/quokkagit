@@ -20,11 +20,11 @@ bool CGit2Wrapper::Initialize()
 {
   int error = 0;
 
+  /*
   if (m_log.empty())
   {
     git::RevWalker walk =  m_repo.rev_walker();
-    walk.sort(git::revwalker::sorting::topological /*|
-              git::revwalker::sorting::reverse*/);
+    walk.sort(git::revwalker::sorting::topological);
     //walk.push(oid);
     walk.push_head();
     while (auto commit = walk.next())
@@ -32,6 +32,7 @@ bool CGit2Wrapper::Initialize()
       m_log.push_back(qtgit::SLogEntry::FromCommit(commit));
     }
   }
+  */
 
   return error != 0;
 }
@@ -39,8 +40,6 @@ bool CGit2Wrapper::Initialize()
 void CGit2Wrapper::SetHead(const QString& sHead)
 {
   m_repo.set_head(sHead.toUtf8().constData());
-
-  m_log.clear();
 
   Initialize();
 
@@ -103,9 +102,7 @@ qtgit::vLogEntries CGit2Wrapper::Log(int branch, const CGit2Wrapper::vBranches& 
     git_oid oid = b.at(static_cast<vBranches::size_type>(branch)).second;
 
     git::RevWalker walk =  m_repo.rev_walker();
-    walk.sort(git::revwalker::sorting::topological /*|
-              git::revwalker::sorting::reverse*/);
-    //walk.push(oid);
+    walk.sort(git::revwalker::sorting::topological);
     walk.push(oid);
     while (auto commit = walk.next())
     {
@@ -166,9 +163,9 @@ git::Diff CGit2Wrapper::find_diff(git::Repository const & repo, git::Tree & t1, 
   }
 }
 
-void CGit2Wrapper::DiffWithParent(int index)
-{
-  DiffWithParent(index, m_log);
+//void CGit2Wrapper::DiffWithParent(int index)
+//{
+//  DiffWithParent(index, m_log);
 //  if(index > 0 ||
 //     static_cast<qtgit::vLogEntries::size_type>(index) < m_log.size())
 //  {
@@ -260,7 +257,7 @@ void CGit2Wrapper::DiffWithParent(int index)
 
 //    emit NewFiles(files);
 //  }
-}
+//}
 
 void CGit2Wrapper::DiffWithParent(int index, const qtgit::vLogEntries& entries)
 {
@@ -269,7 +266,7 @@ void CGit2Wrapper::DiffWithParent(int index, const qtgit::vLogEntries& entries)
   {
     m_currentEntry = entries.at(static_cast<qtgit::vLogEntries::size_type>(index));
 
-    git_oid oid = git::str_to_id(m_currentEntry.sSha.toUtf8().constData());
+    git_oid oid = m_currentEntry.oid();
 
     git::Commit commit = m_repo.commit_lookup(oid);
 
@@ -301,7 +298,7 @@ void CGit2Wrapper::DiffWithParent(int index, const qtgit::vLogEntries& entries)
 
         QString sPath(QString::fromLocal8Bit(delta.new_file.path));
 
-        m_files.append(sPath);
+        //m_files.append(sPath);
 
         QString status;
         switch (delta.status)
@@ -333,7 +330,7 @@ void CGit2Wrapper::DiffWithParent(int index, const qtgit::vLogEntries& entries)
 
         files.push_back(std::make_pair(status, sPath));
 
-        QString sId(QString::fromStdString(git::id_to_str(delta.new_file.id)));
+        QString sId(git::id_to_str(delta.new_file.id).c_str());
 
         m_currentDeltas.push_back(std::make_pair(delta, sPath));
 
@@ -345,11 +342,11 @@ void CGit2Wrapper::DiffWithParent(int index, const qtgit::vLogEntries& entries)
 
 //        emit Message(message);
 
-        emit NewFile(m_files);
+        //emit NewFile(m_files);
     };
 
     m_currentDeltas.clear();
-    m_files.clear();
+    //m_files.clear();
 
     diff.print(git::diff::format::name_only, callback);
 

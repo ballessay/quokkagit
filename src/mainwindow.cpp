@@ -11,7 +11,9 @@ CMainWindow::CMainWindow(CGit2Wrapper& git, QWidget *parent) :
   QMainWindow(parent),
   m_pUi(new Ui::CMainWindow),
   m_git(git),
-  m_pLogModel(new CLogModel(git.Log(), this))
+  m_pLogModel(new CLogModel(git.Log(0), this)),
+  m_logFileModel(nullptr),
+  m_logProxy(nullptr)
 {
   m_pUi->setupUi(this);
 
@@ -114,25 +116,26 @@ void CMainWindow::LogItemSelected(int index)
 
   m_pUi->pMessageTextEdit->setText(msg);
 
-  m_git.DiffWithParent(index);
-
   m_pLogModel->SetColumnWidth(m_pUi->logTableView->columnWidth(qtgit::SLogEntry::Summary));
 
   m_pUi->logTableView->setCurrentIndex(m_pLogModel->index(index, 0));
+
+  m_git.DiffWithParent(index, m_pLogModel->Log());
 }
 
 void CMainWindow::LogItemSelected2(const QModelIndex& index)
 {
   QModelIndex i = m_logProxy->mapToSource(index);
+  //QModelIndex i2 = m_logProxy->mapFromSource(index);
 
   LogItemSelected(i.row());
 }
 
 void CMainWindow::FileSelected(const QModelIndex& index)
 {
-  QModelIndex i = m_logProxy->mapToSource(index);
+  //QModelIndex i = m_logProxy->mapToSource(index);
 
-  m_git.DiffBlobs(i.row());
+  m_git.DiffBlobs(index.row());
 }
 
 void CMainWindow::ToggleColumn(int id, bool enabled)
@@ -150,10 +153,20 @@ void CMainWindow::ToggleColumn(int id, bool enabled)
 void CMainWindow::AddFiles(const CFileLogModel::vFiles& files)
 {
   if(m_logFileModel)
+  {
     m_logFileModel->deleteLater();
+    m_logFileModel = nullptr;
+  }
+
   m_logFileModel = new CFileLogModel(files, this);
 
   m_pUi->pFilesTableView->setModel(m_logFileModel);
+
+//  else
+//  {
+//    m_logFileModel->SetLog(files);
+//  }
+    //
 
   m_pUi->pFilesTableView->resizeColumnToContents(0);
 //  m_pUi->pFilesTableView->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
@@ -183,14 +196,17 @@ void CMainWindow::on_branchSelectionToolButton_clicked()
     {
       qtgit::vLogEntries entries = m_git.Log(d.currentSelection(), b);
 
-      if (m_pLogModel)
-        m_pLogModel->deleteLater();
+      if (!m_pLogModel)
+      {
+          m_pLogModel = new CLogModel(entries, this);
 
-      m_pLogModel = new CLogModel(entries, this);
+          m_logProxy->setSourceModel(m_pLogModel);
 
-      m_logProxy->setSourceModel(m_pLogModel);
-
-      m_pUi->logTableView->setModel(m_logProxy);
+          m_pUi->logTableView->setModel(m_logProxy);
+      }
+      else {
+        m_pLogModel->SetLog(entries);
+      }
 
       m_pUi->branchLabel->setText(b.at(index).first);
     }

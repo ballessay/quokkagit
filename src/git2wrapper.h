@@ -55,12 +55,12 @@ public:
 
   vBranches Branches() const;
 
-  qtgit::vLogEntries Log() const { return m_log; }
+  //qtgit::vLogEntries Log() const { return m_log; }
   qtgit::vLogEntries Log(int branch) const;
   qtgit::vLogEntries Log(int branch, const vBranches& b) const;
-  void DiffWithParent(int index);
+  //void DiffWithParent(int index);
   void DiffWithParent(int index, const qtgit::vLogEntries& entries);
-  QStringList Files() const { return m_files; }
+  //QStringList Files() const { return m_files; }
 
   void DiffBlobs(int deltaIndex);
 
@@ -75,8 +75,8 @@ private:
 
 private:
   git::Repository m_repo;
-  qtgit::vLogEntries m_log;
-  QStringList m_files;
+  //qtgit::vLogEntries m_log;
+  //QStringList m_files;
   qtgit::SLogEntry m_currentEntry;
   std::vector<std::pair<git_diff_delta, QString>> m_currentDeltas;
   std::vector<CKdiff3> m_diffs;
