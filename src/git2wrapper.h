@@ -51,11 +51,13 @@ public:
   bool Initialize();
 
   void SetHead(const QString& sHead);
+  QString HeadRef() const;
 
   vBranches Branches() const;
 
   qtgit::vLogEntries Log() const { return m_log; }
   qtgit::vLogEntries Log(int branch) const;
+  qtgit::vLogEntries Log(int branch, const vBranches& b) const;
   void DiffWithParent(int index);
   QStringList Files() const { return m_files; }
 

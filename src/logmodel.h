@@ -5,6 +5,8 @@
 #include <QAbstractTableModel>
 #include <QSortFilterProxyModel>
 #include <QFont>
+#include <QList>
+#include <QAction>
 #include <vector>
 
 class CLogModel : public QAbstractTableModel
@@ -37,13 +39,15 @@ class CLogFilterProxyModel : public QSortFilterProxyModel
 public:
    CLogFilterProxyModel(QObject* parent = nullptr);
 
-   void SetFilter(const QString& filter) { m_filter = filter; invalidateFilter();}
+   void SetFilter(const QString& filter, const QList<QAction*>& flags)
+   { m_filter = filter; m_flags = flags; invalidateFilter();}
 
 protected:
     bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
 
 private:
     QString m_filter;
+    QList<QAction*> m_flags;
 };
 
 

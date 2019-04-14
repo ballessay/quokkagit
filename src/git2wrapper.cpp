@@ -45,7 +45,12 @@ void CGit2Wrapper::SetHead(const QString& sHead)
   Initialize();
 
   vBranches b = Branches();
+}
 
+QString CGit2Wrapper::HeadRef() const
+{
+  git::Reference ref = m_repo.head();
+  return ref.name();
 }
 
 CGit2Wrapper::vBranches CGit2Wrapper::Branches() const
@@ -68,12 +73,34 @@ CGit2Wrapper::vBranches CGit2Wrapper::Branches() const
 
 qtgit::vLogEntries CGit2Wrapper::Log(int branch) const
 {
-  qtgit::vLogEntries entries;
+//  qtgit::vLogEntries entries;
 
   vBranches b = Branches();
-  if (branch >= 0 && branch < b.size())
+//  if (branch >= 0 && branch < b.size())
+//  {
+//    git_oid oid = b.at(branch).second;
+
+//    git::RevWalker walk =  m_repo.rev_walker();
+//    walk.sort(git::revwalker::sorting::topological /*|
+//              git::revwalker::sorting::reverse*/);
+//    //walk.push(oid);
+//    walk.push(oid);
+//    while (auto commit = walk.next())
+//    {
+//      entries.push_back(qtgit::SLogEntry::FromCommit(commit));
+//    }
+//  }
+
+  return Log(branch, b);
+}
+
+qtgit::vLogEntries CGit2Wrapper::Log(int branch, const CGit2Wrapper::vBranches& b) const
+{
+  qtgit::vLogEntries entries;
+
+  if (branch >= 0 && branch < static_cast<int>(b.size()))
   {
-    git_oid oid = b.at(branch).second;
+    git_oid oid = b.at(static_cast<vBranches::size_type>(branch)).second;
 
     git::RevWalker walk =  m_repo.rev_walker();
     walk.sort(git::revwalker::sorting::topological /*|
@@ -253,10 +280,6 @@ void CGit2Wrapper::DiffBlobs(int deltaIndex)
     QByteArray ba(reinterpret_cast<const char*>(blobNew.content()),
                   static_cast<int>(blobNew.size()));
 
-    QString msg = c_msgTempl.arg(blobNew.size()).arg(QString::fromUtf8(ba));
-
-//    emit Message(msg);
-
     git::Blob blobOld = m_repo.blob_lookup(delta.old_file.id);
 
     QString hashOld(QString::fromStdString(git::id_to_str(delta.old_file.id, 10)));
@@ -271,33 +294,10 @@ void CGit2Wrapper::DiffBlobs(int deltaIndex)
 
     connect(&m_diffs.back(), &CKdiff3::Message,
             this, &CGit2Wrapper::Message);
-//    QTemporaryFile fOld;
-//    if(fOld.open())
-//    {
-//      fOld.setAutoRemove(true);
-//      fOld.write(ba2);
-//      fOld.flush();
-//    }
-
-//    QStringList args = QStringList() << fOld.fileName() << fNew.fileName();
-//    QProcess::execute(QString("kdiff3"), args);
-//    msg = c_msgTempl.arg(blobOld.size()).arg(QString::fromUtf8(ba2));
-
-//    emit Message(msg);
   }
 }
 
 
-
-//QStringList CGit2Wrapper::Files(int index)
-//{
-//}
-
-
-//qtgit::vLogEntries CGit2Wrapper::Log() const
-//{
-//  return m_log;
-//}
 
 CKdiff3::CKdiff3(const QByteArray& baOld, const QByteArray baNew)
   : m_process(new QProcess),

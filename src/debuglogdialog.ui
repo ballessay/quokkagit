@@ -2,6 +2,9 @@
 <ui version="4.0">
  <class>CDebugLogDialog</class>
  <widget class="QDialog" name="CDebugLogDialog">
+  <property name="windowModality">
+   <enum>Qt::WindowModal</enum>
+  </property>
   <property name="geometry">
    <rect>
     <x>0</x>

@@ -3,6 +3,7 @@
 #include "logmodel.h"
 #include "branchselectiondialog.h"
 #include "logcolumnvisibilitymenu.h"
+#include "logcontextmenu.h"
 #include "git2wrapper.h"
 #include <QHeaderView>
 
@@ -13,6 +14,8 @@ CMainWindow::CMainWindow(CGit2Wrapper& git, QWidget *parent) :
   m_pLogModel(new CLogModel(git.Log(), this))
 {
   m_pUi->setupUi(this);
+
+  m_pUi->branchLabel->setText(m_git.HeadRef());
 
   m_logProxy = new CLogFilterProxyModel(this);
   m_logProxy->setSourceModel(m_pLogModel);
@@ -38,8 +41,8 @@ CMainWindow::CMainWindow(CGit2Wrapper& git, QWidget *parent) :
     }
   }
 
-//  connect(m_pUi->logTableView, &QTableView::activated,
-//          this, &CMainWindow::LogItemSelected2);
+  connect(m_pUi->logTableView, &QTableView::activated,
+          this, &CMainWindow::LogItemSelected2);
 
   connect(m_pUi->logTableView, &QTableView::clicked,
           this, &CMainWindow::LogItemSelected2);
@@ -47,11 +50,12 @@ CMainWindow::CMainWindow(CGit2Wrapper& git, QWidget *parent) :
   connect(m_pUi->logTableView, &QTableView::entered,
           this, &CMainWindow::LogItemSelected2);
 
-//  connect(m_pUi->logTableView, &QTableView::pressed,
-//          this, &CMainWindow::LogItemSelected2);
+  connect(m_pUi->logTableView, &QTableView::pressed,
+          this, &CMainWindow::LogItemSelected2);
 
   CLogColumnVisibilityMenu* menu = new CLogColumnVisibilityMenu(this);
   m_pUi->tableViewToolButton->setMenu(menu);
+
   connect(m_pUi->tableViewToolButton, &QToolButton::clicked,
           m_pUi->tableViewToolButton, &QToolButton::showMenu);
 
@@ -61,10 +65,33 @@ CMainWindow::CMainWindow(CGit2Wrapper& git, QWidget *parent) :
   menu->EmitState();
 
   m_pUi->logTableView->setContextMenuPolicy(Qt::ActionsContextMenu);
-  for (auto action : menu->actions())
+  CLogContextMenu* pMenu = new CLogContextMenu(this);
+  for (auto action : pMenu->actions())
   {
     m_pUi->logTableView->addAction(action);
   }
+
+  m_pUi->pFilesTableView->setContextMenuPolicy(Qt::ActionsContextMenu);
+  CLogFilesContextMenu* pFileMenu = new CLogFilesContextMenu(this);
+  for (auto& action : pFileMenu->actions())
+  {
+    auto dispatch = [this, action]() {
+      if ("Diff" == action->text())
+        FileSelected(m_pUi->pFilesTableView->currentIndex());
+      else {
+        int notYet  = 0;
+      }
+    };
+    m_pUi->pFilesTableView->addAction(action);
+
+    connect(action, &QAction::triggered, dispatch);
+  }
+
+  CLogSearchContextMenu* searchMenu = new CLogSearchContextMenu(this);
+  m_pUi->searchOptionsToolButton->setMenu(searchMenu);
+
+  connect(m_pUi->searchOptionsToolButton, &QToolButton::clicked,
+          m_pUi->searchOptionsToolButton, &QToolButton::showMenu);
 
   connect(&m_git, &CGit2Wrapper::NewFiles,
           this, &CMainWindow::AddFiles);
@@ -89,9 +116,9 @@ void CMainWindow::LogItemSelected(int index)
 
   m_git.DiffWithParent(index);
 
-  m_pUi->logTableView->setCurrentIndex(m_pLogModel->index(index, 0));
-
   m_pLogModel->SetColumnWidth(m_pUi->logTableView->columnWidth(qtgit::SLogEntry::Summary));
+
+  m_pUi->logTableView->setCurrentIndex(m_pLogModel->index(index, 0));
 }
 
 void CMainWindow::LogItemSelected2(const QModelIndex& index)
@@ -101,8 +128,6 @@ void CMainWindow::LogItemSelected2(const QModelIndex& index)
 
 void CMainWindow::FileSelected(const QModelIndex& index)
 {
-  const QString msg = m_pLogModel->data(m_pLogModel->index(index.row(), qtgit::SLogEntry::Sha)).toString();
-
   m_git.DiffBlobs(index.row());
 }
 
@@ -155,19 +180,25 @@ void CMainWindow::on_branchSelectionToolButton_clicked()
     int index = d.currentSelection();
     if(index >= 0 && index < b.size())
     {
-      qtgit::vLogEntries entries = m_git.Log(d.currentSelection());
+      qtgit::vLogEntries entries = m_git.Log(d.currentSelection(), b);
 
       if (m_pLogModel)
         m_pLogModel->deleteLater();
 
       m_pLogModel = new CLogModel(entries, this);
 
-      m_pUi->logTableView->setModel(m_pLogModel);
+      m_logProxy->setSourceModel(m_pLogModel);
+
+      m_pUi->logTableView->setModel(m_logProxy);
+
+      m_pUi->branchLabel->setText(b.at(index).first);
     }
   }
 }
 
 void CMainWindow::on_searchLineEdit_returnPressed()
 {
-  m_logProxy->SetFilter(m_pUi->searchLineEdit->text());
+  QList<QAction*> actions = m_pUi->searchOptionsToolButton->menu()->actions();
+
+  m_logProxy->SetFilter(m_pUi->searchLineEdit->text(), actions);
 }
