@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/">
+        <file>QTDark.stylesheet</file>
+        <file>added.png</file>
+        <file>modified.png</file>
+        <file>deleted.png</file>
+    </qresource>
+</RCC>

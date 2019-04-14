@@ -1,0 +1,56 @@
+#ifndef MAINWINDOW_H
+#define MAINWINDOW_H
+
+#include <QMainWindow>
+#include <QMenu>
+#include "debuglogdialog.h"
+#include "logmodel.h"
+
+class CGit2Wrapper;
+class CLogModel;
+class CFileLogModel;
+class CLogFilterProxyModel;
+namespace Ui {
+  class CMainWindow;
+}
+
+class CLogMenu : public QMenu
+{
+
+};
+
+class CMainWindow : public QMainWindow
+{
+  Q_OBJECT
+
+public:
+  explicit CMainWindow(CGit2Wrapper& git, QWidget *parent = nullptr);
+  ~CMainWindow();
+
+public slots:
+  void LogItemSelected(int row);
+  void LogItemSelected2(const QModelIndex& index);
+
+  void FileSelected(const QModelIndex& index);
+
+  void ToggleColumn(int id, bool enabled);
+
+  void AddFiles(const CFileLogModel::vFiles& files);
+
+  void AddMessage(QString msg);
+
+  void on_actionOpen_log_triggered();
+
+  void on_branchSelectionToolButton_clicked();
+  void on_searchLineEdit_returnPressed();
+
+private:
+  Ui::CMainWindow* m_pUi;
+  CGit2Wrapper& m_git;
+  CLogModel* m_pLogModel;
+  CFileLogModel* m_logFileModel;
+  CLogFilterProxyModel* m_logProxy;
+  CDebugLogDialog m_dbgLogDialog;
+};
+
+#endif // MAINWINDOW_H
