@@ -11,11 +11,25 @@ CMainWindow::CMainWindow(CGit2Wrapper& git, QWidget *parent) :
   QMainWindow(parent),
   m_pUi(new Ui::CMainWindow),
   m_git(git),
-  m_pLogModel(new CLogModel(git.Log(0), this)),
+  m_pLogModel(nullptr),
   m_logFileModel(nullptr),
   m_logProxy(nullptr)
 {
   m_pUi->setupUi(this);
+
+  QString head = m_git.HeadRef();
+  CGit2Wrapper::vBranches branches = m_git.Branches();
+  int index = 0;
+  for (const auto& branch : branches)
+  {
+    if(branch.first == head)
+      break;
+    else
+      ++index;
+  }
+
+
+  m_pLogModel = new CLogModel(git.Log(index, branches), this);
 
   m_pUi->branchLabel->setText(m_git.HeadRef());
 

@@ -26,10 +26,10 @@ signals:
   void Message(QString);
 
 public slots:
-  void Open(const QString& sFileNew,
-            const QString& sFileOld,
-            const QString& sHashNew,
-            const QString& sHashOld);
+  void Open(const QString& sFileOld,
+            const QString& sFileNew,
+            const QString& sHashOld,
+            const QString& sHashNew);
   void Finished(int exitCode);
 
 public:
@@ -55,7 +55,6 @@ public:
 
   vBranches Branches() const;
 
-  qtgit::vLogEntries Log(int branch) const;
   qtgit::vLogEntries Log(int branch, const vBranches& b) const;
   vDeltas DiffWithParent(int index, const qtgit::vLogEntries& entries);
 
