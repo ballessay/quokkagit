@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>QTortGit</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="../resources/resources.qrc">
+    <normaloff>:/git.png</normaloff>:/git.png</iconset>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout_2">
     <item row="0" column="0">
@@ -61,7 +65,11 @@
            <item row="0" column="2">
             <widget class="QToolButton" name="searchOptionsToolButton">
              <property name="text">
-              <string>...</string>
+              <string/>
+             </property>
+             <property name="icon">
+              <iconset resource="../resources/resources.qrc">
+               <normaloff>:/search.png</normaloff>:/search.png</iconset>
              </property>
             </widget>
            </item>
@@ -94,7 +102,11 @@
         <item row="0" column="2">
          <widget class="QToolButton" name="tableViewToolButton">
           <property name="text">
-           <string>...</string>
+           <string/>
+          </property>
+          <property name="icon">
+           <iconset resource="../resources/resources.qrc">
+            <normaloff>:/table-properties.png</normaloff>:/table-properties.png</iconset>
           </property>
           <property name="popupMode">
            <enum>QToolButton::DelayedPopup</enum>
@@ -159,7 +171,11 @@
         <item row="0" column="0">
          <widget class="QToolButton" name="branchSelectionToolButton">
           <property name="text">
-           <string>...</string>
+           <string/>
+          </property>
+          <property name="icon">
+           <iconset resource="../resources/resources.qrc">
+            <normaloff>:/tree.png</normaloff>:/tree.png</iconset>
           </property>
          </widget>
         </item>
@@ -228,6 +244,10 @@
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionQuit">
+   <property name="icon">
+    <iconset>
+     <normaloff>../resources/quit.png</normaloff>../resources/quit.png</iconset>
+   </property>
    <property name="text">
     <string>Quit</string>
    </property>
@@ -236,12 +256,18 @@
    </property>
   </action>
   <action name="actionOpen_log">
+   <property name="icon">
+    <iconset>
+     <normaloff>../resources/log.png</normaloff>../resources/log.png</iconset>
+   </property>
    <property name="text">
     <string>Open log ...</string>
    </property>
   </action>
  </widget>
- <resources/>
+ <resources>
+  <include location="../resources/resources.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>actionQuit</sender>

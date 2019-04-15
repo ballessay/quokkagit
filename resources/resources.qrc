@@ -4,5 +4,13 @@
         <file>added.png</file>
         <file>modified.png</file>
         <file>deleted.png</file>
+        <file>git-compare.png</file>
+        <file>tree.png</file>
+        <file>repository.png</file>
+        <file>table-properties.png</file>
+        <file>search.png</file>
+        <file>log.png</file>
+        <file>quit.png</file>
+        <file>git.png</file>
     </qresource>
 </RCC>
