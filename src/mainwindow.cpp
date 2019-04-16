@@ -1,7 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "logmodel.h"
-#include "branchselectiondialog.h"
+#include "dialogs/branchselectiondialog.h"
 #include "logcolumnvisibilitymenu.h"
 #include "logcontextmenu.h"
 #include "git2wrapper.h"

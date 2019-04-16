@@ -18,8 +18,8 @@ CLogFilesContextMenu::CLogFilesContextMenu(QWidget* parent)
   QAction* pAction = new QAction("Diff", this);
   addAction(pAction);
 
-  pAction = new QAction("Blame", this);
-  addAction(pAction);
+//  pAction = new QAction("Blame", this);
+//  addAction(pAction);
 }
 
 CLogSearchContextMenu::CLogSearchContextMenu(QWidget* parent)

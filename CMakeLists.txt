@@ -13,15 +13,15 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 add_executable(${PROJECT_NAME}
-  src/blamedialog.cpp
-  src/blamedialog.h
-  src/blamedialog.ui
-  src/branchselectiondialog.cpp
-  src/branchselectiondialog.h
-  src/branchselectiondialog.ui
-  src/debuglogdialog.cpp
-  src/debuglogdialog.h
-  src/debuglogdialog.ui
+  src/dialogs/blamedialog.cpp
+  src/dialogs/blamedialog.h
+  src/dialogs/blamedialog.ui
+  src/dialogs/branchselectiondialog.cpp
+  src/dialogs/branchselectiondialog.h
+  src/dialogs/branchselectiondialog.ui
+  src/dialogs/debuglogdialog.cpp
+  src/dialogs/debuglogdialog.h
+  src/dialogs/debuglogdialog.ui
   src/git2wrapper.cpp
   src/git2wrapper.h
   src/logcolumnvisibilitymenu.cpp

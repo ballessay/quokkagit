@@ -3,7 +3,7 @@
 
 #include <QMainWindow>
 #include <QMenu>
-#include "debuglogdialog.h"
+#include "dialogs/debuglogdialog.h"
 #include "logmodel.h"
 #include "git2wrapper.h"
 
