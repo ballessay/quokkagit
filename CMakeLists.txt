@@ -4,6 +4,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 
 add_subdirectory(3rd-party/libgit2cpp)
 
+# TODO: quokkagit
 project(qtgit)
 
 set(CMAKE_AUTOMOC ON)
