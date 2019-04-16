@@ -1,0 +1,3 @@
+[submodule "3rd-party/libgit2cpp"]
+	path = 3rd-party/libgit2cpp
+	url = https://github.com/ballessay/libgit2cpp.git
