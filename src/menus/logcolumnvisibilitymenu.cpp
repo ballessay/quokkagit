@@ -4,9 +4,9 @@
 
 namespace
 {
-  QAction* CreateAction(QMenu* parent, const QString& sName, int id, bool bChecked)
+  QAction* CreateAction(QMenu* parent, const QString& /*sName*/, int id, bool bChecked)
   {
-    QAction* action = new QAction(sName, parent);
+    QAction* action = new QAction(quokkagit::SLogEntry::c_strings[id], parent);
     action->setCheckable(true);
     action->setChecked(bChecked);
     action->setData(id);
@@ -22,15 +22,15 @@ CLogColumnVisibilityMenu::CLogColumnVisibilityMenu(QWidget* parent)
 //  QAction* action = new QAction(tr("Sha"), this);
 //  action->setCheckable(true);
 //  addAction(action);
-  AddAction(tr(qtgit::SLogEntry::sha), qtgit::SLogEntry::Sha, true);
-  AddAction(tr(qtgit::SLogEntry::summary), qtgit::SLogEntry::Summary, true);
-  AddAction(tr(qtgit::SLogEntry::message), qtgit::SLogEntry::Message, false);
-  AddAction(tr(qtgit::SLogEntry::commiter), qtgit::SLogEntry::Commiter, false);
-  AddAction(tr(qtgit::SLogEntry::commiterEmail), qtgit::SLogEntry::CommiterEmail, false);
-  AddAction(tr(qtgit::SLogEntry::commitDate), qtgit::SLogEntry::CommitDate, true);
-  AddAction(tr(qtgit::SLogEntry::author), qtgit::SLogEntry::Author, true);
-  AddAction(tr(qtgit::SLogEntry::authorEmail), qtgit::SLogEntry::AuthorEmail, false);
-  AddAction(tr(qtgit::SLogEntry::authorDate), qtgit::SLogEntry::AuthorDate, true);
+  AddAction(tr(quokkagit::SLogEntry::sha), quokkagit::SLogEntry::Sha, true);
+  AddAction(tr(quokkagit::SLogEntry::summary), quokkagit::SLogEntry::Summary, true);
+  AddAction(tr(quokkagit::SLogEntry::message), quokkagit::SLogEntry::Message, false);
+  AddAction(tr(quokkagit::SLogEntry::commiter), quokkagit::SLogEntry::Commiter, false);
+  AddAction(tr(quokkagit::SLogEntry::commiterEmail), quokkagit::SLogEntry::CommiterEmail, false);
+  AddAction(tr(quokkagit::SLogEntry::commitDate), quokkagit::SLogEntry::CommitDate, true);
+  AddAction(tr(quokkagit::SLogEntry::author), quokkagit::SLogEntry::Author, true);
+  AddAction(tr(quokkagit::SLogEntry::authorEmail), quokkagit::SLogEntry::AuthorEmail, false);
+  AddAction(tr(quokkagit::SLogEntry::authorDate), quokkagit::SLogEntry::AuthorDate, true);
 }
 
 CLogColumnVisibilityMenu::~CLogColumnVisibilityMenu()

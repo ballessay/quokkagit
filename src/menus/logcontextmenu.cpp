@@ -25,8 +25,8 @@ CLogFilesContextMenu::CLogFilesContextMenu(QWidget* parent)
 CLogSearchContextMenu::CLogSearchContextMenu(QWidget* parent)
   : QMenu(parent)
 {
-  auto AddAction = [this](const QString& text, qtgit::SLogEntry::Fields field, bool checked) {
-    QAction* pAction = new QAction(text, this);
+  auto AddAction = [this](quokkagit::SLogEntry::Fields field, bool checked) {
+    QAction* pAction = new QAction(quokkagit::SLogEntry::c_strings[field], this);
     pAction->setCheckable(true);
     pAction->setChecked(checked);
     pAction->setData(field);
@@ -34,9 +34,9 @@ CLogSearchContextMenu::CLogSearchContextMenu(QWidget* parent)
     return pAction;
   };
 
-  AddAction(qtgit::SLogEntry::sha, qtgit::SLogEntry::Sha, true);
-  AddAction(qtgit::SLogEntry::summary, qtgit::SLogEntry::Summary, true);
-  AddAction(qtgit::SLogEntry::author, qtgit::SLogEntry::Author, true);
-  AddAction(qtgit::SLogEntry::message, qtgit::SLogEntry::Message, false);
-  AddAction(qtgit::SLogEntry::commitDate, qtgit::SLogEntry::CommitDate, true);
+  AddAction(quokkagit::SLogEntry::Sha, true);
+  AddAction(quokkagit::SLogEntry::Summary, true);
+  AddAction(quokkagit::SLogEntry::Author, true);
+  AddAction(quokkagit::SLogEntry::Message, false);
+  AddAction(quokkagit::SLogEntry::CommitDate, true);
 }

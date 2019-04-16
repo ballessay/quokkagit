@@ -1,15 +1,14 @@
 #include "logmodel.h"
 #include <cassert>
 #include <QFontMetrics>
-#include <QIcon>
 
-CLogModel::CLogModel(const qtgit::vLogEntries& log, QObject* pParent)
+CLogModel::CLogModel(const quokkagit::vLogEntries& log, QObject* pParent)
   : QAbstractTableModel(pParent),
     m_log(log)
 {
 }
 
-void CLogModel::SetLog(const qtgit::vLogEntries& log)
+void CLogModel::SetLog(const quokkagit::vLogEntries& log)
 {
   m_log = log;
   beginResetModel();
@@ -23,7 +22,7 @@ int CLogModel::rowCount(const QModelIndex&) const
 
 int CLogModel::columnCount(const QModelIndex&) const
 {
-  int i = qtgit::SLogEntry::NumberOfFields;
+  int i = quokkagit::SLogEntry::NumberOfFields;
   return i;
 }
 
@@ -39,26 +38,26 @@ QVariant CLogModel::data(const QModelIndex& index, int role) const
       const auto& entry = m_log.at(row);
       switch(column)
       {
-      case qtgit::SLogEntry::Sha:
-        return entry.sSha.left(10);
-      case qtgit::SLogEntry::Summary:
+      case quokkagit::SLogEntry::Sha:
+        return entry.sSha;
+      case quokkagit::SLogEntry::Summary:
       {
         QFontMetrics metrics(m_font);
         return metrics.elidedText(entry.sSummary, Qt::ElideRight, m_columnWidth - 8);
       }
-      case qtgit::SLogEntry::Message:
+      case quokkagit::SLogEntry::Message:
         return entry.sMessage;
-      case qtgit::SLogEntry::Commiter:
+      case quokkagit::SLogEntry::Commiter:
         return entry.sCommiter;
-      case qtgit::SLogEntry::CommiterEmail:
+      case quokkagit::SLogEntry::CommiterEmail:
         return entry.sCommiterEmail;
-      case qtgit::SLogEntry::CommitDate:
+      case quokkagit::SLogEntry::CommitDate:
         return entry.qcommitDate.toString(Qt::ISODate);;
-      case qtgit::SLogEntry::Author:
+      case quokkagit::SLogEntry::Author:
         return entry.sAuthor;
-      case qtgit::SLogEntry::AuthorEmail:
+      case quokkagit::SLogEntry::AuthorEmail:
         return entry.sAuthorEmail;
-      case qtgit::SLogEntry::AuthorDate:
+      case quokkagit::SLogEntry::AuthorDate:
         return entry.qauthorDate.toString(Qt::ISODate);
       default:
         assert(false);
@@ -78,24 +77,24 @@ QVariant CLogModel::headerData(int section, Qt::Orientation orientation, int rol
     {
       switch(section)
       {
-      case qtgit::SLogEntry::Sha:
-        return tr(qtgit::SLogEntry::sha);
-      case qtgit::SLogEntry::Summary:
-        return tr(qtgit::SLogEntry::summary);
-      case qtgit::SLogEntry::Message:
-        return tr(qtgit::SLogEntry::message);
-      case qtgit::SLogEntry::Commiter:
-        return tr(qtgit::SLogEntry::commiter);
-      case qtgit::SLogEntry::CommiterEmail:
-        return tr(qtgit::SLogEntry::commiterEmail);
-      case qtgit::SLogEntry::CommitDate:
-        return tr(qtgit::SLogEntry::commitDate);
-      case qtgit::SLogEntry::Author:
-        return tr(qtgit::SLogEntry::author);
-      case qtgit::SLogEntry::AuthorEmail:
-        return tr(qtgit::SLogEntry::authorEmail);
-      case qtgit::SLogEntry::AuthorDate:
-        return tr(qtgit::SLogEntry::authorDate);
+      case quokkagit::SLogEntry::Sha:
+        return tr(quokkagit::SLogEntry::sha);
+      case quokkagit::SLogEntry::Summary:
+        return tr(quokkagit::SLogEntry::summary);
+      case quokkagit::SLogEntry::Message:
+        return tr(quokkagit::SLogEntry::message);
+      case quokkagit::SLogEntry::Commiter:
+        return tr(quokkagit::SLogEntry::commiter);
+      case quokkagit::SLogEntry::CommiterEmail:
+        return tr(quokkagit::SLogEntry::commiterEmail);
+      case quokkagit::SLogEntry::CommitDate:
+        return tr(quokkagit::SLogEntry::commitDate);
+      case quokkagit::SLogEntry::Author:
+        return tr(quokkagit::SLogEntry::author);
+      case quokkagit::SLogEntry::AuthorEmail:
+        return tr(quokkagit::SLogEntry::authorEmail);
+      case quokkagit::SLogEntry::AuthorDate:
+        return tr(quokkagit::SLogEntry::authorDate);
       default:
         assert(false);
         break;

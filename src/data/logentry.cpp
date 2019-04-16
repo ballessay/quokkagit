@@ -11,7 +11,7 @@ namespace
   }
 }
 
-namespace qtgit
+namespace quokkagit
 {
   const char* SLogEntry::sha = "Sha";
   const char* SLogEntry::summary = "Summary";

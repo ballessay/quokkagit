@@ -13,5 +13,6 @@
         <file>quit.png</file>
         <file>git.png</file>
         <file>quokka.jpg</file>
+        <file>renamed.png</file>
     </qresource>
 </RCC>

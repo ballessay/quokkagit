@@ -9,7 +9,7 @@
 
 namespace git { class Commit; }
 
-namespace qtgit
+namespace quokkagit
 {
   struct SLogEntry
   {

@@ -9,10 +9,10 @@
 class CLogModel : public QAbstractTableModel
 {
 public:
-  CLogModel(const qtgit::vLogEntries& Log, QObject* pParent = nullptr);
+  CLogModel(const quokkagit::vLogEntries& Log, QObject* pParent = nullptr);
 
-  void SetLog(const qtgit::vLogEntries& Log);
-  const qtgit::vLogEntries& Log() const { return m_log; }
+  void SetLog(const quokkagit::vLogEntries& Log);
+  const quokkagit::vLogEntries& Log() const { return m_log; }
 
   int rowCount(const QModelIndex& parent = QModelIndex()) const override;
 
@@ -26,7 +26,7 @@ public:
   void SetColumnWidth(int width) { m_columnWidth = width; }
 
 private:
-  qtgit::vLogEntries m_log;
+  quokkagit::vLogEntries m_log;
   QFont m_font;
   int m_columnWidth;
   int padding;

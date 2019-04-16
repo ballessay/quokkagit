@@ -40,16 +40,16 @@ CMainWindow::CMainWindow(CGit2Wrapper& git, QWidget *parent) :
 
   m_pLogModel->SetFont(m_pUi->logTableView->font());
 
-  m_pUi->logTableView->horizontalHeader()->hideSection(qtgit::SLogEntry::Message);
+  m_pUi->logTableView->horizontalHeader()->hideSection(quokkagit::SLogEntry::Message);
   m_pUi->logTableView->horizontalHeader()->setSectionsMovable(true);
   m_pUi->logTableView->horizontalHeader()->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Preferred);
-  m_pLogModel->SetColumnWidth(m_pUi->logTableView->columnWidth(qtgit::SLogEntry::Summary));
+  m_pLogModel->SetColumnWidth(m_pUi->logTableView->columnWidth(quokkagit::SLogEntry::Summary));
   //m_pUi->logTableView->horizontalHeader()->setSectionResizeMode(qtgit::SLogEntry::Summary, QHeaderView::Interactive);
 
   int columns = m_pLogModel->columnCount();
   for(int i = 0; i < columns; ++i)
   {
-    if(i != qtgit::SLogEntry::Summary)
+    if(i != quokkagit::SLogEntry::Summary)
     {
       m_pUi->logTableView->resizeColumnToContents(i);
     }
@@ -58,8 +58,8 @@ CMainWindow::CMainWindow(CGit2Wrapper& git, QWidget *parent) :
     }
   }
 
-  connect(m_pUi->logTableView, &QTableView::activated,
-          this, &CMainWindow::LogItemSelected2);
+//  connect(m_pUi->logTableView, &QTableView::activated,
+//          this, &CMainWindow::LogItemSelected2);
 
   connect(m_pUi->logTableView, &QTableView::clicked,
           this, &CMainWindow::LogItemSelected2);
@@ -67,8 +67,8 @@ CMainWindow::CMainWindow(CGit2Wrapper& git, QWidget *parent) :
   connect(m_pUi->logTableView, &QTableView::entered,
           this, &CMainWindow::LogItemSelected2);
 
-  connect(m_pUi->logTableView, &QTableView::pressed,
-          this, &CMainWindow::LogItemSelected2);
+//  connect(m_pUi->logTableView, &QTableView::pressed,
+//          this, &CMainWindow::LogItemSelected2);
 
   CLogColumnVisibilityMenu* menu = new CLogColumnVisibilityMenu(this);
   m_pUi->tableViewToolButton->setMenu(menu);
@@ -127,11 +127,16 @@ CMainWindow::~CMainWindow()
 
 void CMainWindow::LogItemSelected(int index)
 {
-  const QString msg = m_pLogModel->data(m_pLogModel->index(index, qtgit::SLogEntry::Message)).toString();
+  const QString msg = m_pLogModel->data(m_pLogModel->index(index, quokkagit::SLogEntry::Message)).toString();
+
+
+  m_pUi->pFilesTableView->setModel(nullptr);
+  delete m_logFileModel;
+  m_logFileModel = nullptr;
 
   m_pUi->pMessageTextEdit->setText(msg);
 
-  m_pLogModel->SetColumnWidth(m_pUi->logTableView->columnWidth(qtgit::SLogEntry::Summary));
+  m_pLogModel->SetColumnWidth(m_pUi->logTableView->columnWidth(quokkagit::SLogEntry::Summary));
 
   m_pUi->logTableView->setCurrentIndex(m_pLogModel->index(index, 0));
 
@@ -209,7 +214,7 @@ void CMainWindow::on_branchSelectionToolButton_clicked()
     int index = d.currentSelection();
     if(index >= 0 && index < b.size())
     {
-      qtgit::vLogEntries entries = m_git.Log(d.currentSelection(), b);
+      quokkagit::vLogEntries entries = m_git.Log(d.currentSelection(), b);
 
       if (!m_pLogModel)
       {

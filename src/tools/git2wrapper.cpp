@@ -63,9 +63,9 @@ CGit2Wrapper::vBranches CGit2Wrapper::Branches() const
 }
 
 
-qtgit::vLogEntries CGit2Wrapper::Log(int branch, const CGit2Wrapper::vBranches& b) const
+quokkagit::vLogEntries CGit2Wrapper::Log(int branch, const CGit2Wrapper::vBranches& b) const
 {
-  qtgit::vLogEntries entries;
+  quokkagit::vLogEntries entries;
 
   if (branch >= 0 && branch < static_cast<int>(b.size()))
   {
@@ -76,7 +76,7 @@ qtgit::vLogEntries CGit2Wrapper::Log(int branch, const CGit2Wrapper::vBranches& 
     walk.push(oid);
     while (auto commit = walk.next())
     {
-      entries.push_back(qtgit::SLogEntry::FromCommit(commit));
+      entries.push_back(quokkagit::SLogEntry::FromCommit(commit));
     }
   }
 
@@ -127,14 +127,14 @@ git::Diff CGit2Wrapper::find_diff(git::Repository const & repo, git::Tree & t1, 
 }
 
 
-CGit2Wrapper::vDeltas CGit2Wrapper::DiffWithParent(int index, const qtgit::vLogEntries& entries)
+CGit2Wrapper::vDeltas CGit2Wrapper::DiffWithParent(int index, const quokkagit::vLogEntries& entries)
 {
   vDeltas deltas;
 
   if(index > 0 ||
-     static_cast<qtgit::vLogEntries::size_type>(index) < entries.size())
+     static_cast<quokkagit::vLogEntries::size_type>(index) < entries.size())
   {
-    qtgit::SLogEntry entry = entries.at(static_cast<qtgit::vLogEntries::size_type>(index));
+    quokkagit::SLogEntry entry = entries.at(static_cast<quokkagit::vLogEntries::size_type>(index));
 
     git_oid oid = entry.oid();
 
@@ -198,7 +198,7 @@ CGit2Wrapper::vDeltas CGit2Wrapper::DiffWithParent(int index, const qtgit::vLogE
 //        emit Message(QString("old id: %1 - new id: %2").arg(git::id_to_str(delta.old_file.id).c_str()).arg(git::id_to_str(delta.new_file.id).c_str()));
 
         if(GIT_DELTA_RENAMED == delta.status)
-          files.push_back(std::make_pair(status, sOldPath + " => " + sNewPath));
+          files.push_back(std::make_pair(status, sNewPath + " => " + sOldPath));
         else
           files.push_back(std::make_pair(status, sNewPath));
 
@@ -264,63 +264,4 @@ void CGit2Wrapper::DiffBlobs(int deltaIndex, const vDeltas& deltas)
 
   connect(&m_diffs.back(), &CKdiff3::Message,
           this, &CGit2Wrapper::Message);
-}
-
-
-
-CKdiff3::CKdiff3(const QByteArray& baOld, const QByteArray baNew)
-  : m_process(new QProcess),
-    m_old(new QTemporaryFile),
-    m_new(new QTemporaryFile)
-{
-  if(m_old->open())
-  {
-    m_old->write(baOld);
-    m_old->setAutoRemove(true);
-    m_old->flush();
-  }
-
-  if(m_new->open())
-  {
-    m_new->write(baNew);
-    m_new->setAutoRemove(true);
-    m_new->flush();
-  }
-
-  connect(m_process.get(), SIGNAL(finished(int)),
-          this, SLOT(Finished(int)));
-}
-
-CKdiff3::CKdiff3(const CKdiff3& diff)
-  : m_process(diff.m_process),
-    m_old(diff.m_old),
-    m_new(diff.m_new)
-{
-  connect(m_process.get(), SIGNAL(finished(int)),
-          this, SLOT(Finished(int)));
-}
-
-void CKdiff3::Open(const QString& sFileOld,
-                   const QString& sFileNew,
-                   const QString& sHashOld,
-                   const QString& sHashNew)
-{
-//  connect(m_process.get(), &QProcess::finished,
-//                   this, &CKdiff3::Finished);
-  QStringList args;
-  args << "--L1"
-       << sFileOld + "@" + sHashOld
-       << "--L2"
-       << sFileNew + "@" + sHashNew
-       << m_old->fileName()
-       << m_new->fileName();
-
-  m_process->start("kdiff3", args);
-}
-
-void CKdiff3::Finished(int exitCode)
-{
-  QString msg = QString("ExitCode: %1").arg(exitCode);
-
-  emit Message(msg);
 }
