@@ -12,5 +12,6 @@
         <file>log.png</file>
         <file>quit.png</file>
         <file>git.png</file>
+        <file>quokka.jpg</file>
     </qresource>
 </RCC>

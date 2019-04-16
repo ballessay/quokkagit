@@ -2,6 +2,7 @@
 #include "git2wrapper.h"
 #include "git2cpp/initializer.h"
 #include <QApplication>
+#include <QSplashScreen>
 #include <QString>
 #include <QFile>
 #include <QTextStream>
@@ -30,18 +31,29 @@ int main(int argc, char** argv)
   app.setOrganizationDomain("ballessay.de");
   app.setApplicationName("qtgit");
 
+
   QFile stylesheet( ":/QTDark.stylesheet");
   stylesheet.open(QFile::ReadOnly | QFile::Text);
   QTextStream ts(&stylesheet);
 
   app.setStyleSheet(ts.readAll());
 
+  QPixmap pixmap(":/quokka.jpg");
+  QSplashScreen splash(pixmap);
+  splash.show();
+  app.processEvents();
+
   try
   {
+    splash.showMessage("Init git...");
     CGit2Wrapper git(InitialPath());
 
     CMainWindow w(git);
     w.show();
+
+    splash.showMessage("Init GUI...");
+
+    splash.finish(&w);
 
     return app.exec();
   }
