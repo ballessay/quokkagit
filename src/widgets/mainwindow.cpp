@@ -67,9 +67,6 @@ CMainWindow::CMainWindow(CGit2Wrapper& git, QWidget *parent) :
   connect(m_pUi->logTableView, &QTableView::entered,
           this, &CMainWindow::LogItemSelected2);
 
-//  connect(m_pUi->logTableView, &QTableView::pressed,
-//          this, &CMainWindow::LogItemSelected2);
-
   CLogColumnVisibilityMenu* menu = new CLogColumnVisibilityMenu(this);
   m_pUi->tableViewToolButton->setMenu(menu);
 
@@ -80,6 +77,12 @@ CMainWindow::CMainWindow(CGit2Wrapper& git, QWidget *parent) :
           this, &CMainWindow::ToggleColumn);
 
   menu->EmitState();
+
+  CFileLogModel::vFiles files;
+
+  m_logFileModel = new CFileLogModel(files, this);
+
+  m_pUi->pFilesTableView->setModel(m_logFileModel);
 
   m_pUi->logTableView->setContextMenuPolicy(Qt::ActionsContextMenu);
   CLogContextMenu* pMenu = new CLogContextMenu(this);
@@ -129,11 +132,6 @@ void CMainWindow::LogItemSelected(int index)
 {
   const QString msg = m_pLogModel->data(m_pLogModel->index(index, quokkagit::SLogEntry::Message)).toString();
 
-
-  m_pUi->pFilesTableView->setModel(nullptr);
-  delete m_logFileModel;
-  m_logFileModel = nullptr;
-
   m_pUi->pMessageTextEdit->setText(msg);
 
   m_pLogModel->SetColumnWidth(m_pUi->logTableView->columnWidth(quokkagit::SLogEntry::Summary));
@@ -172,25 +170,9 @@ void CMainWindow::ToggleColumn(int id, bool enabled)
 
 void CMainWindow::AddFiles(const CFileLogModel::vFiles& files)
 {
-  if(m_logFileModel)
-  {
-    m_logFileModel->deleteLater();
-    m_logFileModel = nullptr;
-  }
-
-  m_logFileModel = new CFileLogModel(files, this);
-
-  m_pUi->pFilesTableView->setModel(m_logFileModel);
-
-//  else
-//  {
-//    m_logFileModel->SetLog(files);
-//  }
-    //
+  m_logFileModel->SetLog(files);
 
   m_pUi->pFilesTableView->resizeColumnToContents(0);
-//  m_pUi->pFilesTableView->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
-//  m_pUi->pFilesTableView->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Interactive);
 }
 
 void CMainWindow::AddMessage(QString msg)
@@ -218,11 +200,12 @@ void CMainWindow::on_branchSelectionToolButton_clicked()
 
       if (!m_pLogModel)
       {
-          m_pLogModel = new CLogModel(entries, this);
+          //m_pLogModel = new CLogModel(entries, this);
+        m_pLogModel->SetLog(entries);
 
-          m_logProxy->setSourceModel(m_pLogModel);
+        m_logProxy->setSourceModel(m_pLogModel);
 
-          m_pUi->logTableView->setModel(m_logProxy);
+        m_pUi->logTableView->setModel(m_logProxy);
       }
       else {
         m_pLogModel->SetLog(entries);

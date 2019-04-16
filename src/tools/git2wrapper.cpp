@@ -44,18 +44,25 @@ QString CGit2Wrapper::HeadRef() const
 }
 
 
+void CGit2Wrapper::Initialize()
+{
+  m_branches = m_repo.branches(git::branch_type::ALL);
+}
+
+
 CGit2Wrapper::vBranches CGit2Wrapper::Branches() const
 {
   vBranches branches;
 
-  std::vector<git::Reference> vBranches = m_repo.branches(git::branch_type::ALL);
+  //std::vector<git::Reference> vBranches = m_repo.branches(git::branch_type::ALL);
 
-  for(const auto& ref : vBranches)
+  for(const auto& ref : m_branches)
   {
     if(ref.type() != GIT_REF_SYMBOLIC)
     {
       branches.push_back(std::make_pair(QString::fromLocal8Bit(ref.name()), ref.target()));
-      //emit Message(branches.back().first);
+
+      emit Message(QString("%1 at %2").arg(branches.back().first).arg(git::id_to_str(ref.target()).c_str()));
     }
   }
 

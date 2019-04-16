@@ -10,8 +10,12 @@ CFileLogModel::CFileLogModel(const vFiles& log, QObject* pParent)
 
 void CFileLogModel::SetLog(const vFiles& log)
 {
-  m_log = log;
   beginResetModel();
+
+  m_log.clear();
+
+  m_log = log;
+
   endResetModel();
 }
 

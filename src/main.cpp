@@ -47,6 +47,7 @@ int main(int argc, char** argv)
   {
     splash.showMessage("Init git...");
     CGit2Wrapper git(InitialPath());
+    git.Initialize();
 
     CMainWindow w(git);
     w.show();

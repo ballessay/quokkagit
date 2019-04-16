@@ -11,10 +11,10 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>QTortGit</string>
+   <string>quokkagit</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="../resources/resources.qrc">
+   <iconset resource="../../resources/resources.qrc">
     <normaloff>:/git.png</normaloff>:/git.png</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
@@ -68,7 +68,7 @@
               <string/>
              </property>
              <property name="icon">
-              <iconset resource="../resources/resources.qrc">
+              <iconset resource="../../resources/resources.qrc">
                <normaloff>:/search.png</normaloff>:/search.png</iconset>
              </property>
             </widget>
@@ -105,7 +105,7 @@
            <string/>
           </property>
           <property name="icon">
-           <iconset resource="../resources/resources.qrc">
+           <iconset resource="../../resources/resources.qrc">
             <normaloff>:/table-properties.png</normaloff>:/table-properties.png</iconset>
           </property>
           <property name="popupMode">
@@ -174,7 +174,7 @@
            <string/>
           </property>
           <property name="icon">
-           <iconset resource="../resources/resources.qrc">
+           <iconset resource="../../resources/resources.qrc">
             <normaloff>:/tree.png</normaloff>:/tree.png</iconset>
           </property>
          </widget>
@@ -266,7 +266,7 @@
   </action>
  </widget>
  <resources>
-  <include location="../resources/resources.qrc"/>
+  <include location="../../resources/resources.qrc"/>
  </resources>
  <connections>
   <connection>

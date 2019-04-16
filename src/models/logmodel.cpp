@@ -10,8 +10,12 @@ CLogModel::CLogModel(const quokkagit::vLogEntries& log, QObject* pParent)
 
 void CLogModel::SetLog(const quokkagit::vLogEntries& log)
 {
-  m_log = log;
   beginResetModel();
+
+  m_log.clear();
+
+  m_log = log;
+
   endResetModel();
 }
 

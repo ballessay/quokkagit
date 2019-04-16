@@ -19,6 +19,7 @@ class CGit2Wrapper : public QObject
   Q_OBJECT
 
 public:
+  using vReferences = std::vector<git::Reference>;
   using vBranches = std::vector<std::pair<QString, git_oid>>;
   using vDeltas = std::vector<std::pair<git_diff_delta, QString>>;
 
@@ -26,6 +27,8 @@ public:
 
   void SetHead(const QString& sHead);
   QString HeadRef() const;
+
+  void Initialize();
 
   vBranches Branches() const;
 
@@ -46,6 +49,7 @@ private:
 
 private:
   git::Repository m_repo;
+  vReferences m_branches;
   std::vector<CKdiff3> m_diffs;
 };
 
