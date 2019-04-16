@@ -39,7 +39,6 @@ int main(int argc, char** argv)
   try
   {
     CGit2Wrapper git(InitialPath());
-    git.Initialize();
 
     CMainWindow w(git);
     w.show();

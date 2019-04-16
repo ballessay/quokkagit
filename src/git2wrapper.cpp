@@ -26,32 +26,9 @@ CGit2Wrapper::CGit2Wrapper(const QString& sPath)
 {
 }
 
-bool CGit2Wrapper::Initialize()
-{
-  int error = 0;
-
-  /*
-  if (m_log.empty())
-  {
-    git::RevWalker walk =  m_repo.rev_walker();
-    walk.sort(git::revwalker::sorting::topological);
-    //walk.push(oid);
-    walk.push_head();
-    while (auto commit = walk.next())
-    {
-      m_log.push_back(qtgit::SLogEntry::FromCommit(commit));
-    }
-  }
-  */
-
-  return error != 0;
-}
-
 void CGit2Wrapper::SetHead(const QString& sHead)
 {
   m_repo.set_head(sHead.toUtf8().constData());
-
-  Initialize();
 
   vBranches b = Branches();
 }
