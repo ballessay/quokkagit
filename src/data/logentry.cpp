@@ -23,6 +23,17 @@ namespace qtgit
   const char* SLogEntry::authorEmail = "Author Email";
   const char* SLogEntry::authorDate = "Author Date";
 
+  const char* SLogEntry::c_strings[] = { SLogEntry::sha,
+                                         SLogEntry::summary,
+                                         SLogEntry::message,
+                                         SLogEntry::commiter,
+                                         SLogEntry::commiterEmail,
+                                         SLogEntry::commitDate,
+                                         SLogEntry::author,
+                                         SLogEntry::authorEmail,
+                                         SLogEntry::authorDate
+                                       };
+
   SLogEntry SLogEntry::FromCommit(const git::Commit& commit)
   {
     SLogEntry entry;

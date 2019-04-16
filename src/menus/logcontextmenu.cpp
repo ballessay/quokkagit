@@ -1,5 +1,5 @@
 #include "logcontextmenu.h"
-#include "logentry.h"
+#include "data/logentry.h"
 
 CLogContextMenu::CLogContextMenu(QWidget* parent)
   : QMenu(parent)

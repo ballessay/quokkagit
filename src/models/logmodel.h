@@ -1,7 +1,7 @@
 #ifndef LOGMODEL_H
 #define LOGMODEL_H
 
-#include "logentry.h"
+#include "data/logentry.h"
 #include <QAbstractTableModel>
 #include <QSortFilterProxyModel>
 #include <QFont>

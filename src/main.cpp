@@ -1,5 +1,5 @@
-#include "mainwindow.h"
-#include "git2wrapper.h"
+#include "widgets/mainwindow.h"
+#include "tools/git2wrapper.h"
 #include "git2cpp/initializer.h"
 #include <QApplication>
 #include <QSplashScreen>

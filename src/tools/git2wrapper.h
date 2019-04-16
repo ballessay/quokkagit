@@ -1,7 +1,7 @@
 #ifndef GIT2WRAPPER_H
 #define GIT2WRAPPER_H
 
-#include "logentry.h"
+#include "data/logentry.h"
 #include "models/logmodel.h"
 #include "git2cpp/repo.h"
 #include "git2cpp/diff.h"

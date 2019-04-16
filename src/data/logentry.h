@@ -1,7 +1,6 @@
 #ifndef LOGENTRY_H
 #define LOGENTRY_H
 
-//#include "git2cpp/commit.h"
 #include "git2cpp/id_to_str.h"
 #include <QString>
 #include <QStringList>
@@ -38,6 +37,8 @@ namespace qtgit
     static const char* author;
     static const char* authorEmail;
     static const char* authorDate;
+
+    static const char* c_strings[];
 
     static SLogEntry FromCommit(const git::Commit& commit);
 

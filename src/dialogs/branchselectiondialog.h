@@ -1,7 +1,7 @@
 #ifndef BRANCHSELECTIONDIALOG_H
 #define BRANCHSELECTIONDIALOG_H
 
-#include "git2wrapper.h"
+#include "tools/git2wrapper.h"
 #include <QDialog>
 
 namespace Ui {

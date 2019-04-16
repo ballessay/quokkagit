@@ -4,7 +4,7 @@
 #include "dialogs/branchselectiondialog.h"
 #include "menus/logcolumnvisibilitymenu.h"
 #include "menus/logcontextmenu.h"
-#include "git2wrapper.h"
+#include "tools/git2wrapper.h"
 #include <QHeaderView>
 
 CMainWindow::CMainWindow(CGit2Wrapper& git, QWidget *parent) :
@@ -27,7 +27,6 @@ CMainWindow::CMainWindow(CGit2Wrapper& git, QWidget *parent) :
     else
       ++index;
   }
-
 
   m_pLogModel = new CLogModel(git.Log(index, branches), this);
 

@@ -1,5 +1,5 @@
 #include "logcolumnvisibilitymenu.h"
-#include "logentry.h"
+#include "data/logentry.h"
 #include <QAction>
 
 namespace

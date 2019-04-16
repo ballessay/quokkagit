@@ -1,13 +1,12 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include "git2wrapper.h"
+#include "tools/git2wrapper.h"
 
 #include "dialogs/debuglogdialog.h"
 #include "models/logmodel.h"
 
 #include <QMainWindow>
-#include <QMenu>
 
 class CGit2Wrapper;
 class CLogModel;
@@ -17,10 +16,6 @@ namespace Ui {
   class CMainWindow;
 }
 
-class CLogMenu : public QMenu
-{
-
-};
 
 class CMainWindow : public QMainWindow
 {
