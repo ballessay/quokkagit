@@ -1,6 +1,8 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "models/logmodel.h"
+#include "models/filelogmodel.h"
+#include "models/logfilterproxymodel.h"
 #include "dialogs/branchselectiondialog.h"
 #include "menus/logcolumnvisibilitymenu.h"
 #include "menus/logcontextmenu.h"

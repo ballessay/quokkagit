@@ -2,7 +2,7 @@
 #define GIT2WRAPPER_H
 
 #include "data/logentry.h"
-#include "models/logmodel.h"
+#include "models/filelogmodel.h"
 #include "git2cpp/repo.h"
 #include "git2cpp/diff.h"
 #include <QStringList>

@@ -29,6 +29,10 @@ add_executable(${PROJECT_NAME}
   src/menus/logcolumnvisibilitymenu.h
   src/menus/logcontextmenu.cpp
   src/menus/logcontextmenu.h
+  src/models/filelogmodel.cpp
+  src/models/filelogmodel.h
+  src/models/logfilterproxymodel.cpp
+  src/models/logfilterproxymodel.h
   src/models/logmodel.cpp
   src/models/logmodel.h
   src/main.cpp
