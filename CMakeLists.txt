@@ -24,14 +24,14 @@ add_executable(${PROJECT_NAME}
   src/dialogs/debuglogdialog.ui
   src/git2wrapper.cpp
   src/git2wrapper.h
-  src/logcolumnvisibilitymenu.cpp
-  src/logcolumnvisibilitymenu.h
-  src/logcontextmenu.cpp
-  src/logcontextmenu.h
+  src/menus/logcolumnvisibilitymenu.cpp
+  src/menus/logcolumnvisibilitymenu.h
+  src/menus/logcontextmenu.cpp
+  src/menus/logcontextmenu.h
   src/logentry.cpp
   src/logentry.h
-  src/logmodel.cpp
-  src/logmodel.h
+  src/models/logmodel.cpp
+  src/models/logmodel.h
   src/main.cpp
   src/mainwindow.cpp
   src/mainwindow.h

@@ -1,6 +1,6 @@
 #include "git2wrapper.h"
 //#include <git2.h>
-#include "logmodel.h"
+#include "models/logmodel.h"
 
 #include "git2cpp/repo.h"
 #include "git2cpp/reference.h"

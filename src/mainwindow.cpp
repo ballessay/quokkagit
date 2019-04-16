@@ -1,9 +1,9 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "logmodel.h"
+#include "models/logmodel.h"
 #include "dialogs/branchselectiondialog.h"
-#include "logcolumnvisibilitymenu.h"
-#include "logcontextmenu.h"
+#include "menus/logcolumnvisibilitymenu.h"
+#include "menus/logcontextmenu.h"
 #include "git2wrapper.h"
 #include <QHeaderView>
 
