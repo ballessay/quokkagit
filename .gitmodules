@@ -1,9 +1,0 @@
-[submodule "3rd-party/libgit2"]
-	path = 3rd-party/libgit2cpp
-	url = https://github.com/AndreyG/libgit2cpp.git
-[submodule "3rd-party/libgit2cpp"]
-	path = 3rd-party/libgit2cpp
-	url = https://github.com/AndreyG/libgit2cpp.git
-[submodule "3rd-party/better-enums"]
-	path = 3rd-party/better-enums
-	url = https://github.com/aantron/better-enums.git
