@@ -38,6 +38,8 @@ public:
 
   void DiffBlobs(int deltaIndex, const vDeltas& deltas);
 
+  git_repository* repo() { return m_repo.get(); }
+
 signals:
   void NewFile(const QStringList& list);
   void Message(const QString& message) const;

@@ -4,10 +4,12 @@
 #include "models/filelogmodel.h"
 #include "models/logfilterproxymodel.h"
 #include "dialogs/branchselectiondialog.h"
+#include "dialogs/blamedialog.h"
 #include "menus/logcolumnvisibilitymenu.h"
 #include "menus/logcontextmenu.h"
 #include "tools/git2wrapper.h"
 #include <QHeaderView>
+
 
 CMainWindow::CMainWindow(CGit2Wrapper& git, QWidget *parent) :
   QMainWindow(parent),
@@ -97,7 +99,9 @@ CMainWindow::CMainWindow(CGit2Wrapper& git, QWidget *parent) :
   {
     auto dispatch = [this, action]() {
       if ("Diff" == action->text())
-        FileSelected(m_pUi->pFilesTableView->currentIndex());
+        DiffFile(m_pUi->pFilesTableView->currentIndex());
+      if ("Blame" == action->text())
+        BlameFile(m_pUi->pFilesTableView->currentIndex());
       else {
         int notYet  = 0;
       }
@@ -120,41 +124,53 @@ CMainWindow::CMainWindow(CGit2Wrapper& git, QWidget *parent) :
           this, &CMainWindow::AddMessage);
 
   connect(m_pUi->pFilesTableView, &QAbstractItemView::doubleClicked,
-          this, &CMainWindow::FileSelected);
+          this, &CMainWindow::DiffFile);
 }
+
 
 CMainWindow::~CMainWindow()
 {
   delete m_pUi;
 }
 
-void CMainWindow::LogItemSelected(int index)
+
+void CMainWindow::LogItemSelected2(const QModelIndex& index)
 {
-  const QString msg = m_pLogModel->data(m_pLogModel->index(index, quokkagit::SLogEntry::Message)).toString();
+  QModelIndex i = m_logProxy->mapToSource(index);
+
+  int r = i.row();
+
+  const QString msg = m_pLogModel->data(m_pLogModel->index(r, quokkagit::SLogEntry::Message)).toString();
 
   m_pUi->pMessageTextEdit->setText(msg);
 
   m_pLogModel->SetColumnWidth(m_pUi->logTableView->columnWidth(quokkagit::SLogEntry::Summary));
 
-  m_pUi->logTableView->setCurrentIndex(m_pLogModel->index(index, 0));
+  m_pUi->logTableView->setCurrentIndex(m_pLogModel->index(r, 0));
 
-  m_deltas = m_git.DiffWithParent(index, m_pLogModel->Log());
+  m_deltas = m_git.DiffWithParent(r, m_pLogModel->Log());
 }
 
-void CMainWindow::LogItemSelected2(const QModelIndex& index)
+
+void CMainWindow::DiffFile(const QModelIndex& index)
 {
-  QModelIndex i = m_logProxy->mapToSource(index);
-  //QModelIndex i2 = m_logProxy->mapFromSource(index);
-
-  LogItemSelected(i.row());
-}
-
-void CMainWindow::FileSelected(const QModelIndex& index)
-{
-  //QModelIndex i = m_logProxy->mapToSource(index);
-
   m_git.DiffBlobs(index.row(), m_deltas);
 }
+
+
+void CMainWindow::BlameFile(const QModelIndex& index)
+{
+  int r = index.row();
+
+  auto [delta, path] = m_deltas[r];
+
+  CBlameDialog d(m_git.repo());
+  if (d.exec(path))
+  {
+
+  }
+}
+
 
 void CMainWindow::ToggleColumn(int id, bool enabled)
 {
@@ -168,6 +184,7 @@ void CMainWindow::ToggleColumn(int id, bool enabled)
   }
 }
 
+
 void CMainWindow::AddFiles(const CFileLogModel::vFiles& files)
 {
   m_logFileModel->SetLog(files);
@@ -175,16 +192,18 @@ void CMainWindow::AddFiles(const CFileLogModel::vFiles& files)
   m_pUi->pFilesTableView->resizeColumnToContents(0);
 }
 
+
 void CMainWindow::AddMessage(QString msg)
 {
-  //m_pUi->pFilesListWidget->addItem(msg);
   m_dbgLogDialog.AddMessage(msg);
 }
+
 
 void CMainWindow::on_actionOpen_log_triggered()
 {
   m_dbgLogDialog.exec();
 }
+
 
 void CMainWindow::on_branchSelectionToolButton_clicked()
 {
@@ -215,6 +234,7 @@ void CMainWindow::on_branchSelectionToolButton_clicked()
     }
   }
 }
+
 
 void CMainWindow::on_searchLineEdit_returnPressed()
 {

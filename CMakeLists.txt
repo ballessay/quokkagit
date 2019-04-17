@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.5)
 
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 
-set(BUNDLE_LIBGIT2 ON)
+option(BUNDLE_LIBGIT2 ON)
 add_subdirectory(3rd-party/libgit2cpp)
 
 project(quokkagit VERSION 0.1.0)

@@ -26,10 +26,11 @@ public:
   ~CMainWindow();
 
 public slots:
-  void LogItemSelected(int row);
   void LogItemSelected2(const QModelIndex& index);
 
-  void FileSelected(const QModelIndex& index);
+  void DiffFile(const QModelIndex& index);
+
+  void BlameFile(const QModelIndex& index);
 
   void ToggleColumn(int id, bool enabled);
 
