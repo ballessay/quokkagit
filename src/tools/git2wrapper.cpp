@@ -19,6 +19,13 @@ namespace
 
     return c_invalidOid;
   }
+
+  git_repository_init_options RepoOptions()
+  {
+    git_repository_init_options opts;
+
+    return opts;
+  }
 }
 
 
