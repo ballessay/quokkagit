@@ -15,7 +15,7 @@ namespace
     if(qApp->arguments().size() > 1) {
       return qApp->arguments().at(1);
     } else {
-      return qApp->applicationDirPath();
+      return ".";
     }
   }
 }
