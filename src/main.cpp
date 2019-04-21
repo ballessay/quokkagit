@@ -1,42 +1,17 @@
+#include "application.h"
 #include "widgets/mainwindow.h"
 #include "tools/git2wrapper.h"
 #include "git2cpp/initializer.h"
-#include <QApplication>
 #include <QSplashScreen>
 #include <QString>
-#include <QFile>
-#include <QTextStream>
 #include <QMessageBox>
-
-namespace
-{
-  QString InitialPath()
-  {
-    if(qApp->arguments().size() > 1) {
-      return qApp->arguments().at(1);
-    } else {
-      return ".";
-    }
-  }
-}
 
 
 int main(int argc, char** argv)
 {
   auto_git_initializer;
 
-  QApplication app(argc, argv);
-
-  app.setOrganizationName("ballessay");
-  app.setOrganizationDomain("ballessay.de");
-  app.setApplicationName("quokkagit");
-
-
-  QFile stylesheet( ":/QTDark.stylesheet");
-  stylesheet.open(QFile::ReadOnly | QFile::Text);
-  QTextStream ts(&stylesheet);
-
-  app.setStyleSheet(ts.readAll());
+  CApplication app(argc, argv);
 
   QPixmap pixmap(":/quokka.jpg");
   QSplashScreen splash(pixmap);
@@ -46,7 +21,7 @@ int main(int argc, char** argv)
   try
   {
     splash.showMessage("Init git...");
-    CGit2Wrapper git(InitialPath());
+    CGit2Wrapper git(app.InitialRepoPath());
     git.Initialize();
 
     CMainWindow w(git);

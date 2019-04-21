@@ -14,6 +14,8 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 add_executable(${PROJECT_NAME}
+  src/application.cpp
+  src/application.h
   src/data/logentry.cpp
   src/data/logentry.h
   src/dialogs/blamedialog.cpp
