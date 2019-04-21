@@ -22,10 +22,10 @@ bool CLogFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex& so
 
   return false;
   /*
-  //QModelIndex index = sourceParent.child(sourceRow, qtgit::SLogEntry::Summary);
-  QModelIndex index1 = sourceModel()->index(sourceRow, qtgit::SLogEntry::Summary, sourceParent);
-  QModelIndex index2 = sourceModel()->index(sourceRow, qtgit::SLogEntry::Message, sourceParent);
-  QModelIndex index3 = sourceModel()->index(sourceRow, qtgit::SLogEntry::Author, sourceParent);
+  //QModelIndex index = sourceParent.child(sourceRow, quokkagit::SLogEntry::Summary);
+  QModelIndex index1 = sourceModel()->index(sourceRow, quokkagit::SLogEntry::Summary, sourceParent);
+  QModelIndex index2 = sourceModel()->index(sourceRow, quokkagit::SLogEntry::Message, sourceParent);
+  QModelIndex index3 = sourceModel()->index(sourceRow, quokkagit::SLogEntry::Author, sourceParent);
 
   if (!m_filter.isEmpty() && index1.isValid() && index2.isValid())
   {

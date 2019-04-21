@@ -46,7 +46,7 @@ CMainWindow::CMainWindow(CGit2Wrapper& git, QWidget *parent) :
   m_pUi->logTableView->horizontalHeader()->setSectionsMovable(true);
   m_pUi->logTableView->horizontalHeader()->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Preferred);
   m_pLogModel->SetColumnWidth(m_pUi->logTableView->columnWidth(quokkagit::SLogEntry::Summary));
-  //m_pUi->logTableView->horizontalHeader()->setSectionResizeMode(qtgit::SLogEntry::Summary, QHeaderView::Interactive);
+  //m_pUi->logTableView->horizontalHeader()->setSectionResizeMode(quokkagit::SLogEntry::Summary, QHeaderView::Interactive);
 
   int columns = m_pLogModel->columnCount();
   for(int i = 0; i < columns; ++i)
@@ -162,7 +162,7 @@ void CMainWindow::BlameFile(const QModelIndex& index)
 {
   int r = index.row();
 
-  auto [delta, path] = m_deltas[r];
+  auto [delta, path] = m_deltas.at(r);
 
   CBlameDialog d(m_git.repo());
   if (d.exec(path))
@@ -213,24 +213,13 @@ void CMainWindow::on_branchSelectionToolButton_clicked()
   if(d.exec() == QDialog::Accepted)
   {
     int index = d.currentSelection();
-    if(index >= 0 && index < b.size())
+    if(index >= 0 && index < static_cast<int>(b.size()))
     {
       quokkagit::vLogEntries entries = m_git.Log(d.currentSelection(), b);
 
-      if (!m_pLogModel)
-      {
-          //m_pLogModel = new CLogModel(entries, this);
-        m_pLogModel->SetLog(entries);
+      m_pLogModel->SetLog(entries);
 
-        m_logProxy->setSourceModel(m_pLogModel);
-
-        m_pUi->logTableView->setModel(m_logProxy);
-      }
-      else {
-        m_pLogModel->SetLog(entries);
-      }
-
-      m_pUi->branchLabel->setText(b.at(index).first);
+      m_pUi->branchLabel->setText(b.at(static_cast<quokkagit::vLogEntries::size_type>(index)).first);
     }
   }
 }

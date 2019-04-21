@@ -29,7 +29,7 @@ int main(int argc, char** argv)
 
   app.setOrganizationName("ballessay");
   app.setOrganizationDomain("ballessay.de");
-  app.setApplicationName("qtgit");
+  app.setApplicationName("quokkagit");
 
 
   QFile stylesheet( ":/QTDark.stylesheet");
