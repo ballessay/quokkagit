@@ -47,7 +47,8 @@ QVariant CLogModel::data(const QModelIndex& index, int role) const
       case quokkagit::SLogEntry::Summary:
       {
         QFontMetrics metrics(m_font);
-        return metrics.elidedText(entry.sSummary, Qt::ElideRight, m_columnWidth - 8);
+        //return metrics.elidedText(entry.sSummary, Qt::ElideRight, m_columnWidth - 8);
+        return entry.sSummary;
       }
       case quokkagit::SLogEntry::Message:
         return entry.sMessage;
