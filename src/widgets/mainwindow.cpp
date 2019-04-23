@@ -60,14 +60,14 @@ CMainWindow::CMainWindow(CGit2Wrapper& git, QWidget *parent) :
     }
   }
 
-//  connect(m_pUi->logTableView, &QTableView::activated,
-//          this, &CMainWindow::LogItemSelected2);
+  connect(m_pUi->logTableView, &QTableView::activated,
+          this, &CMainWindow::LogItemSelected);
 
   connect(m_pUi->logTableView, &QTableView::clicked,
-          this, &CMainWindow::LogItemSelected2);
+          this, &CMainWindow::LogItemSelected);
 
-  connect(m_pUi->logTableView, &QTableView::entered,
-          this, &CMainWindow::LogItemSelected2);
+//  connect(m_pUi->logTableView, &QTableView::entered,
+//          this, &CMainWindow::LogItemSelected);
 
   CLogColumnVisibilityMenu* menu = new CLogColumnVisibilityMenu(this);
   m_pUi->tableViewToolButton->setMenu(menu);
@@ -134,8 +134,10 @@ CMainWindow::~CMainWindow()
 }
 
 
-void CMainWindow::LogItemSelected2(const QModelIndex& index)
+void CMainWindow::LogItemSelected(const QModelIndex& index)
 {
+  m_logFileModel->SetLog(CFileLogModel::vFiles());
+
   QModelIndex i = m_logProxy->mapToSource(index);
 
   int r = i.row();

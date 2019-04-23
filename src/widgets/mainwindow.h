@@ -26,7 +26,7 @@ public:
   ~CMainWindow();
 
 public slots:
-  void LogItemSelected2(const QModelIndex& index);
+  void LogItemSelected(const QModelIndex& index);
 
   void DiffFile(const QModelIndex& index);
 
