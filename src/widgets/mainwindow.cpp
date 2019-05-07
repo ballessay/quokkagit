@@ -164,7 +164,10 @@ void CMainWindow::BlameFile(const QModelIndex& index)
 {
   int r = index.row();
 
-  auto [delta, path] = m_deltas.at(r);
+  git_diff_delta delta;
+  QString path;
+
+  std::tie(delta, path) = m_deltas.at(r);
 
   CBlameDialog d(m_git.repo());
   if (d.exec(path))
