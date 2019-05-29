@@ -37,6 +37,16 @@ CKdiff3::CKdiff3(const CKdiff3&& diff)
 //  diff.m_new.reset(nullptr);
 }
 
+CKdiff3& CKdiff3::operator=(const CKdiff3& other)
+{
+  m_index = other.m_index;
+  m_process = other.m_process;
+  m_old = other.m_old;
+  m_new = other.m_new;
+
+  return *this;
+}
+
 
 void CKdiff3::Finished(int exitCode)
 {

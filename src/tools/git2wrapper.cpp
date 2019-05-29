@@ -100,9 +100,9 @@ quokkagit::vLogEntries CGit2Wrapper::Log(int branch, const CGit2Wrapper::vBranch
 
 void CGit2Wrapper::DiffFinished(std::size_t index, int errorCode)
 {
-  m_diffs.at(index);
   m_diffs.erase(m_diffs.begin() + index);
 }
+
 
 
 git::Tree CGit2Wrapper::resolve_to_tree(git::Repository const & repo, const QString& identifier)

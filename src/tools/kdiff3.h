@@ -15,6 +15,7 @@ public:
   CKdiff3(std::size_t index);
   CKdiff3(const CKdiff3& diff);
   CKdiff3(const CKdiff3&& diff);
+  CKdiff3& operator=(const CKdiff3& other);
 
 signals:
   void Message(QString);
