@@ -32,10 +32,11 @@ int CLogModel::columnCount(const QModelIndex&) const
 
 QVariant CLogModel::data(const QModelIndex& index, int role) const
 {
-  if (Qt::DisplayRole == role)
+  if (Qt::DisplayRole == role && index.isValid())
   {
     int column = index.column();
     int row = index.row();
+
 
     if (row < static_cast<int>(m_log.size()))
     {
@@ -46,8 +47,6 @@ QVariant CLogModel::data(const QModelIndex& index, int role) const
         return entry.sSha;
       case quokkagit::SLogEntry::Summary:
       {
-        QFontMetrics metrics(m_font);
-        //return metrics.elidedText(entry.sSummary, Qt::ElideRight, m_columnWidth - 8);
         return entry.sSummary;
       }
       case quokkagit::SLogEntry::Message:

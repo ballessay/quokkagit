@@ -45,6 +45,9 @@ signals:
   void Message(const QString& message) const;
   void NewFiles(CFileLogModel::vFiles files);
 
+protected slots:
+  void DiffFinished(std::size_t index, int exitCode);
+
 private:
   git::Tree resolve_to_tree(git::Repository const & repo, const QString& identifier);
   git::Diff find_diff(git::Repository const & repo, git::Tree & t1, git::Tree & t2);

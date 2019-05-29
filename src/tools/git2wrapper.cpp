@@ -98,6 +98,13 @@ quokkagit::vLogEntries CGit2Wrapper::Log(int branch, const CGit2Wrapper::vBranch
 }
 
 
+void CGit2Wrapper::DiffFinished(std::size_t index, int errorCode)
+{
+  m_diffs.at(index);
+  m_diffs.erase(m_diffs.begin() + index);
+}
+
+
 git::Tree CGit2Wrapper::resolve_to_tree(git::Repository const & repo, const QString& identifier)
 {
     git::Object obj = git::revparse_single(repo, identifier.toUtf8().constData());
@@ -208,7 +215,7 @@ CGit2Wrapper::vDeltas CGit2Wrapper::DiffWithParent(int index, const quokkagit::v
           status = "conflict"; break;
         }
 
-//        emit Message(QString("Similarity of old: %1 new: %2 is %3").arg(sOldPath).arg(sNewPath).arg(delta.similarity));
+        emit Message(QString("Similarity of old: %1 new: %2 is %3").arg(sOldPath).arg(sNewPath).arg(delta.similarity));
 //        emit Message(QString("old id: %1 - new id: %2").arg(git::id_to_str(delta.old_file.id).c_str()).arg(git::id_to_str(delta.new_file.id).c_str()));
 
         if(GIT_DELTA_RENAMED == delta.status)
@@ -258,7 +265,7 @@ void CGit2Wrapper::DiffBlobs(int deltaIndex, const vDeltas& deltas)
                          static_cast<int>(blobNew.size()));
   }
 
-  oid = git::id_to_str(delta.old_file.id).c_str();;
+  oid = git::id_to_str(delta.old_file.id).c_str();
   if(oid != InvaliOid())
   {
     //pathNew = delta.old_file.path;
@@ -271,11 +278,14 @@ void CGit2Wrapper::DiffBlobs(int deltaIndex, const vDeltas& deltas)
                          static_cast<int>(blobOld.size()));
   }
 
-  CKdiff3 diff(dataOld, dataNew);
-  m_diffs.push_back(diff);
 
-  m_diffs.back().Open(pathOld, pathNew, hashOld, hashNew);
+  m_diffs.push_back(CKdiff3(m_diffs.size()));
+
+  m_diffs.back().Open(dataOld, dataNew, pathOld, pathNew, hashOld, hashNew);
 
   connect(&m_diffs.back(), &CKdiff3::Message,
           this, &CGit2Wrapper::Message);
+
+  connect(&m_diffs.back(), SIGNAL(CKdiff3::Finished(std::size_t, int)),
+          this, SLOT(DiffFinished(std::size_t, int)));
 }

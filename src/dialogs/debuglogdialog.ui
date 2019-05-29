@@ -17,7 +17,7 @@
    <string>Log Dialog</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="../resources/resources.qrc">
+   <iconset resource="../../resources/resources.qrc">
     <normaloff>:/log.png</normaloff>:/log.png</iconset>
   </property>
   <layout class="QGridLayout" name="gridLayout">
@@ -30,14 +30,14 @@
       <enum>Qt::Horizontal</enum>
      </property>
      <property name="standardButtons">
-      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+      <set>QDialogButtonBox::Close</set>
      </property>
     </widget>
    </item>
   </layout>
  </widget>
  <resources>
-  <include location="../resources/resources.qrc"/>
+  <include location="../../resources/resources.qrc"/>
  </resources>
  <connections>
   <connection>

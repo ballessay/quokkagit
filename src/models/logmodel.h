@@ -3,7 +3,6 @@
 
 #include "data/logentry.h"
 #include <QAbstractTableModel>
-#include <QFont>
 
 
 class CLogModel : public QAbstractTableModel
@@ -22,14 +21,8 @@ public:
 
   QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
 
-  void SetFont(const QFont& font) { m_font = font; }
-  void SetColumnWidth(int width) { m_columnWidth = width; }
-
 private:
   quokkagit::vLogEntries m_log;
-  QFont m_font;
-  int m_columnWidth;
-  int padding;
 };
 
 #endif // LOGMODEL_H

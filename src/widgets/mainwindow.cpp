@@ -32,6 +32,13 @@ CMainWindow::CMainWindow(CGit2Wrapper& git, QWidget *parent) :
       ++index;
   }
 
+//  QFont monoFont("Hack", 8);
+//  setFont(monoFont);
+
+//  m_pUi->logTableView->setFont(monoFont);
+//  m_pUi->pMessageTextEdit->setFont(monoFont);
+//  m_pUi->pFilesTableView->setFont(monoFont);
+
   m_pLogModel = new CLogModel(git.Log(index, branches), this);
 
   m_pUi->branchLabel->setText(m_git.HeadRef());
@@ -40,13 +47,9 @@ CMainWindow::CMainWindow(CGit2Wrapper& git, QWidget *parent) :
   m_logProxy->setSourceModel(m_pLogModel);
   m_pUi->logTableView->setModel(m_logProxy);
 
-  m_pLogModel->SetFont(m_pUi->logTableView->font());
-
   m_pUi->logTableView->horizontalHeader()->hideSection(quokkagit::SLogEntry::Message);
   m_pUi->logTableView->horizontalHeader()->setSectionsMovable(true);
   m_pUi->logTableView->horizontalHeader()->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Preferred);
-  m_pLogModel->SetColumnWidth(m_pUi->logTableView->columnWidth(quokkagit::SLogEntry::Summary));
-  //m_pUi->logTableView->horizontalHeader()->setSectionResizeMode(quokkagit::SLogEntry::Summary, QHeaderView::Interactive);
 
   int columns = m_pLogModel->columnCount();
   for(int i = 0; i < columns; ++i)
@@ -145,8 +148,6 @@ void CMainWindow::LogItemSelected(const QModelIndex& index)
   const QString msg = m_pLogModel->data(m_pLogModel->index(r, quokkagit::SLogEntry::Message)).toString();
 
   m_pUi->pMessageTextEdit->setText(msg);
-
-  m_pLogModel->SetColumnWidth(m_pUi->logTableView->columnWidth(quokkagit::SLogEntry::Summary));
 
   m_pUi->logTableView->setCurrentIndex(m_pLogModel->index(r, 0));
 

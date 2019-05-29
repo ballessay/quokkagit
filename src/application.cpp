@@ -1,6 +1,7 @@
 #include "application.h"
 #include <QFile>
 #include <QTextStream>
+#include <QFont>
 
 CApplication::CApplication(int& argc, char** argv)
   : QApplication (argc, argv)
@@ -16,6 +17,9 @@ CApplication::CApplication(int& argc, char** argv)
 
     setStyleSheet(ts.readAll());
   }
+
+  QFont monoFont("Hack", 8);
+  setFont(monoFont);
 }
 
 

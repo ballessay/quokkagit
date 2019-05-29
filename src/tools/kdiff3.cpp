@@ -1,10 +1,54 @@
 #include "kdiff3.h"
 
 
-CKdiff3::CKdiff3(const QByteArray& baOld, const QByteArray baNew)
-  : m_process(new QProcess),
+CKdiff3::CKdiff3(std::size_t index)
+  : m_index(index),
+    m_process(new QProcess),
     m_old(new QTemporaryFile),
     m_new(new QTemporaryFile)
+{
+  connect(m_process.get(), SIGNAL(finished(int)),
+          this, SLOT(Finished(int)));
+}
+
+
+CKdiff3::CKdiff3(const CKdiff3& diff)
+  : m_index(diff.m_index),
+    m_process(diff.m_process),
+    m_old(diff.m_old),
+    m_new(diff.m_new)
+{
+  connect(m_process.get(), SIGNAL(finished(int)),
+          this, SLOT(Finished(int)));
+}
+
+
+CKdiff3::CKdiff3(const CKdiff3&& diff)
+  : m_index(std::move(diff.m_index)),
+    m_process(std::move(diff.m_process)),
+    m_old(std::move(diff.m_old)),
+    m_new(std::move(diff.m_new))
+{
+  connect(m_process.get(), SIGNAL(finished(int)),
+          this, SLOT(Finished(int)));
+
+//  diff.m_process.reset(nullptr);
+//  diff.m_old.reset(nullptr);
+//  diff.m_new.reset(nullptr);
+}
+
+
+void CKdiff3::Finished(int exitCode)
+{
+  emit Finished(m_index, exitCode);
+}
+
+void CKdiff3::Open(const QByteArray& baOld,
+                   const QByteArray baNew,
+                   const QString& sFileOld,
+                   const QString& sFileNew,
+                   const QString& sHashOld,
+                   const QString& sHashNew)
 {
   if(m_old->open())
   {
@@ -20,39 +64,6 @@ CKdiff3::CKdiff3(const QByteArray& baOld, const QByteArray baNew)
     m_new->flush();
   }
 
-  connect(m_process.get(), SIGNAL(finished(int)),
-          this, SLOT(Finished(int)));
-}
-
-
-CKdiff3::CKdiff3(const CKdiff3& diff)
-  : m_process(diff.m_process),
-    m_old(diff.m_old),
-    m_new(diff.m_new)
-{
-  connect(m_process.get(), SIGNAL(finished(int)),
-          this, SLOT(Finished(int)));
-}
-
-
-CKdiff3::CKdiff3(const CKdiff3&& diff)
-  : m_process(std::move(diff.m_process)),
-    m_old(std::move(diff.m_old)),
-    m_new(std::move(diff.m_new))
-{
-  connect(m_process.get(), SIGNAL(finished(int)),
-          this, SLOT(Finished(int)));
-
-//  diff.m_process.reset();
-//  diff.m_old.reset(nullptr);
-//  diff.m_new.reset(nullptr);
-}
-
-void CKdiff3::Open(const QString& sFileOld,
-                   const QString& sFileNew,
-                   const QString& sHashOld,
-                   const QString& sHashNew)
-{
 //  connect(m_process.get(), &QProcess::finished,
 //                   this, &CKdiff3::Finished);
   QStringList args;
@@ -67,9 +78,9 @@ void CKdiff3::Open(const QString& sFileOld,
 }
 
 
-void CKdiff3::Finished(int exitCode)
-{
-  QString msg = QString("ExitCode: %1").arg(exitCode);
+//void CKdiff3::Finished(int exitCode)
+//{
+//  QString msg = QString("ExitCode: %1").arg(exitCode);
 
-  emit Message(msg);
-}
+//  emit Message(msg);
+//}
