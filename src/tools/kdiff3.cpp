@@ -1,7 +1,7 @@
 #include "kdiff3.h"
 
 
-CKdiff3::CKdiff3(std::size_t index)
+CKdiff3::CKdiff3(int index)
   : m_index(index),
     m_process(new QProcess),
     m_old(new QTemporaryFile),
@@ -48,9 +48,9 @@ CKdiff3& CKdiff3::operator=(const CKdiff3& other)
 }
 
 
-void CKdiff3::Finished(int exitCode)
+void CKdiff3::Finished(int)
 {
-  emit Finished(m_index, exitCode);
+  emit ProgrammFinished(m_index);
 }
 
 void CKdiff3::Open(const QByteArray& baOld,

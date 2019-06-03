@@ -98,7 +98,7 @@ quokkagit::vLogEntries CGit2Wrapper::Log(int branch, const CGit2Wrapper::vBranch
 }
 
 
-void CGit2Wrapper::DiffFinished(std::size_t index, int errorCode)
+void CGit2Wrapper::DiffFinished(int index)
 {
   m_diffs.erase(m_diffs.begin() + index);
 }
@@ -279,7 +279,7 @@ void CGit2Wrapper::DiffBlobs(int deltaIndex, const vDeltas& deltas)
   }
 
 
-  m_diffs.push_back(CKdiff3(m_diffs.size()));
+  m_diffs.push_back(CKdiff3(static_cast<int>(m_diffs.size())));
 
   // TODO:
   // Not sure why but in case of GIT_DELTA_MODIFIED the paths need to be
@@ -292,6 +292,5 @@ void CGit2Wrapper::DiffBlobs(int deltaIndex, const vDeltas& deltas)
   connect(&m_diffs.back(), &CKdiff3::Message,
           this, &CGit2Wrapper::Message);
 
-  connect(&m_diffs.back(), SIGNAL(CKdiff3::Finished(std::size_t, int)),
-          this, SLOT(DiffFinished(std::size_t, int)));
+  connect(&m_diffs.back(), &CKdiff3::ProgrammFinished, this, &CGit2Wrapper::DiffFinished);
 }

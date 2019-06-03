@@ -46,7 +46,7 @@ signals:
   void NewFiles(CFileLogModel::vFiles files);
 
 protected slots:
-  void DiffFinished(std::size_t index, int exitCode);
+  void DiffFinished(int index);
 
 private:
   git::Tree resolve_to_tree(git::Repository const & repo, const QString& identifier);

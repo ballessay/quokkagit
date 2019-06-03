@@ -12,14 +12,14 @@ class CKdiff3 : public QObject
   Q_OBJECT
 
 public:
-  CKdiff3(std::size_t index);
+  CKdiff3(int index);
   CKdiff3(const CKdiff3& diff);
   CKdiff3(const CKdiff3&& diff);
   CKdiff3& operator=(const CKdiff3& other);
 
 signals:
   void Message(QString);
-  void Finished(std::size_t index, int status);
+  void ProgrammFinished(int index);
 
 protected slots:
   void Finished(int exitCode);
@@ -33,7 +33,7 @@ public slots:
             const QString& sHashNew);
 
 public:
-  std::size_t m_index;
+  int m_index;
   std::shared_ptr<QProcess> m_process;
   std::shared_ptr<QTemporaryFile> m_old;
   std::shared_ptr<QTemporaryFile> m_new;
