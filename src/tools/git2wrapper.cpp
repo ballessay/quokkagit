@@ -161,7 +161,7 @@ CGit2Wrapper::vDeltas CGit2Wrapper::DiffWithParent(int index, const quokkagit::v
 
     git::Commit commit = m_repo.commit_lookup(oid);
 
-    git::Tree tree1 = commit.tree();
+    git::Tree commitTree = commit.tree();
 
     size_t n = commit.parents_num();
     if(n == 0) return deltas;
@@ -170,11 +170,11 @@ CGit2Wrapper::vDeltas CGit2Wrapper::DiffWithParent(int index, const quokkagit::v
 
     git::Commit parentCommit = m_repo.commit_lookup(parent_oid);
 
-    git::Tree tree2 = parentCommit.tree(); // resolve_to_tree(m_repo, parentId);
+    git::Tree parentTree = parentCommit.tree(); // resolve_to_tree(m_repo, parentId);
 
     git_diff_options opts;
     git_diff_init_options(&opts, GIT_DIFF_OPTIONS_VERSION);
-    git::Diff diff = m_repo.diff(tree1, tree2, opts);
+    git::Diff diff = m_repo.diff(parentTree, commitTree, opts);
     git_diff_find_options findopts = GIT_DIFF_FIND_OPTIONS_INIT;
     diff.find_similar(findopts);
 
@@ -284,10 +284,10 @@ void CGit2Wrapper::DiffBlobs(int deltaIndex, const vDeltas& deltas)
   // TODO:
   // Not sure why but in case of GIT_DELTA_MODIFIED the paths need to be
   // reversed to show up in Kdiff3 as expected
-  if (GIT_DELTA_MODIFIED != delta.status)
+//  if (GIT_DELTA_MODIFIED != delta.status)
     m_diffs.back().Open(dataOld, dataNew, pathOld, pathNew, hashOld, hashNew);
-  else
-    m_diffs.back().Open(dataNew, dataOld, pathNew, pathOld, hashNew, hashOld);
+//  else
+//    m_diffs.back().Open(dataNew, dataOld, pathNew, pathOld, hashNew, hashOld);
 
   connect(&m_diffs.back(), &CKdiff3::Message,
           this, &CGit2Wrapper::Message);
