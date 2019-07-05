@@ -27,8 +27,10 @@ public:
 
 public slots:
   void LogItemSelected(const QModelIndex& index);
+  void LogItemKeyPressed();
 
   void DiffFile(const QModelIndex& index);
+  void DiffCurrentIndex();
 
   void BlameFile(const QModelIndex& index);
 

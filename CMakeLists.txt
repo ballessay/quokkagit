@@ -45,6 +45,8 @@ add_executable(${PROJECT_NAME}
   src/widgets/mainwindow.cpp
   src/widgets/mainwindow.h
   src/widgets/mainwindow.ui
+  src/widgets/tablewidget.cpp
+  src/widgets/tablewidget.h
   resources/resources.qrc
 )
 

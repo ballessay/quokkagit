@@ -67,6 +67,9 @@ CMainWindow::CMainWindow(CGit2Wrapper& git, QWidget *parent) :
   connect(m_pUi->logTableView, &QTableView::clicked,
           this, &CMainWindow::LogItemSelected);
 
+  connect(m_pUi->logTableView, &CTableWidget::enterOrReturnPressed,
+          this, &CMainWindow::LogItemKeyPressed);
+
 //  connect(m_pUi->logTableView, &QTableView::entered,
 //          this, &CMainWindow::LogItemSelected);
 
@@ -126,6 +129,9 @@ CMainWindow::CMainWindow(CGit2Wrapper& git, QWidget *parent) :
 
   connect(m_pUi->pFilesTableView, &QAbstractItemView::doubleClicked,
           this, &CMainWindow::DiffFile);
+
+  connect(m_pUi->pFilesTableView, &CTableWidget::enterOrReturnPressed,
+          this, &CMainWindow::DiffCurrentIndex);
 }
 
 
@@ -152,10 +158,20 @@ void CMainWindow::LogItemSelected(const QModelIndex& index)
   m_deltas = m_git.DiffWithParent(r, m_pLogModel->Log());
 }
 
+void CMainWindow::LogItemKeyPressed()
+{
+  LogItemSelected(m_pUi->logTableView->currentIndex());
+}
+
 
 void CMainWindow::DiffFile(const QModelIndex& index)
 {
   m_git.DiffBlobs(index.row(), m_deltas);
+}
+
+void CMainWindow::DiffCurrentIndex()
+{
+  DiffFile(m_pUi->pFilesTableView->currentIndex());
 }
 
 
