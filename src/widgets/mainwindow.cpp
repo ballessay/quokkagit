@@ -32,14 +32,12 @@ CMainWindow::CMainWindow(CGit2Wrapper& git, QWidget *parent) :
       ++index;
   }
 
-//  QFont monoFont("Hack", 8);
-//  setFont(monoFont);
+  QString path;
+  QStringList args(qApp->arguments());
+  if (args.size() > 1)
+    path = args.at(1);
 
-//  m_pUi->logTableView->setFont(monoFont);
-//  m_pUi->pMessageTextEdit->setFont(monoFont);
-//  m_pUi->pFilesTableView->setFont(monoFont);
-
-  m_pLogModel = new CLogModel(git.Log(index, branches), this);
+  m_pLogModel = new CLogModel(git.Log(index, branches, path), this);
 
   m_pUi->branchLabel->setText(m_git.HeadRef());
 

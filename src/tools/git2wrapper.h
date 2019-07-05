@@ -32,7 +32,9 @@ public:
 
   vBranches Branches() const;
 
-  quokkagit::vLogEntries Log(int branch, const vBranches& b) const;
+  quokkagit::vLogEntries Log(int branch,
+                             const vBranches& b,
+                             const QString& path = QString()) const;
 
   vDeltas DiffWithParent(int index, const quokkagit::vLogEntries& entries);
 

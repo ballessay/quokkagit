@@ -77,7 +77,9 @@ CGit2Wrapper::vBranches CGit2Wrapper::Branches() const
 }
 
 
-quokkagit::vLogEntries CGit2Wrapper::Log(int branch, const CGit2Wrapper::vBranches& b) const
+quokkagit::vLogEntries CGit2Wrapper::Log(int branch,
+                                         const CGit2Wrapper::vBranches& b,
+                                         const QString& path) const
 {
   quokkagit::vLogEntries entries;
 
@@ -85,12 +87,47 @@ quokkagit::vLogEntries CGit2Wrapper::Log(int branch, const CGit2Wrapper::vBranch
   {
     git_oid oid = b.at(static_cast<vBranches::size_type>(branch)).second;
 
+    char* p = path.toUtf8().data();
+    git_diff_options diffopts = GIT_DIFF_OPTIONS_INIT;
+    diffopts.pathspec.strings = &p;
+    diffopts.pathspec.count = 1;
+    git::Pathspec ps(diffopts.pathspec);
+
     git::RevWalker walk =  m_repo.rev_walker();
     walk.sort(git::revwalker::sorting::topological);
     walk.push(oid);
     while (auto commit = walk.next())
     {
-      entries.push_back(quokkagit::SLogEntry::FromCommit(commit));
+      if (path.isEmpty())
+        entries.push_back(quokkagit::SLogEntry::FromCommit(commit));
+      else
+      {
+        std::size_t parents = commit.parents_num();
+        if (parents == 0)
+        {
+          int i = commit.tree().pathspec_match(GIT_PATHSPEC_NO_MATCH_ERROR, ps);
+          if (i != 0)
+            continue;
+          else
+            entries.push_back(quokkagit::SLogEntry::FromCommit(commit));
+        }
+        else if (parents == 1)
+        {
+          auto parent = commit.parent(0);
+          auto c_tree = commit.tree();
+          auto p_tree = parent.tree();
+          auto diff = commit.repo().diff(p_tree, c_tree, diffopts);
+
+          if (diff.deltas_num() > 0)
+            entries.push_back(quokkagit::SLogEntry::FromCommit(commit));
+          else continue;
+        }
+        else
+        {
+
+        }
+
+      }
     }
   }
 
