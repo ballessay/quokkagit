@@ -256,7 +256,7 @@ CGit2Wrapper::vDeltas CGit2Wrapper::DiffWithParent(int index, const quokkagit::v
 //        emit Message(QString("old id: %1 - new id: %2").arg(git::id_to_str(delta.old_file.id).c_str()).arg(git::id_to_str(delta.new_file.id).c_str()));
 
         if(GIT_DELTA_RENAMED == delta.status)
-          files.push_back(std::make_pair(status, sNewPath + " => " + sOldPath));
+          files.push_back(std::make_pair(status, sOldPath + " => " + sNewPath));
         else
           files.push_back(std::make_pair(status, sNewPath));
 
