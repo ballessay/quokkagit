@@ -1,6 +1,6 @@
 #!/bin/bash
 
-BUILD_DIR=builds
+BUILD_DIR=build
 
 rm -rf $BUILD_DIR
 mkdir -p $BUILD_DIR
@@ -16,4 +16,4 @@ DESTDIR=install make install
 #linuxdeployqt quokkagit
 #cd -
 
-cpack -G TGZ
+#cpack -G TGZ

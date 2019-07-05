@@ -1,0 +1,16 @@
+language: cpp
+sudo: required
+dist: xenial
+
+os: linux
+
+
+before_script:
+  - sudo add-apt-repository --yes ppa:beineri/opt-qt-5.12.3-xenial
+  - sudo apt-get update
+  - sudo apt-get install -qq qt512-meta-minimal cmake libgl1-mesa-dev
+
+script:
+  - QT_ENV_SCRIPT=$(find /opt -name 'qt*-env.sh')
+  - source $QT_ENV_SCRIPT
+  - ./scripts/build.sh
