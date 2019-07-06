@@ -1,5 +1,6 @@
 [Desktop Entry]
 Type=Application
+Comment=A git log viewer
 Name=quokkagit
 Exec=quokkagit
 Icon=quokkagit
