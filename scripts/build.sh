@@ -17,10 +17,10 @@ rm -rf install/usr/include
 wget -c -nv "https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage"
 chmod a+x linuxdeployqt-continuous-x86_64.AppImage
 # export VERSION=... # linuxdeployqt uses this for naming the file
-./linuxdeployqt-continuous-x86_64.AppImage install/usr/share/applications/*.desktop -appimage
+LD_LIBRARY_PATH=install/usr/lib ./linuxdeployqt-continuous-x86_64.AppImage install/usr/share/applications/*.desktop -appimage
 
 #cd install/usr/bin
 #linuxdeployqt quokkagit
 #cd -
 
-#cpack -G TGZ
+
