@@ -28,9 +28,6 @@ script:
   - mv quokkagit*.AppImage out/
 
 after_success:
-  - pwd
-  - ls -la
-  - cd build
   - ls -lh out/* 
   - wget -c https://github.com/probonopd/uploadtool/raw/master/upload.sh
   - bash upload.sh out/*
