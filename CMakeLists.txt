@@ -86,6 +86,14 @@ if(UNIX)
 endif()
 
 
+install(TARGETS ${APPAME} DESTINATION bin)
+if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+
+    install(FILES resources/org.ballessay.quokkagit.desktop DESTINATION share/applications)
+
+endif(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+
+
 # Qt
 #if(Qt5_FOUND AND WIN32 AND TARGET Qt5::qmake AND NOT TARGET Qt5::windeployqt)
 #    get_target_property(_qt5_qmake_location Qt5::qmake IMPORTED_LOCATION)
