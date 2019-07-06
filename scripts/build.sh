@@ -1,27 +1,17 @@
 #!/bin/bash
 
 BUILD_DIR=build
+INSTALL_DIR=install
 
 rm -rf $BUILD_DIR
 mkdir -p $BUILD_DIR
 cd $BUILD_DIR
 
-cmake -DCMAKE_INSTALL_PREFIX=/usr -DBUNDLE_LIBGIT2=ON ..
+cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DBUNDLE_LIBGIT2=ON ..
 
 make -j
 
-DESTDIR=install make install
+DESTDIR=$INSTALL_DIR make install
 
-rm -rf install/usr/include
-
-wget -c -nv "https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage"
-chmod a+x linuxdeployqt-continuous-x86_64.AppImage
-# export VERSION=... # linuxdeployqt uses this for naming the file
-export LD_LIBRARY_PATH=$(pwd)/install/usr/lib 
-./linuxdeployqt-continuous-x86_64.AppImage install/usr/share/applications/*.desktop -appimage
-
-#cd install/usr/bin
-#linuxdeployqt quokkagit
-#cd -
-
+rm -rf $INSTALL_DIR/usr/include
 
