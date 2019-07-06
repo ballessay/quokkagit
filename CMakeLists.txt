@@ -91,6 +91,8 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
 
     install(FILES resources/org.ballessay.quokkagit.desktop DESTINATION share/applications)
 
+    install(FILES ../resources/quokkagit.png DESTINATION share/icons/hicolor/256x256/apps)
+
 endif(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
 
 
