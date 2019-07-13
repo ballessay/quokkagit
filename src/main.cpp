@@ -15,7 +15,7 @@ int main(int argc, char** argv)
     {
         CApplication app(argc, argv);
 
-        CGit2Wrapper git(app.InitialRepoPath());
+        CGit2Wrapper git(app.settings());
         git.Initialize();
 
         CMainWindow w(git, app.settings());

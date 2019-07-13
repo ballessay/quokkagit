@@ -1,6 +1,8 @@
 #include "git2wrapper.h"
 
+#include "data/diffentry.h"
 #include "data/logentry.h"
+#include "data/settings.h"
 
 
 #include "git2cpp/repo.h"
@@ -34,8 +36,9 @@ namespace
 
 
 
-CGit2Wrapper::CGit2Wrapper(const QString& sPath)
-    : m_repo(sPath.toUtf8().constData())
+CGit2Wrapper::CGit2Wrapper(const quokkagit::SSettings& settings)
+    : m_repo(settings.repoPath.toUtf8().constData()),
+      m_settings(settings)
 {
 }
 
@@ -224,10 +227,18 @@ CGit2Wrapper::vDeltas CGit2Wrapper::DiffWithParent(int index, const quokkagit::v
 
         std::vector<git::Tree> trees;
 
-        auto callback = [this, &files, &deltas, &trees](git_diff_delta const & delta, git_diff_hunk const &, git_diff_line const &) {
+        auto callback = [this, &files, &deltas, &trees](git_diff_delta const & delta,
+                                                        git_diff_hunk const &,
+                                                        git_diff_line const &) {
 
-            QString sNewPath(QString::fromLocal8Bit(delta.new_file.path));
-            QString sOldPath(QString::fromLocal8Bit(delta.old_file.path));
+            quokkagit::SDelta d;
+
+            d.oldFile.oid = delta.old_file.id;
+            d.oldFile.path = QString::fromLocal8Bit(delta.old_file.path);
+            d.oldFile.id = git::id_to_str(delta.old_file.id).c_str();
+            d.newFile.oid = delta.new_file.id;
+            d.newFile.path = QString::fromLocal8Bit(delta.new_file.path);
+            d.newFile.id = git::id_to_str(delta.new_file.id).c_str();
 
             QString status;
             switch (delta.status)
@@ -256,16 +267,23 @@ CGit2Wrapper::vDeltas CGit2Wrapper::DiffWithParent(int index, const quokkagit::v
                 status = "conflict"; break;
             }
 
-            emit Message(QString("Similarity of old: %1 new: %2 is %3").arg(sOldPath).arg(sNewPath).arg(delta.similarity));
-            //        emit Message(QString("old id: %1 - new id: %2").arg(git::id_to_str(delta.old_file.id).c_str()).arg(git::id_to_str(delta.new_file.id).c_str()));
+            emit Message(QString("Similarity of old: %1 new: %2 is %3")
+                            .arg(d.oldFile.path)
+                            .arg(d.newFile.path)
+                            .arg(delta.similarity));
+            //        emit Message(QString("old id: %1 - new id: %2").arg(it::id_to_str(delta.old_file.id).c_str()).arg(git::id_to_str(delta.new_file.id).c_str()));
 
             if(GIT_DELTA_RENAMED == delta.status)
-                files.push_back(std::make_pair(status, sOldPath + " => " + sNewPath));
+            {
+                d.display = d.oldFile.path + " => " + d.newFile.path;
+            }
             else
-                files.push_back(std::make_pair(status, sNewPath));
+            {
+                d.display = d.newFile.path;
+            }
 
-
-            deltas.push_back(std::make_pair(delta, sNewPath));
+            files.push_back(std::make_pair(status, d.newFile.path));
+            deltas.push_back(d);
         };
 
         diff.print(git::diff::format::raw, callback);
@@ -282,47 +300,34 @@ void CGit2Wrapper::DiffBlobs(int deltaIndex, const vDeltas& deltas)
     if(deltaIndex < 0) return;
 
     static const QString c_msgTempl("Size: %1");
-    git_diff_delta delta = deltas.at(static_cast<size_t>(deltaIndex)).first;
-    const QString sPath = deltas.at(static_cast<size_t>(deltaIndex)).second;
+    const auto& delta = deltas.at(static_cast<size_t>(deltaIndex));
 
-    QByteArray dataNew;
-    QByteArray dataOld;
-    // TODO: Use delta paths
-    QString pathNew = sPath;
-    QString pathOld = sPath;
-    QString hashNew;
-    QString hashOld;
+    quokkagit::SDiffEntry e;
 
-    QString oid = git::id_to_str(delta.new_file.id).c_str();
-    if(oid != InvaliOid())
+    if(delta.newFile.id != InvaliOid())
     {
-        //pathNew = delta.new_file.path;
+        e.newFilename = delta.newFile.path;
+        e.newHash = delta.newFile.id.left(10);
 
-        git::Blob blobNew = m_repo.blob_lookup(delta.new_file.id);
-
-        hashNew = QString::fromStdString(git::id_to_str(delta.new_file.id, 10));
-
-        dataNew = QByteArray(reinterpret_cast<const char*>(blobNew.content()),
-                             static_cast<int>(blobNew.size()));
+        git::Blob blobNew = m_repo.blob_lookup(delta.newFile.oid);
+        e.newData = QByteArray(reinterpret_cast<const char*>(blobNew.content()),
+                               static_cast<int>(blobNew.size()));
     }
 
-    oid = git::id_to_str(delta.old_file.id).c_str();
-    if(oid != InvaliOid())
+    if(delta.oldFile.id != InvaliOid())
     {
-        //pathNew = delta.old_file.path;
+        e.oldFilename = delta.oldFile.path;
+        e.oldHash = delta.oldFile.id.left(10);
 
-        git::Blob blobOld = m_repo.blob_lookup(delta.old_file.id);
-
-        hashOld = QString::fromStdString(git::id_to_str(delta.old_file.id, 10));
-
-        dataOld = QByteArray(reinterpret_cast<const char*>(blobOld.content()),
-                             static_cast<int>(blobOld.size()));
+        git::Blob blobOld = m_repo.blob_lookup(delta.oldFile.oid);
+        e.oldData = QByteArray(reinterpret_cast<const char*>(blobOld.content()),
+                               static_cast<int>(blobOld.size()));
     }
 
 
-    m_diffs.push_back(CKdiff3(static_cast<int>(m_diffs.size())));
+    m_diffs.push_back(CKdiff3(m_settings.diff, e, static_cast<int>(m_diffs.size())));
 
-    m_diffs.back().Open(dataOld, dataNew, pathOld, pathNew, hashOld, hashNew);
+    m_diffs.back().Open();
 
     connect(&m_diffs.back(), &CKdiff3::Message,
             this, &CGit2Wrapper::Message);

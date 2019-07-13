@@ -181,16 +181,13 @@ void CMainWindow::BlameFile(const QModelIndex& index)
 {
     int r = index.row();
 
-    git_diff_delta delta;
-    QString path;
-
-    std::tie(delta, path) = m_deltas.at(r);
+    const auto& delta = m_deltas.at(r);
 
     const QModelIndex i = m_pLogModel->index(m_ui->logTableView->currentIndex().row(),
                                              quokkagit::SLogEntry::Sha);
     const QString sha = m_pLogModel->data(i).toString();
 
-    CBlameDialog d(m_git.BlameFile(path, sha), this);
+    CBlameDialog d(m_git.BlameFile(delta.newFile.path, sha), this);
     if (d.exec())
     {
 

@@ -19,6 +19,7 @@ add_executable(${PROJECT_NAME}
   src/application.cpp
   src/application.h
   src/data/blamedata.h
+  src/data/diffentry.h
   src/data/logentry.cpp
   src/data/logentry.h
   src/data/settings.cpp
@@ -45,6 +46,8 @@ add_executable(${PROJECT_NAME}
   src/models/logmodel.cpp
   src/models/logmodel.h
   src/main.cpp
+  src/tools/difftool.cpp
+  src/tools/difftool.h
   src/tools/git2wrapper.cpp
   src/tools/git2wrapper.h
   src/tools/kdiff3.cpp

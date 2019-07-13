@@ -2,6 +2,7 @@
 #define SETTINGS_H
 
 #include <QString>
+#include <QStringList>
 #include <QFont>
 
 class QSettings;
@@ -14,7 +15,7 @@ namespace quokkagit
         void Save(QSettings& settings) const;
 
         QString path;
-        QString arguments;
+        QStringList arguments;
     };
 
 
@@ -26,6 +27,7 @@ namespace quokkagit
         void Load();
         void Save() const;
 
+        QString repoPath;
         QFont font;
         SDiffSettings diff;
     };

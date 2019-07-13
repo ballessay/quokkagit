@@ -1,10 +1,11 @@
 #ifndef GIT2WRAPPER_H
 #define GIT2WRAPPER_H
 
-#include "tools/kdiff3.h"
 #include "data/blamedata.h"
+#include "data/diffentry.h"
 #include "data/logentry.h"
 #include "models/filelogmodel.h"
+#include "tools/kdiff3.h"
 #include "git2cpp/repo.h"
 #include "git2cpp/diff.h"
 #include <QStringList>
@@ -12,6 +13,7 @@
 #include <memory>
 #include <vector>
 
+namespace quokkagit { struct SSettings; }
 class QString;
 
 
@@ -22,9 +24,9 @@ class CGit2Wrapper : public QObject
 public:
     using vReferences = std::vector<git::Reference>;
     using vBranches = std::vector<std::pair<QString, git_oid>>;
-    using vDeltas = std::vector<std::pair<git_diff_delta, QString>>;
+    using vDeltas = std::vector<quokkagit::SDelta>;
 
-    CGit2Wrapper(const QString& sPath);
+    CGit2Wrapper(const quokkagit::SSettings& settings);
 
     void SetHead(const QString& sHead);
     QString HeadRef() const;
@@ -59,6 +61,7 @@ private:
     git::Repository m_repo;
     vReferences m_branches;
     std::vector<CKdiff3> m_diffs;
+    const quokkagit::SSettings& m_settings;
 };
 
 #endif // GIT2WRAPPER_H
