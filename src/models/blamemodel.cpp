@@ -1,5 +1,8 @@
 #include "blamemodel.h"
+#include <QBrush>
+#include <QString>
 #include <cassert>
+#include <set>
 
 namespace
 {
@@ -29,7 +32,17 @@ void CBlameModel::SetData(const quokkagit::tvBlameData& data)
 
     m_data = data;
 
+    CalculateBackgroundColors();
+
     endResetModel();
+}
+
+void CBlameModel::SetColors(const QColor& fg, const QColor& bg)
+{
+    m_fg = QColor(Qt::white);
+    m_bg = bg;
+
+    CalculateBackgroundColors();
 }
 
 int CBlameModel::rowCount(const QModelIndex&) const
@@ -44,73 +57,81 @@ int CBlameModel::columnCount(const QModelIndex&) const
 
 QVariant CBlameModel::data(const QModelIndex& index, int role) const
 {
-    if (Qt::DisplayRole == role && index.isValid())
+    if (index.isValid())
     {
         int column = index.column();
         int row = index.row();
 
-
         if (row < static_cast<int>(m_data.size()))
         {
             const auto& entry = m_data.at(row);
-            switch(column)
+
+            if (Qt::DisplayRole == role )
             {
-            case Column::Sha:
-                return entry.oid;
-            case Column::Signature:
-                return entry.signature;
-            case Column::LineNumber:
-                return QVariant::fromValue(entry.linenumber);
-            case Column::Data:
-                return entry.line;
-            default:
-                assert(false);
-                break;
+                switch(column)
+                {
+                case Column::Sha:
+                    return entry.oid;
+                case Column::Signature:
+                    return entry.signature;
+                case Column::LineNumber:
+                    return QVariant::fromValue(entry.linenumber);
+                case Column::Data:
+                    return entry.line;
+                default:
+                    assert(false);
+                    break;
+                }
             }
+            else if (Qt::ForegroundRole == role)
+            {
+                const auto& it = m_colors.find(entry.oid);
+                return it != m_colors.end() ? it->second : QBrush(m_fg);
+            }
+//            else if (Qt::BackgroundRole == role)
+//            {
+//                const auto& it = m_colors.find(entry.oid);
+//                return it != m_colors.end() ? it->second : QBrush(m_fg);
+//            }
         }
     }
 
     return QVariant();
 }
 
-/*
-QVariant CBlameModel::headerData(int section, Qt::Orientation orientation, int role) const
+void CBlameModel::CalculateBackgroundColors()
 {
-    if(Qt::DisplayRole == role)
-    {
-        if(Qt::Horizontal == orientation)
-        {
-            switch(section)
-            {
-            case quokkagit::SLogEntry::Sha:
-                return tr(quokkagit::SLogEntry::sha);
-            case quokkagit::SLogEntry::Summary:
-                return tr(quokkagit::SLogEntry::summary);
-            case quokkagit::SLogEntry::Message:
-                return tr(quokkagit::SLogEntry::message);
-            case quokkagit::SLogEntry::Commiter:
-                return tr(quokkagit::SLogEntry::commiter);
-            case quokkagit::SLogEntry::CommiterEmail:
-                return tr(quokkagit::SLogEntry::commiterEmail);
-            case quokkagit::SLogEntry::CommitDate:
-                return tr(quokkagit::SLogEntry::commitDate);
-            case quokkagit::SLogEntry::Author:
-                return tr(quokkagit::SLogEntry::author);
-            case quokkagit::SLogEntry::AuthorEmail:
-                return tr(quokkagit::SLogEntry::authorEmail);
-            case quokkagit::SLogEntry::AuthorDate:
-                return tr(quokkagit::SLogEntry::authorDate);
-            default:
-                assert(false);
-                break;
-            }
-        }
-        else
-        {
-            return QString::number(m_data.size() - section);
-        }
-    }
+    std::set<QString> shas;
 
-    return QVariant();
+    for (const auto& data : m_data)
+        shas.insert(data.oid);
+
+    int noColors = static_cast<int>(shas.size());
+
+    // Source: https://doc.qt.io/archives/qq/qq26-adaptivecoloring.html
+    const int HUE_BASE = (m_bg.hue() == -1) ? 90 : m_bg.hue();
+    int h, s, v;
+    auto it = shas.begin();
+    for (int i = 0; i <  noColors; i++) {
+        h = int(HUE_BASE + (360.0 / noColors * i)) % 360;
+        s = 240;
+        int bg = m_bg.value();
+        int fg = m_fg.value();
+        v = int(qMax(m_bg.value(), m_fg.value()) * 0.85);
+
+        const int M = 35;
+        if ((h < m_bg.hue() + M && h > m_bg.hue() - M)
+            || (h < m_fg.hue() + M && h > m_fg.hue() - M))
+        {
+            h = ((m_bg.hue() + m_fg.hue()) / (i+1)) % 360;
+            s = ((m_bg.saturation() + m_fg.saturation() + 2*i)
+                 / 2) % 256;
+            v = ((m_bg.value() + m_fg.value() + 2*i) / 2)
+                % 256;
+        }
+
+        m_colors[*it] = QBrush(QColor::fromHsv(h, s, v));
+
+        ++it;
+    }
 }
-*/
