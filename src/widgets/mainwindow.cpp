@@ -12,242 +12,246 @@
 
 
 CMainWindow::CMainWindow(CGit2Wrapper& git, QWidget *parent) :
-  QMainWindow(parent),
-  m_pUi(new Ui::CMainWindow),
-  m_git(git),
-  m_pLogModel(nullptr),
-  m_logFileModel(nullptr),
-  m_logProxy(nullptr)
+    QMainWindow(parent),
+    m_pUi(new Ui::CMainWindow),
+    m_git(git),
+    m_pLogModel(nullptr),
+    m_logFileModel(nullptr),
+    m_logProxy(nullptr)
 {
-  m_pUi->setupUi(this);
+    m_pUi->setupUi(this);
 
-  QString head = m_git.HeadRef();
-  CGit2Wrapper::vBranches branches = m_git.Branches();
-  int index = 0;
-  for (const auto& branch : branches)
-  {
-    if(branch.first == head)
-      break;
-    else
-      ++index;
-  }
-
-  QString path;
-  QStringList args(qApp->arguments());
-  if (args.size() > 1)
-    path = args.at(1);
-
-  m_pLogModel = new CLogModel(git.Log(index, branches, path), this);
-
-  m_pUi->branchLabel->setText(m_git.HeadRef());
-
-  m_logProxy = new CLogFilterProxyModel(this);
-  m_logProxy->setSourceModel(m_pLogModel);
-  m_pUi->logTableView->setModel(m_logProxy);
-
-  m_pUi->logTableView->horizontalHeader()->hideSection(quokkagit::SLogEntry::Message);
-  m_pUi->logTableView->horizontalHeader()->setSectionsMovable(true);
-  m_pUi->logTableView->horizontalHeader()->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Preferred);
-
-  int columns = m_pLogModel->columnCount();
-  for(int i = 0; i < columns; ++i)
-  {
-    if(i != quokkagit::SLogEntry::Summary)
+    QString head = m_git.HeadRef();
+    CGit2Wrapper::vBranches branches = m_git.Branches();
+    int index = 0;
+    for (const auto& branch : branches)
     {
-      m_pUi->logTableView->resizeColumnToContents(i);
+        if(branch.first == head)
+            break;
+        else
+            ++index;
     }
-    else {
-      m_pUi->logTableView->setColumnWidth(i, 400);
+
+    QString path;
+    QStringList args(qApp->arguments());
+    if (args.size() > 1)
+        path = args.at(1);
+
+    m_pLogModel = new CLogModel(git.Log(index, branches, path), this);
+
+    m_pUi->branchLabel->setText(m_git.HeadRef());
+
+    m_logProxy = new CLogFilterProxyModel(this);
+    m_logProxy->setSourceModel(m_pLogModel);
+    m_pUi->logTableView->setModel(m_logProxy);
+
+    m_pUi->logTableView->horizontalHeader()->hideSection(quokkagit::SLogEntry::Message);
+    m_pUi->logTableView->horizontalHeader()->setSectionsMovable(true);
+    m_pUi->logTableView->horizontalHeader()->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Preferred);
+
+    int columns = m_pLogModel->columnCount();
+    for(int i = 0; i < columns; ++i)
+    {
+        if(i != quokkagit::SLogEntry::Summary)
+        {
+            m_pUi->logTableView->resizeColumnToContents(i);
+        }
+        else {
+            m_pUi->logTableView->setColumnWidth(i, 400);
+        }
     }
-  }
 
-  connect(m_pUi->logTableView, &QTableView::activated,
-          this, &CMainWindow::LogItemSelected);
+    connect(m_pUi->logTableView, &QTableView::activated,
+            this, &CMainWindow::LogItemSelected);
 
-  connect(m_pUi->logTableView, &QTableView::clicked,
-          this, &CMainWindow::LogItemSelected);
+    connect(m_pUi->logTableView, &QTableView::clicked,
+            this, &CMainWindow::LogItemSelected);
 
-  connect(m_pUi->logTableView, &CTableWidget::enterOrReturnPressed,
-          this, &CMainWindow::LogItemKeyPressed);
+    connect(m_pUi->logTableView, &CTableWidget::enterOrReturnPressed,
+            this, &CMainWindow::LogItemKeyPressed);
 
-//  connect(m_pUi->logTableView, &QTableView::entered,
-//          this, &CMainWindow::LogItemSelected);
+    //  connect(m_pUi->logTableView, &QTableView::entered,
+    //          this, &CMainWindow::LogItemSelected);
 
-  CLogColumnVisibilityMenu* menu = new CLogColumnVisibilityMenu(this);
-  m_pUi->tableViewToolButton->setMenu(menu);
+    CLogColumnVisibilityMenu* menu = new CLogColumnVisibilityMenu(this);
+    m_pUi->tableViewToolButton->setMenu(menu);
 
-  connect(m_pUi->tableViewToolButton, &QToolButton::clicked,
-          m_pUi->tableViewToolButton, &QToolButton::showMenu);
+    connect(m_pUi->tableViewToolButton, &QToolButton::clicked,
+            m_pUi->tableViewToolButton, &QToolButton::showMenu);
 
-  connect(menu, &CLogColumnVisibilityMenu::ToggleColumn,
-          this, &CMainWindow::ToggleColumn);
+    connect(menu, &CLogColumnVisibilityMenu::ToggleColumn,
+            this, &CMainWindow::ToggleColumn);
 
-  menu->EmitState();
+    menu->EmitState();
 
-  CFileLogModel::vFiles files;
+    CFileLogModel::vFiles files;
 
-  m_logFileModel = new CFileLogModel(files, this);
+    m_logFileModel = new CFileLogModel(files, this);
 
-  m_pUi->pFilesTableView->setModel(m_logFileModel);
+    m_pUi->pFilesTableView->setModel(m_logFileModel);
 
-  m_pUi->logTableView->setContextMenuPolicy(Qt::ActionsContextMenu);
-  CLogContextMenu* pMenu = new CLogContextMenu(this);
-  for (auto action : pMenu->actions())
-  {
-    m_pUi->logTableView->addAction(action);
-  }
+    m_pUi->logTableView->setContextMenuPolicy(Qt::ActionsContextMenu);
+    CLogContextMenu* pMenu = new CLogContextMenu(this);
+    for (auto action : pMenu->actions())
+    {
+        m_pUi->logTableView->addAction(action);
+    }
 
-  m_pUi->pFilesTableView->setContextMenuPolicy(Qt::ActionsContextMenu);
-  CLogFilesContextMenu* pFileMenu = new CLogFilesContextMenu(this);
-  for (auto& action : pFileMenu->actions())
-  {
-    auto dispatch = [this, action]() {
-      if ("Diff" == action->text())
-        DiffFile(m_pUi->pFilesTableView->currentIndex());
-      if ("Blame" == action->text())
-        BlameFile(m_pUi->pFilesTableView->currentIndex());
-      else {
-        int notYet  = 0;
-      }
-    };
-    m_pUi->pFilesTableView->addAction(action);
+    m_pUi->pFilesTableView->setContextMenuPolicy(Qt::ActionsContextMenu);
+    CLogFilesContextMenu* pFileMenu = new CLogFilesContextMenu(this);
+    for (auto& action : pFileMenu->actions())
+    {
+        auto dispatch = [this, action]() {
+            if ("Diff" == action->text())
+                DiffFile(m_pUi->pFilesTableView->currentIndex());
+            if ("Blame" == action->text())
+                BlameFile(m_pUi->pFilesTableView->currentIndex());
+            else {
+                int notYet  = 0;
+            }
+        };
+        m_pUi->pFilesTableView->addAction(action);
 
-    connect(action, &QAction::triggered, dispatch);
-  }
+        connect(action, &QAction::triggered, dispatch);
+    }
 
-  CLogSearchContextMenu* searchMenu = new CLogSearchContextMenu(this);
-  m_pUi->searchOptionsToolButton->setMenu(searchMenu);
+    CLogSearchContextMenu* searchMenu = new CLogSearchContextMenu(this);
+    m_pUi->searchOptionsToolButton->setMenu(searchMenu);
 
-  connect(m_pUi->searchOptionsToolButton, &QToolButton::clicked,
-          m_pUi->searchOptionsToolButton, &QToolButton::showMenu);
+    connect(m_pUi->searchOptionsToolButton, &QToolButton::clicked,
+            m_pUi->searchOptionsToolButton, &QToolButton::showMenu);
 
-  connect(&m_git, &CGit2Wrapper::NewFiles,
-          this, &CMainWindow::AddFiles);
+    connect(&m_git, &CGit2Wrapper::NewFiles,
+            this, &CMainWindow::AddFiles);
 
-  connect(&m_git, &CGit2Wrapper::Message,
-          this, &CMainWindow::AddMessage);
+    connect(&m_git, &CGit2Wrapper::Message,
+            this, &CMainWindow::AddMessage);
 
-  connect(m_pUi->pFilesTableView, &QAbstractItemView::doubleClicked,
-          this, &CMainWindow::DiffFile);
+    connect(m_pUi->pFilesTableView, &QAbstractItemView::doubleClicked,
+            this, &CMainWindow::DiffFile);
 
-  connect(m_pUi->pFilesTableView, &CTableWidget::enterOrReturnPressed,
-          this, &CMainWindow::DiffCurrentIndex);
+    connect(m_pUi->pFilesTableView, &CTableWidget::enterOrReturnPressed,
+            this, &CMainWindow::DiffCurrentIndex);
 }
 
 
 CMainWindow::~CMainWindow()
 {
-  delete m_pUi;
+    delete m_pUi;
 }
 
 
 void CMainWindow::LogItemSelected(const QModelIndex& index)
 {
-  m_logFileModel->SetLog(CFileLogModel::vFiles());
+    m_logFileModel->SetLog(CFileLogModel::vFiles());
 
-  QModelIndex i = m_logProxy->mapToSource(index);
+    QModelIndex i = m_logProxy->mapToSource(index);
 
-  int r = i.row();
+    int r = i.row();
 
-  const QString msg = m_pLogModel->data(m_pLogModel->index(r, quokkagit::SLogEntry::Message)).toString();
+    const QString msg = m_pLogModel->data(m_pLogModel->index(r, quokkagit::SLogEntry::Message)).toString();
 
-  m_pUi->pMessageTextEdit->setText(msg);
+    m_pUi->pMessageTextEdit->setText(msg);
 
-  m_pUi->logTableView->setCurrentIndex(m_pLogModel->index(r, 0));
+    m_pUi->logTableView->setCurrentIndex(m_pLogModel->index(r, 0));
 
-  m_deltas = m_git.DiffWithParent(r, m_pLogModel->Log());
+    m_deltas = m_git.DiffWithParent(r, m_pLogModel->Log());
 }
 
 void CMainWindow::LogItemKeyPressed()
 {
-  LogItemSelected(m_pUi->logTableView->currentIndex());
+    LogItemSelected(m_pUi->logTableView->currentIndex());
 }
 
 
 void CMainWindow::DiffFile(const QModelIndex& index)
 {
-  m_git.DiffBlobs(index.row(), m_deltas);
+    m_git.DiffBlobs(index.row(), m_deltas);
 }
 
 void CMainWindow::DiffCurrentIndex()
 {
-  DiffFile(m_pUi->pFilesTableView->currentIndex());
+    DiffFile(m_pUi->pFilesTableView->currentIndex());
 }
 
 
 void CMainWindow::BlameFile(const QModelIndex& index)
 {
-  int r = index.row();
+    int r = index.row();
 
-  git_diff_delta delta;
-  QString path;
+    git_diff_delta delta;
+    QString path;
 
-  std::tie(delta, path) = m_deltas.at(r);
+    std::tie(delta, path) = m_deltas.at(r);
 
-  CBlameDialog d(m_git.repo());
-  if (d.exec(path))
-  {
+    const QModelIndex i = m_pLogModel->index(m_pUi->logTableView->currentIndex().row(),
+                                             quokkagit::SLogEntry::Sha);
+    const QString sha = m_pLogModel->data(i).toString();
 
-  }
+    CBlameDialog d(m_git.BlameFile(path, sha), this);
+    if (d.exec())
+    {
+
+    }
 }
 
 
 void CMainWindow::ToggleColumn(int id, bool enabled)
 {
-  if (enabled)
-  {
-    m_pUi->logTableView->horizontalHeader()->showSection(id);
-  }
-  else
-  {
-    m_pUi->logTableView->horizontalHeader()->hideSection(id);
-  }
+    if (enabled)
+    {
+        m_pUi->logTableView->horizontalHeader()->showSection(id);
+    }
+    else
+    {
+        m_pUi->logTableView->horizontalHeader()->hideSection(id);
+    }
 }
 
 
 void CMainWindow::AddFiles(const CFileLogModel::vFiles& files)
 {
-  m_logFileModel->SetLog(files);
+    m_logFileModel->SetLog(files);
 
-  m_pUi->pFilesTableView->resizeColumnToContents(0);
+    m_pUi->pFilesTableView->resizeColumnToContents(0);
 }
 
 
 void CMainWindow::AddMessage(QString msg)
 {
-  m_dbgLogDialog.AddMessage(msg);
+    m_dbgLogDialog.AddMessage(msg);
 }
 
 
 void CMainWindow::on_actionOpen_log_triggered()
 {
-  m_dbgLogDialog.exec();
+    m_dbgLogDialog.exec();
 }
 
 
 void CMainWindow::on_branchSelectionToolButton_clicked()
 {
-  CGit2Wrapper::vBranches b = m_git.Branches();
+    CGit2Wrapper::vBranches b = m_git.Branches();
 
-  CBranchSelectionDialog d(b, this);
-  if(d.exec() == QDialog::Accepted)
-  {
-    int index = d.currentSelection();
-    if(index >= 0 && index < static_cast<int>(b.size()))
+    CBranchSelectionDialog d(b, this);
+    if(d.exec() == QDialog::Accepted)
     {
-      quokkagit::vLogEntries entries = m_git.Log(d.currentSelection(), b);
+        int index = d.currentSelection();
+        if(index >= 0 && index < static_cast<int>(b.size()))
+        {
+            quokkagit::vLogEntries entries = m_git.Log(d.currentSelection(), b);
 
-      m_pLogModel->SetLog(entries);
+            m_pLogModel->SetLog(entries);
 
-      m_pUi->branchLabel->setText(b.at(static_cast<quokkagit::vLogEntries::size_type>(index)).first);
+            m_pUi->branchLabel->setText(b.at(static_cast<quokkagit::vLogEntries::size_type>(index)).first);
+        }
     }
-  }
 }
 
 
 void CMainWindow::on_searchLineEdit_returnPressed()
 {
-  QList<QAction*> actions = m_pUi->searchOptionsToolButton->menu()->actions();
+    QList<QAction*> actions = m_pUi->searchOptionsToolButton->menu()->actions();
 
-  m_logProxy->SetFilter(m_pUi->searchLineEdit->text(), actions);
+    m_logProxy->SetFilter(m_pUi->searchLineEdit->text(), actions);
 }

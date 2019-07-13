@@ -5,22 +5,22 @@
 
 class CLogColumnVisibilityMenu : public QMenu
 {
-  Q_OBJECT
+    Q_OBJECT
 
 public:
-  CLogColumnVisibilityMenu(QWidget* parent);
-  ~CLogColumnVisibilityMenu();
+    CLogColumnVisibilityMenu(QWidget* parent);
+    ~CLogColumnVisibilityMenu();
 
-  void EmitState();
+    void EmitState();
 
 public slots:
-  void Toggled(bool enabled);
+    void Toggled(bool enabled);
 
 signals:
-  void ToggleColumn(int column, bool bVisible);
+    void ToggleColumn(int column, bool bVisible);
 
 private:
-  void AddAction(const QString& sName, int id, bool bEnabled);
+    void AddAction(const QString& sName, int id, bool bEnabled);
 };
 
 #endif // LOGCOLUMNVISIBILITYMENU_H

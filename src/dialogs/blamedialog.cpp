@@ -1,33 +1,20 @@
 #include "blamedialog.h"
 #include "ui_blamedialog.h"
+#include "models/blamemodel.h"
 
-CBlameDialog::CBlameDialog(git_repository* repo, QWidget *parent) :
-  QDialog(parent),
-  ui(new Ui::CBlameDialog),
-  m_repo(repo),
-  m_blame(nullptr)
+CBlameDialog::CBlameDialog(const quokkagit::tvBlameData& vData,
+                           QWidget *parent) :
+    QDialog(parent),
+    ui(new Ui::CBlameDialog)
 {
-  ui->setupUi(this);
+    ui->setupUi(this);
+
+    CBlameModel* model = new CBlameModel(vData, this);
+    ui->tableView->setModel(model);
+
+    ui->tableView->resizeColumnsToContents();
 }
 
 CBlameDialog::~CBlameDialog()
 {
-  delete ui;
-}
-
-int CBlameDialog::exec(const QString& path)
-{
-  git_blame_options opts(GIT_BLAME_OPTIONS_INIT);
-  if(0 == git_blame_file(&m_blame, m_repo, path.toLocal8Bit().constData(), &opts))
-  {
-    uint32_t count  = git_blame_get_hunk_count(m_blame);
-    for (uint32_t i = 0; i < count; ++i)
-    {
-      const git_blame_hunk* hunk = git_blame_get_hunk_byindex(m_blame, i);
-    }
-
-    git_blame_free(m_blame);
-  }
-
-  return QDialog::exec();
 }

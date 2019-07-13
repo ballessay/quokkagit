@@ -1,28 +1,25 @@
 #ifndef BLAMEDIALOG_H
 #define BLAMEDIALOG_H
 
+#include "data/blamedata.h"
 #include <QDialog>
-#include <git2cpp/repo.h>
-#include <git2.h>
+#include <memory>
 
 namespace Ui {
-  class CBlameDialog;
+    class CBlameDialog;
 }
 
 class CBlameDialog : public QDialog
 {
-  Q_OBJECT
+    Q_OBJECT
 
 public:
-  explicit CBlameDialog(git_repository* repo, QWidget *parent = nullptr);
-  ~CBlameDialog() override;
-
-  int exec(const QString& sPath);
+    explicit CBlameDialog(const quokkagit::tvBlameData& vData,
+                          QWidget *parent = nullptr);
+    ~CBlameDialog() override;
 
 private:
-  Ui::CBlameDialog *ui;
-  git_repository* m_repo;
-  git_blame* m_blame;
+    std::unique_ptr<Ui::CBlameDialog> ui;
 };
 
 #endif // BLAMEDIALOG_H

@@ -2,6 +2,7 @@
 #define GIT2WRAPPER_H
 
 #include "tools/kdiff3.h"
+#include "data/blamedata.h"
 #include "data/logentry.h"
 #include "models/filelogmodel.h"
 #include "git2cpp/repo.h"
@@ -16,48 +17,48 @@ class QString;
 
 class CGit2Wrapper : public QObject
 {
-  Q_OBJECT
+    Q_OBJECT
 
 public:
-  using vReferences = std::vector<git::Reference>;
-  using vBranches = std::vector<std::pair<QString, git_oid>>;
-  using vDeltas = std::vector<std::pair<git_diff_delta, QString>>;
+    using vReferences = std::vector<git::Reference>;
+    using vBranches = std::vector<std::pair<QString, git_oid>>;
+    using vDeltas = std::vector<std::pair<git_diff_delta, QString>>;
 
-  CGit2Wrapper(const QString& sPath);
+    CGit2Wrapper(const QString& sPath);
 
-  void SetHead(const QString& sHead);
-  QString HeadRef() const;
+    void SetHead(const QString& sHead);
+    QString HeadRef() const;
 
-  void Initialize();
+    void Initialize();
 
-  vBranches Branches() const;
+    vBranches Branches() const;
 
-  quokkagit::vLogEntries Log(int branch,
-                             const vBranches& b,
-                             const QString& path = QString()) const;
+    quokkagit::vLogEntries Log(int branch,
+                               const vBranches& b,
+                               const QString& path = QString()) const;
 
-  vDeltas DiffWithParent(int index, const quokkagit::vLogEntries& entries);
+    vDeltas DiffWithParent(int index, const quokkagit::vLogEntries& entries);
 
-  void DiffBlobs(int deltaIndex, const vDeltas& deltas);
+    void DiffBlobs(int deltaIndex, const vDeltas& deltas);
 
-  git_repository* repo() { return m_repo.get(); }
+    quokkagit::tvBlameData BlameFile(const QString& sPath, const QString& oid);
 
 signals:
-  void NewFile(const QStringList& list);
-  void Message(const QString& message) const;
-  void NewFiles(CFileLogModel::vFiles files);
+    void NewFile(const QStringList& list);
+    void Message(const QString& message) const;
+    void NewFiles(CFileLogModel::vFiles files);
 
 protected slots:
-  void DiffFinished(int index);
+    void DiffFinished(int index);
 
 private:
-  git::Tree resolve_to_tree(git::Repository const & repo, const QString& identifier);
-  git::Diff find_diff(git::Repository const & repo, git::Tree & t1, git::Tree & t2);
+    git::Tree resolve_to_tree(git::Repository const & repo, const QString& identifier);
+    git::Diff find_diff(git::Repository const & repo, git::Tree & t1, git::Tree & t2);
 
 private:
-  git::Repository m_repo;
-  vReferences m_branches;
-  std::vector<CKdiff3> m_diffs;
+    git::Repository m_repo;
+    vReferences m_branches;
+    std::vector<CKdiff3> m_diffs;
 };
 
 #endif // GIT2WRAPPER_H

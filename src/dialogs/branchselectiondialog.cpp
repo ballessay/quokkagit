@@ -74,9 +74,9 @@ namespace
 
 CBranchSelectionDialog::CBranchSelectionDialog(const CGit2Wrapper::vBranches& branches,
                                                QWidget* parent) :
-  QDialog(parent),
-  m_ui(new Ui::CBranchSelectionDialog),
-  m_branches(branches)
+    QDialog(parent),
+    m_ui(new Ui::CBranchSelectionDialog),
+    m_branches(branches)
 {
     m_ui->setupUi(this);
 

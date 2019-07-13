@@ -8,13 +8,13 @@
 
 class CLogFilterProxyModel : public QSortFilterProxyModel
 {
-  Q_OBJECT
+    Q_OBJECT
 
 public:
-   CLogFilterProxyModel(QObject* parent = nullptr);
+    CLogFilterProxyModel(QObject* parent = nullptr);
 
-   void SetFilter(const QString& filter, const QList<QAction*>& flags)
-   { m_filter = filter; m_flags = flags; invalidateFilter();}
+    void SetFilter(const QString& filter, const QList<QAction*>& flags)
+    { m_filter = filter; m_flags = flags; invalidateFilter();}
 
 protected:
     bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;

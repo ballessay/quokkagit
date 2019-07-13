@@ -7,16 +7,16 @@ class QKeyEvent;
 
 class CTableWidget : public QTableView
 {
-  Q_OBJECT
+    Q_OBJECT
 
 public:
-  CTableWidget(QWidget* parent);
+    CTableWidget(QWidget* parent);
 
 signals:
-  void enterOrReturnPressed();
+    void enterOrReturnPressed();
 
 protected:
-  void keyPressEvent(QKeyEvent* event) override;
+    void keyPressEvent(QKeyEvent* event) override;
 };
 
 #endif // TABLEWIDGET_H

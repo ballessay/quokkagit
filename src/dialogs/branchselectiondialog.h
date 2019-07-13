@@ -6,25 +6,26 @@
 
 class QTreeWidgetItem;
 namespace Ui {
-  class CBranchSelectionDialog;
+    class CBranchSelectionDialog;
 }
 
 class CBranchSelectionDialog : public QDialog
 {
-  Q_OBJECT
+    Q_OBJECT
 
 public:
-  explicit CBranchSelectionDialog(const CGit2Wrapper::vBranches& branches, QWidget* parent = nullptr);
-  ~CBranchSelectionDialog();
+    explicit CBranchSelectionDialog(const CGit2Wrapper::vBranches& branches,
+                                    QWidget* parent = nullptr);
+    ~CBranchSelectionDialog();
 
-  int currentSelection() const;
+    int currentSelection() const;
 
 public slots:
-  void on_treeWidget_itemDoubleClicked(QTreeWidgetItem*, int);
+    void on_treeWidget_itemDoubleClicked(QTreeWidgetItem*, int);
 
 private:
-  Ui::CBranchSelectionDialog* m_ui;
-  CGit2Wrapper::vBranches m_branches;
+    Ui::CBranchSelectionDialog* m_ui;
+    CGit2Wrapper::vBranches m_branches;
 };
 
 #endif // BRANCHSELECTIONDIALOG_H

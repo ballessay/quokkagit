@@ -18,6 +18,7 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 add_executable(${PROJECT_NAME}
   src/application.cpp
   src/application.h
+  src/data/blamedata.h
   src/data/logentry.cpp
   src/data/logentry.h
   src/dialogs/blamedialog.cpp
@@ -33,6 +34,8 @@ add_executable(${PROJECT_NAME}
   src/menus/logcolumnvisibilitymenu.h
   src/menus/logcontextmenu.cpp
   src/menus/logcontextmenu.h
+  src/models/blamemodel.cpp
+  src/models/blamemodel.h
   src/models/filelogmodel.cpp
   src/models/filelogmodel.h
   src/models/logfilterproxymodel.cpp

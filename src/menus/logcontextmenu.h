@@ -7,21 +7,21 @@
 class CLogContextMenu : public QMenu
 {
 public:
-  CLogContextMenu(QWidget* parent);
+    CLogContextMenu(QWidget* parent);
 };
 
 
 class CLogFilesContextMenu : public QMenu
 {
 public:
-  CLogFilesContextMenu(QWidget* parent);
+    CLogFilesContextMenu(QWidget* parent);
 };
 
 
 class CLogSearchContextMenu : public QMenu
 {
 public:
-  CLogSearchContextMenu(QWidget* parent);
+    CLogSearchContextMenu(QWidget* parent);
 };
 
 #endif // LOGCONTEXTMENU_H

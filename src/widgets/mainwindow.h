@@ -13,46 +13,46 @@ class CLogModel;
 class CFileLogModel;
 class CLogFilterProxyModel;
 namespace Ui {
-  class CMainWindow;
+    class CMainWindow;
 }
 
 
 class CMainWindow : public QMainWindow
 {
-  Q_OBJECT
+    Q_OBJECT
 
 public:
-  explicit CMainWindow(CGit2Wrapper& git, QWidget *parent = nullptr);
-  ~CMainWindow();
+    explicit CMainWindow(CGit2Wrapper& git, QWidget *parent = nullptr);
+    ~CMainWindow();
 
 public slots:
-  void LogItemSelected(const QModelIndex& index);
-  void LogItemKeyPressed();
+    void LogItemSelected(const QModelIndex& index);
+    void LogItemKeyPressed();
 
-  void DiffFile(const QModelIndex& index);
-  void DiffCurrentIndex();
+    void DiffFile(const QModelIndex& index);
+    void DiffCurrentIndex();
 
-  void BlameFile(const QModelIndex& index);
+    void BlameFile(const QModelIndex& index);
 
-  void ToggleColumn(int id, bool enabled);
+    void ToggleColumn(int id, bool enabled);
 
-  void AddFiles(const CFileLogModel::vFiles& files);
+    void AddFiles(const CFileLogModel::vFiles& files);
 
-  void AddMessage(QString msg);
+    void AddMessage(QString msg);
 
-  void on_actionOpen_log_triggered();
+    void on_actionOpen_log_triggered();
 
-  void on_branchSelectionToolButton_clicked();
-  void on_searchLineEdit_returnPressed();
+    void on_branchSelectionToolButton_clicked();
+    void on_searchLineEdit_returnPressed();
 
 private:
-  Ui::CMainWindow* m_pUi;
-  CGit2Wrapper& m_git;
-  CLogModel* m_pLogModel;
-  CFileLogModel* m_logFileModel;
-  CLogFilterProxyModel* m_logProxy;
-  CDebugLogDialog m_dbgLogDialog;
-  CGit2Wrapper::vDeltas m_deltas;
+    Ui::CMainWindow* m_pUi;
+    CGit2Wrapper& m_git;
+    CLogModel* m_pLogModel;
+    CFileLogModel* m_logFileModel;
+    CLogFilterProxyModel* m_logProxy;
+    CDebugLogDialog m_dbgLogDialog;
+    CGit2Wrapper::vDeltas m_deltas;
 };
 
 #endif // MAINWINDOW_H
