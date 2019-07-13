@@ -368,11 +368,11 @@ quokkagit::tvBlameData CGit2Wrapper::BlameFile(const QString& path,
             if (nullptr == hunk) break;
 
             quokkagit::SBlameData d;
-            d.oid = git::id_to_str(hunk->orig_commit_id).c_str();
+            d.sha = git::id_to_str(hunk->orig_commit_id).c_str();
             d.signature = QString("%1 <%2>").arg(hunk->final_signature->name)
                           .arg(hunk->final_signature->email);
-            d.linenumber = line;
-            d.line = sLine;
+            d.line = line;
+            d.data = sLine;
 
             vData.push_back(d);
 

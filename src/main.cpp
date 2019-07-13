@@ -1,4 +1,5 @@
 #include "application.h"
+#include "data/settings.h"
 #include "widgets/mainwindow.h"
 #include "tools/git2wrapper.h"
 #include "git2cpp/initializer.h"
@@ -10,14 +11,14 @@ int main(int argc, char** argv)
 {
     auto_git_initializer;
 
-    CApplication app(argc, argv);
-
     try
     {
+        CApplication app(argc, argv);
+
         CGit2Wrapper git(app.InitialRepoPath());
         git.Initialize();
 
-        CMainWindow w(git);
+        CMainWindow w(git, app.settings());
         w.show();
 
         return app.exec();

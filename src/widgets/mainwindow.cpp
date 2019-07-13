@@ -11,13 +11,16 @@
 #include <QHeaderView>
 
 
-CMainWindow::CMainWindow(CGit2Wrapper& git, QWidget *parent) :
+CMainWindow::CMainWindow(CGit2Wrapper& git,
+                         quokkagit::SSettings& settings,
+                         QWidget *parent) :
     QMainWindow(parent),
     m_ui(new Ui::CMainWindow),
     m_git(git),
     m_pLogModel(nullptr),
     m_logFileModel(nullptr),
-    m_logProxy(nullptr)
+    m_logProxy(nullptr),
+    m_settings(settings)
 {
     m_ui->setupUi(this);
 

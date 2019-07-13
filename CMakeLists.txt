@@ -21,6 +21,8 @@ add_executable(${PROJECT_NAME}
   src/data/blamedata.h
   src/data/logentry.cpp
   src/data/logentry.h
+  src/data/settings.cpp
+  src/data/settings.h
   src/dialogs/blamedialog.cpp
   src/dialogs/blamedialog.h
   src/dialogs/blamedialog.ui

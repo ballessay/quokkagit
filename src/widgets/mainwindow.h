@@ -9,6 +9,7 @@
 #include <QMainWindow>
 #include <memory>
 
+namespace quokkagit { struct SSettings; }
 class CGit2Wrapper;
 class CLogModel;
 class CFileLogModel;
@@ -23,7 +24,9 @@ class CMainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit CMainWindow(CGit2Wrapper& git, QWidget *parent = nullptr);
+    explicit CMainWindow(CGit2Wrapper& git,
+                         quokkagit::SSettings& settings,
+                         QWidget *parent = nullptr);
     ~CMainWindow();
 
 public slots:
@@ -54,6 +57,7 @@ private:
     CLogFilterProxyModel* m_logProxy;
     CDebugLogDialog m_dbgLogDialog;
     CGit2Wrapper::vDeltas m_deltas;
+    quokkagit::SSettings& m_settings;
 };
 
 #endif // MAINWINDOW_H

@@ -8,10 +8,10 @@ namespace quokkagit
 {
     struct SBlameData
     {
-        QString oid;
+        QString sha;
         QString signature;
-        std::size_t linenumber;
-        QString line;
+        std::size_t line;
+        QString data;
     };
 
     using tvBlameData = std::vector<SBlameData>;

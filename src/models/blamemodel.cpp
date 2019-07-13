@@ -71,13 +71,13 @@ QVariant CBlameModel::data(const QModelIndex& index, int role) const
                 switch(column)
                 {
                 case Column::Sha:
-                    return entry.oid;
+                    return entry.sha;
                 case Column::Signature:
                     return entry.signature;
                 case Column::LineNumber:
-                    return QVariant::fromValue(entry.linenumber);
+                    return QVariant::fromValue(entry.line);
                 case Column::Data:
-                    return entry.line;
+                    return entry.data;
                 default:
                     assert(false);
                     break;
@@ -85,7 +85,7 @@ QVariant CBlameModel::data(const QModelIndex& index, int role) const
             }
             else if (Qt::ForegroundRole == role)
             {
-                const auto& it = m_colors.find(entry.oid);
+                const auto& it = m_colors.find(entry.sha);
                 return it != m_colors.end() ? it->second : QBrush(m_fg);
             }
 //            else if (Qt::BackgroundRole == role)
@@ -104,7 +104,7 @@ void CBlameModel::CalculateBackgroundColors()
     std::set<QString> shas;
 
     for (const auto& data : m_data)
-        shas.insert(data.oid);
+        shas.insert(data.sha);
 
     int noColors = static_cast<int>(shas.size());
 

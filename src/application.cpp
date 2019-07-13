@@ -10,7 +10,9 @@ CApplication::CApplication(int& argc, char** argv)
     setOrganizationDomain("ballessay.de");
     setApplicationName("quokkagit");
 
-    QFile stylesheet( ":/QTDark.stylesheet");
+    m_settings.Load();
+
+    QFile stylesheet(":/QTDark.stylesheet");
     if (stylesheet.open(QFile::ReadOnly | QFile::Text))
     {
         QTextStream ts(&stylesheet);
@@ -18,8 +20,12 @@ CApplication::CApplication(int& argc, char** argv)
         setStyleSheet(ts.readAll());
     }
 
-    QFont monoFont("Hack", 8);
-    setFont(monoFont);
+    setFont(m_settings.font);
+}
+
+
+CApplication::~CApplication()
+{
 }
 
 
