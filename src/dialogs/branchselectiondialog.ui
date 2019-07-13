@@ -6,15 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>770</width>
+    <height>623</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Branches</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="../resources/resources.qrc">
+   <iconset resource="../../resources/resources.qrc">
     <normaloff>:/tree.png</normaloff>:/tree.png</iconset>
   </property>
   <layout class="QGridLayout" name="gridLayout">
@@ -29,12 +29,21 @@
     </widget>
    </item>
    <item row="0" column="0">
-    <widget class="QListWidget" name="listWidget"/>
+    <widget class="QTreeWidget" name="treeWidget">
+     <attribute name="headerVisible">
+      <bool>false</bool>
+     </attribute>
+     <column>
+      <property name="text">
+       <string notr="true">1</string>
+      </property>
+     </column>
+    </widget>
    </item>
   </layout>
  </widget>
  <resources>
-  <include location="../resources/resources.qrc"/>
+  <include location="../../resources/resources.qrc"/>
  </resources>
  <connections>
   <connection>

@@ -4,6 +4,7 @@
 #include "tools/git2wrapper.h"
 #include <QDialog>
 
+class QTreeWidgetItem;
 namespace Ui {
   class CBranchSelectionDialog;
 }
@@ -19,7 +20,7 @@ public:
   int currentSelection() const;
 
 public slots:
-  void on_listWidget_doubleClicked(const QModelIndex&);
+  void on_treeWidget_itemDoubleClicked(QTreeWidgetItem*, int);
 
 private:
   Ui::CBranchSelectionDialog* m_ui;
