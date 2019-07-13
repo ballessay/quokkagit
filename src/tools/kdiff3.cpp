@@ -8,7 +8,7 @@ CKdiff3::CKdiff3(int index)
       m_new(new QTemporaryFile)
 {
     connect(m_process.get(), SIGNAL(finished(int)),
-            this, SLOT(Finished(int)));
+            this, SLOT(Finished(int)), Qt::UniqueConnection);
 }
 
 
@@ -19,7 +19,7 @@ CKdiff3::CKdiff3(const CKdiff3& diff)
       m_new(diff.m_new)
 {
     connect(m_process.get(), SIGNAL(finished(int)),
-            this, SLOT(Finished(int)));
+            this, SLOT(Finished(int)), Qt::UniqueConnection);
 }
 
 
@@ -30,7 +30,7 @@ CKdiff3::CKdiff3(const CKdiff3&& diff)
       m_new(std::move(diff.m_new))
 {
     connect(m_process.get(), SIGNAL(finished(int)),
-            this, SLOT(Finished(int)));
+            this, SLOT(Finished(int)), Qt::UniqueConnection);
 
     //  diff.m_process.reset(nullptr);
     //  diff.m_old.reset(nullptr);

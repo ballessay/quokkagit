@@ -7,6 +7,7 @@
 #include "models/logmodel.h"
 
 #include <QMainWindow>
+#include <memory>
 
 class CGit2Wrapper;
 class CLogModel;
@@ -46,7 +47,7 @@ public slots:
     void on_searchLineEdit_returnPressed();
 
 private:
-    Ui::CMainWindow* m_pUi;
+    std::unique_ptr<Ui::CMainWindow> m_ui;
     CGit2Wrapper& m_git;
     CLogModel* m_pLogModel;
     CFileLogModel* m_logFileModel;

@@ -2,6 +2,7 @@
 #define DEBUGLOGDIALOG_H
 
 #include <QDialog>
+#include <memory>
 
 namespace Ui {
     class CDebugLogDialog;
@@ -19,7 +20,7 @@ public slots:
     void AddMessage(QString msg);
 
 private:
-    Ui::CDebugLogDialog* m_ui;
+    std::unique_ptr<Ui::CDebugLogDialog> m_ui;
 };
 
 #endif // DEBUGLOGDIALOG_H

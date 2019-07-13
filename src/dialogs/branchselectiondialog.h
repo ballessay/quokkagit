@@ -3,6 +3,7 @@
 
 #include "tools/git2wrapper.h"
 #include <QDialog>
+#include <memory>
 
 class QTreeWidgetItem;
 namespace Ui {
@@ -24,7 +25,7 @@ public slots:
     void on_treeWidget_itemDoubleClicked(QTreeWidgetItem*, int);
 
 private:
-    Ui::CBranchSelectionDialog* m_ui;
+    std::unique_ptr<Ui::CBranchSelectionDialog> m_ui;
     CGit2Wrapper::vBranches m_branches;
 };
 

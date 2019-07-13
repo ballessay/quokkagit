@@ -5,14 +5,15 @@
 CBlameDialog::CBlameDialog(const quokkagit::tvBlameData& vData,
                            QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::CBlameDialog)
+    m_ui(new Ui::CBlameDialog)
 {
-    ui->setupUi(this);
+    m_ui->setupUi(this);
 
     CBlameModel* model = new CBlameModel(vData, this);
-    ui->tableView->setModel(model);
+    m_ui->tableView->setModel(model);
 
-    ui->tableView->resizeColumnsToContents();
+    m_ui->tableView->resizeColumnsToContents();
+    m_ui->tableView->resizeRowsToContents();
 }
 
 CBlameDialog::~CBlameDialog()

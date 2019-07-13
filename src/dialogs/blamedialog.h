@@ -19,7 +19,7 @@ public:
     ~CBlameDialog() override;
 
 private:
-    std::unique_ptr<Ui::CBlameDialog> ui;
+    std::unique_ptr<Ui::CBlameDialog> m_ui;
 };
 
 #endif // BLAMEDIALOG_H

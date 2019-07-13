@@ -95,7 +95,6 @@ CBranchSelectionDialog::CBranchSelectionDialog(const CGit2Wrapper::vBranches& br
 
 CBranchSelectionDialog::~CBranchSelectionDialog()
 {
-    delete m_ui;
 }
 
 int CBranchSelectionDialog::currentSelection() const

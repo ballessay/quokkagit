@@ -6,9 +6,9 @@
 class CApplication : public QApplication
 {
 public:
-  CApplication(int& argc, char** argv);
+    CApplication(int& argc, char** argv);
 
-  QString InitialRepoPath() const;
+    QString InitialRepoPath() const;
 };
 
 #endif // APPLICATION_H

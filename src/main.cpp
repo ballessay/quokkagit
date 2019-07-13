@@ -8,25 +8,25 @@
 
 int main(int argc, char** argv)
 {
-  auto_git_initializer;
+    auto_git_initializer;
 
-  CApplication app(argc, argv);
+    CApplication app(argc, argv);
 
-  try
-  {
-    CGit2Wrapper git(app.InitialRepoPath());
-    git.Initialize();
+    try
+    {
+        CGit2Wrapper git(app.InitialRepoPath());
+        git.Initialize();
 
-    CMainWindow w(git);
-    w.show();
+        CMainWindow w(git);
+        w.show();
 
-    return app.exec();
-  }
-  catch(std::exception& ex)
-  {
-    QMessageBox::warning(nullptr, QObject::tr("Error"),
-                         QObject::tr("Exception occured: %1").arg(ex.what()));
-  }
+        return app.exec();
+    }
+    catch(std::exception& ex)
+    {
+        QMessageBox::warning(nullptr, QObject::tr("Error"),
+                             QObject::tr("Exception occured: %1").arg(ex.what()));
+    }
 
-  return 1;
+    return 1;
 }

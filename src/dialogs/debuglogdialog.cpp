@@ -10,7 +10,6 @@ CDebugLogDialog::CDebugLogDialog(QWidget *parent) :
 
 CDebugLogDialog::~CDebugLogDialog()
 {
-    delete m_ui;
 }
 
 void CDebugLogDialog::AddMessage(QString msg)
