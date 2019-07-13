@@ -4,11 +4,11 @@
 CLogContextMenu::CLogContextMenu(QWidget* parent)
   : QMenu(parent)
 {
-  QAction* pAction = new QAction("Rebase...", this);
-  addAction(pAction);
+//  QAction* pAction = new QAction("Rebase...", this);
+//  addAction(pAction);
 
-  pAction = new QAction("Reset", this);
-  addAction(pAction);
+//  pAction = new QAction("Reset", this);
+//  addAction(pAction);
 }
 
 
@@ -18,8 +18,8 @@ CLogFilesContextMenu::CLogFilesContextMenu(QWidget* parent)
   QAction* pAction = new QAction("Diff", this);
   addAction(pAction);
 
-  pAction = new QAction("Blame", this);
-  addAction(pAction);
+//  pAction = new QAction("Blame", this);
+//  addAction(pAction);
 }
 
 CLogSearchContextMenu::CLogSearchContextMenu(QWidget* parent)
