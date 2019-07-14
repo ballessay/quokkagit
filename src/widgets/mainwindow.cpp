@@ -239,11 +239,11 @@ void CMainWindow::on_branchSelectionToolButton_clicked()
         int index = d.currentSelection();
         if(index >= 0 && index < static_cast<int>(b.size()))
         {
-            quokkagit::vLogEntries entries = m_git.Log(d.currentSelection(), b);
+            quokkagit::LogEntries entries = m_git.Log(d.currentSelection(), b);
 
             m_pLogModel->SetLog(entries);
 
-            m_ui->branchLabel->setText(b.at(static_cast<quokkagit::vLogEntries::size_type>(index)).first);
+            m_ui->branchLabel->setText(b.at(static_cast<quokkagit::LogEntries::size_type>(index)).first);
         }
     }
 }

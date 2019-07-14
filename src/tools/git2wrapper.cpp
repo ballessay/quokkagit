@@ -84,11 +84,11 @@ CGit2Wrapper::vBranches CGit2Wrapper::Branches() const
 }
 
 
-quokkagit::vLogEntries CGit2Wrapper::Log(int branch,
+quokkagit::LogEntries CGit2Wrapper::Log(int branch,
                                          const CGit2Wrapper::vBranches& b,
                                          const QString& path) const
 {
-    quokkagit::vLogEntries entries;
+    quokkagit::LogEntries entries;
 
     if (branch >= 0 && branch < static_cast<int>(b.size()))
     {
@@ -192,14 +192,14 @@ git::Diff CGit2Wrapper::find_diff(git::Repository const & repo, git::Tree & t1, 
 }
 
 
-CGit2Wrapper::vDeltas CGit2Wrapper::DiffWithParent(int index, const quokkagit::vLogEntries& entries)
+CGit2Wrapper::vDeltas CGit2Wrapper::DiffWithParent(int index, const quokkagit::LogEntries& entries)
 {
     vDeltas deltas;
 
     if(index > 0 ||
-       static_cast<quokkagit::vLogEntries::size_type>(index) < entries.size())
+       static_cast<quokkagit::LogEntries::size_type>(index) < entries.size())
     {
-        quokkagit::SLogEntry entry = entries.at(static_cast<quokkagit::vLogEntries::size_type>(index));
+        quokkagit::SLogEntry entry = entries.at(static_cast<quokkagit::LogEntries::size_type>(index));
 
         git_oid oid = entry.oid();
 

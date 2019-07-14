@@ -35,11 +35,11 @@ public:
 
     vBranches Branches() const;
 
-    quokkagit::vLogEntries Log(int branch,
+    quokkagit::LogEntries Log(int branch,
                                const vBranches& b,
                                const QString& path = QString()) const;
 
-    vDeltas DiffWithParent(int index, const quokkagit::vLogEntries& entries);
+    vDeltas DiffWithParent(int index, const quokkagit::LogEntries& entries);
 
     void DiffBlobs(int deltaIndex, const vDeltas& deltas);
 

@@ -2,13 +2,13 @@
 #include <cassert>
 #include <QFontMetrics>
 
-CLogModel::CLogModel(const quokkagit::vLogEntries& log, QObject* pParent)
+CLogModel::CLogModel(const quokkagit::LogEntries& log, QObject* pParent)
     : QAbstractTableModel(pParent),
       m_log(log)
 {
 }
 
-void CLogModel::SetLog(const quokkagit::vLogEntries& log)
+void CLogModel::SetLog(const quokkagit::LogEntries& log)
 {
     beginResetModel();
 

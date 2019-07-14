@@ -8,10 +8,10 @@
 class CLogModel : public QAbstractTableModel
 {
 public:
-    CLogModel(const quokkagit::vLogEntries& Log, QObject* pParent = nullptr);
+    CLogModel(const quokkagit::LogEntries& Log, QObject* pParent = nullptr);
 
-    void SetLog(const quokkagit::vLogEntries& Log);
-    const quokkagit::vLogEntries& Log() const { return m_log; }
+    void SetLog(const quokkagit::LogEntries& Log);
+    const quokkagit::LogEntries& Log() const { return m_log; }
 
     int rowCount(const QModelIndex& parent = QModelIndex()) const override;
 
@@ -22,7 +22,7 @@ public:
     QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
 
 private:
-    quokkagit::vLogEntries m_log;
+    quokkagit::LogEntries m_log;
 };
 
 #endif // LOGMODEL_H

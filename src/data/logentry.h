@@ -55,7 +55,7 @@ namespace quokkagit
         QDateTime qauthorDate;
     };
 
-    using vLogEntries = std::vector<SLogEntry>;
+    using LogEntries = std::vector<SLogEntry>;
 }
 
 #endif // LOGENTRY_H
