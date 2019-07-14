@@ -19,7 +19,7 @@ public:
     struct SData
     {
         CGit2Wrapper& git;
-        QString sha;
+        QString hash;
         QString path;
     };
 

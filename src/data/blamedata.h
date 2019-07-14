@@ -8,7 +8,7 @@ namespace quokkagit
 {
     struct SBlameData
     {
-        QString sha;
+        QString hash;
         QString signature;
         std::size_t line;
         QString data;

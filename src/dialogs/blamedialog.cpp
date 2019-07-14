@@ -47,7 +47,7 @@ CBlameDialog::~CBlameDialog()
 
 int CBlameDialog::exec()
 {
-    return exec(m_data.path, m_data.sha);
+    return exec(m_data.path, m_data.hash);
 }
 
 

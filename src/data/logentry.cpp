@@ -3,6 +3,7 @@
 #include "git2cpp/id_to_str.h"
 
 
+
 namespace
 {
     QDateTime FromGitTime(git_time time)
@@ -10,6 +11,7 @@ namespace
         return QDateTime::fromSecsSinceEpoch(time.time, Qt::LocalTime, time.offset);
     }
 }
+
 
 namespace quokkagit
 {
