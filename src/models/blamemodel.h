@@ -23,11 +23,11 @@ public:
     };
 
     explicit CBlameModel(QObject* parent = nullptr);
-    CBlameModel(const quokkagit::tvBlameData& data,
+    CBlameModel(const quokkagit::BlameData& data,
                 QObject* pParent = nullptr);
 
-    void SetData(const quokkagit::tvBlameData& Log);
-    const quokkagit::tvBlameData& Data() const { return m_data; }
+    void SetData(const quokkagit::BlameData& Log);
+    const quokkagit::BlameData& Data() const { return m_data; }
 
     void SetColors(const QColor& fg, const QColor& bg);
 
@@ -42,7 +42,7 @@ public:
 private:
     void CalculateBackgroundColors();
 
-    quokkagit::tvBlameData m_data;
+    quokkagit::BlameData m_data;
     std::map<QString, QBrush> m_colors;
     QColor m_fg;
     QColor m_bg;

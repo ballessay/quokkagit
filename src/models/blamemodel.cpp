@@ -13,13 +13,13 @@ CBlameModel::CBlameModel(QObject* parent)
 
 }
 
-CBlameModel::CBlameModel(const quokkagit::tvBlameData& data, QObject* pParent)
+CBlameModel::CBlameModel(const quokkagit::BlameData& data, QObject* pParent)
     : QAbstractTableModel(pParent),
       m_data(data)
 {
 }
 
-void CBlameModel::SetData(const quokkagit::tvBlameData& data)
+void CBlameModel::SetData(const quokkagit::BlameData& data)
 {
     beginResetModel();
 

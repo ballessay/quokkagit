@@ -14,7 +14,7 @@ namespace quokkagit
         QString data;
     };
 
-    using tvBlameData = std::vector<SBlameData>;
+    using BlameData = std::vector<SBlameData>;
 }
 
 #endif // BLAMEDATA_H

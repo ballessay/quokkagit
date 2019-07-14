@@ -43,7 +43,7 @@ public:
 
     void DiffBlobs(int deltaIndex, const vDeltas& deltas);
 
-    quokkagit::tvBlameData BlameFile(const QString& sPath, const QString& oid);
+    quokkagit::BlameData BlameFile(const QString& sPath, const QString& oid);
 
 signals:
     void NewFile(const QStringList& list);

@@ -336,10 +336,10 @@ void CGit2Wrapper::DiffBlobs(int deltaIndex, const vDeltas& deltas)
 }
 
 
-quokkagit::tvBlameData CGit2Wrapper::BlameFile(const QString& path,
+quokkagit::BlameData CGit2Wrapper::BlameFile(const QString& path,
                                                const QString& oid)
 {
-    quokkagit::tvBlameData vData;
+    quokkagit::BlameData vData;
 
     try
     {

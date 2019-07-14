@@ -53,7 +53,7 @@ int CBlameDialog::exec()
 
 int CBlameDialog::exec(const QString& path, const QString& hash)
 {
-    quokkagit::tvBlameData data = m_data.git.BlameFile(path, hash);
+    quokkagit::BlameData data = m_data.git.BlameFile(path, hash);
 
     m_model->SetData(data);
 
