@@ -19,9 +19,6 @@ namespace
 CLogColumnVisibilityMenu::CLogColumnVisibilityMenu(QWidget* parent)
     : QMenu(parent)
 {
-    //  QAction* action = new QAction(tr("Sha"), this);
-    //  action->setCheckable(true);
-    //  addAction(action);
     AddAction(tr(quokkagit::SLogEntry::sha), quokkagit::SLogEntry::Sha, true);
     AddAction(tr(quokkagit::SLogEntry::summary), quokkagit::SLogEntry::Summary, true);
     AddAction(tr(quokkagit::SLogEntry::message), quokkagit::SLogEntry::Message, false);

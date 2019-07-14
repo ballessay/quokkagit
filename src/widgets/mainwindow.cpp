@@ -185,9 +185,10 @@ void CMainWindow::BlameFile(const QModelIndex& index)
 
     const QModelIndex i = m_pLogModel->index(m_ui->logTableView->currentIndex().row(),
                                              quokkagit::SLogEntry::Sha);
-    const QString sha = m_pLogModel->data(i).toString();
+    const QString hash = m_pLogModel->data(i).toString();
 
-    CBlameDialog d(m_git.BlameFile(delta.newFile.path, sha), this);
+    CBlameDialog::SData data = {m_git, hash, delta.newFile.path};
+    CBlameDialog d(data, this);
     if (d.exec())
     {
 

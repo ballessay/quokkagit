@@ -12,7 +12,19 @@ class QString;
 class CBlameModel : public QAbstractTableModel
 {
 public:
-    CBlameModel(const quokkagit::tvBlameData& data, QObject* pParent = nullptr);
+    enum Column
+    {
+        Sha,
+        Signature,
+        LineNumber,
+        LineData,
+        // must be last
+        Count
+    };
+
+    explicit CBlameModel(QObject* parent = nullptr);
+    CBlameModel(const quokkagit::tvBlameData& data,
+                QObject* pParent = nullptr);
 
     void SetData(const quokkagit::tvBlameData& Log);
     const quokkagit::tvBlameData& Data() const { return m_data; }

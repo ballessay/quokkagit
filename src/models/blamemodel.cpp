@@ -4,19 +4,14 @@
 #include <cassert>
 #include <set>
 
-namespace
-{
-    enum Column
-    {
-        Sha,
-        Signature,
-        LineNumber,
-        Data,
-        // must be last
-        Count
-    };
-}
 
+
+CBlameModel::CBlameModel(QObject* parent)
+    : QAbstractTableModel(parent),
+      m_data()
+{
+
+}
 
 CBlameModel::CBlameModel(const quokkagit::tvBlameData& data, QObject* pParent)
     : QAbstractTableModel(pParent),
@@ -76,7 +71,7 @@ QVariant CBlameModel::data(const QModelIndex& index, int role) const
                     return entry.signature;
                 case Column::LineNumber:
                     return QVariant::fromValue(entry.line);
-                case Column::Data:
+                case Column::LineData:
                     return entry.data;
                 default:
                     assert(false);
