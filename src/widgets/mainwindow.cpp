@@ -74,9 +74,6 @@ CMainWindow::CMainWindow(CGit2Wrapper& git,
     connect(m_ui->logTableView, &CTableWidget::enterOrReturnPressed,
             this, &CMainWindow::LogItemKeyPressed);
 
-    //  connect(m_pUi->logTableView, &QTableView::entered,
-    //          this, &CMainWindow::LogItemSelected);
-
     CLogColumnVisibilityMenu* menu = new CLogColumnVisibilityMenu(this);
     m_ui->tableViewToolButton->setMenu(menu);
 
@@ -110,9 +107,6 @@ CMainWindow::CMainWindow(CGit2Wrapper& git,
                 DiffFile(m_ui->pFilesTableView->currentIndex());
             if ("Blame" == action->text())
                 BlameFile(m_ui->pFilesTableView->currentIndex());
-            else {
-                int notYet  = 0;
-            }
         };
         m_ui->pFilesTableView->addAction(action);
 
@@ -192,10 +186,7 @@ void CMainWindow::BlameFile(const QModelIndex& index)
 
     CBlameDialog::SData data = {m_git, hash, delta.newFile.path};
     CBlameDialog d(data, this);
-    if (d.exec())
-    {
-
-    }
+    d.exec();
 }
 
 

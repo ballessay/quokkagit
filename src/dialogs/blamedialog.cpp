@@ -67,8 +67,35 @@ void CBlameDialog::OnBlameHereTriggered()
 {
     QModelIndex index = m_ui->tableView->currentIndex();
 
-    QString hash = m_model->data(m_model->index(index.row(), CBlameModel::Sha)).toString();
+    QModelIndex in = m_model->index(index.row(), CBlameModel::Sha);
+    QString hash = m_model->data(in).toString();
 
     CBlameDialog d(m_data, this);
     d.exec(m_data.path, hash);
+}
+
+
+void CBlameDialog::on_tableView_pressed(const QModelIndex& index)
+{
+    QItemSelectionModel* model = m_ui->tableView->selectionModel();
+    model->clear();
+
+    QModelIndex in = m_model->index(index.row(), CBlameModel::Sha);
+    QString hash = m_model->data(in).toString();
+
+    for (int i = 0; i < m_model->rowCount(); ++i)
+    {
+        in = m_model->index(i, CBlameModel::Sha);
+        const QString h = m_model->data(in).toString();
+        if (h == hash)
+        {
+            model->select(in, QItemSelectionModel::Select);
+
+            for (int r = 1; r < m_model->columnCount(); ++r)
+            {
+                in = m_model->index(i, r);
+                model->select(in, QItemSelectionModel::Select);
+            }
+        }
+    }
 }
