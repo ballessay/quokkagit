@@ -2,6 +2,7 @@
 #include "data/diffentry.h"
 
 
+
 CKdiff3::CKdiff3(const quokkagit::SDiffSettings& settings,
                  const quokkagit::SDiffEntry& entry,
                  int index)

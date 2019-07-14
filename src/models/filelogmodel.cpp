@@ -2,11 +2,13 @@
 #include <QIcon>
 
 
+
 CFileLogModel::CFileLogModel(const vFiles& log, QObject* pParent)
     : QAbstractTableModel(pParent),
       m_log(log)
 {
 }
+
 
 void CFileLogModel::SetLog(const vFiles& log)
 {
@@ -19,15 +21,18 @@ void CFileLogModel::SetLog(const vFiles& log)
     endResetModel();
 }
 
+
 int CFileLogModel::rowCount(const QModelIndex&) const
 {
     return static_cast<int>(m_log.size());
 }
 
+
 int CFileLogModel::columnCount(const QModelIndex& parent) const
 {
     return NumberOfElements;
 }
+
 
 QVariant CFileLogModel::data(const QModelIndex& index, int role) const
 {
@@ -52,6 +57,7 @@ QVariant CFileLogModel::data(const QModelIndex& index, int role) const
     }
     return QVariant();
 }
+
 
 QVariant CFileLogModel::headerData(int section, Qt::Orientation orientation, int role) const
 {

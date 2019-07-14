@@ -7,6 +7,7 @@
 #include <QMessageBox>
 
 
+
 int main(int argc, char** argv)
 {
     auto_git_initializer;

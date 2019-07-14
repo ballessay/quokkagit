@@ -18,6 +18,7 @@ namespace
         return nullptr;
     }
 
+
     QTreeWidgetItem* FindItem(const QString& text,
                               const QList<QTreeWidgetItem*> items)
     {
@@ -28,6 +29,7 @@ namespace
 
         return nullptr;
     }
+
 
     void BuildTree(QStringList& parts,
                    QList<QTreeWidgetItem*>& items,
@@ -57,6 +59,7 @@ namespace
             parts.pop_front();
         }
 
+
         QTreeWidgetItem* i = FindChildItem(parts.first(), item);
         if (nullptr == i)
         {
@@ -71,6 +74,8 @@ namespace
         BuildTree(parts, items, branchIndex, i);
     }
 }
+
+
 
 CBranchSelectionDialog::CBranchSelectionDialog(const CGit2Wrapper::vBranches& branches,
                                                QWidget* parent) :
@@ -93,9 +98,11 @@ CBranchSelectionDialog::CBranchSelectionDialog(const CGit2Wrapper::vBranches& br
     m_ui->treeWidget->expandAll();
 }
 
+
 CBranchSelectionDialog::~CBranchSelectionDialog()
 {
 }
+
 
 int CBranchSelectionDialog::currentSelection() const
 {
@@ -112,6 +119,7 @@ int CBranchSelectionDialog::currentSelection() const
 
     return index;
 }
+
 
 void CBranchSelectionDialog::on_treeWidget_itemDoubleClicked(QTreeWidgetItem* item,
                                                              int)

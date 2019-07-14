@@ -2,6 +2,7 @@
 #include <QSettings>
 #include <QCoreApplication>
 
+
 using namespace quokkagit;
 
 namespace
@@ -12,6 +13,8 @@ namespace
     const char* const settings_repo_path = "settings.repoPath";
     const char* const settings_font = "settings.font";
 }
+
+
 
 void SDiffSettings::Load(const QSettings& settings)
 {
@@ -35,10 +38,12 @@ SSettings::SSettings()
     QSettings::setDefaultFormat(QSettings::IniFormat);
 }
 
+
 SSettings::~SSettings()
 {
     Save();
 }
+
 
 void SSettings::Load()
 {

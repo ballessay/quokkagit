@@ -1,7 +1,6 @@
 #ifndef DIFFTOOL_H
 #define DIFFTOOL_H
 
-
 #include <QObject>
 #include <QProcess>
 #include <QString>
@@ -13,7 +12,6 @@ namespace quokkagit
     struct SDiffEntry;
     struct SDiffSettings;
 }
-
 
 class CDiffTool : public QObject
 {

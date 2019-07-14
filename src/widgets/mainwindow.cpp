@@ -11,6 +11,7 @@
 #include <QHeaderView>
 
 
+
 CMainWindow::CMainWindow(CGit2Wrapper& git,
                          quokkagit::SSettings& settings,
                          QWidget *parent) :
@@ -160,6 +161,7 @@ void CMainWindow::LogItemSelected(const QModelIndex& index)
     m_deltas = m_git.DiffWithParent(r, m_pLogModel->Log());
 }
 
+
 void CMainWindow::LogItemKeyPressed()
 {
     LogItemSelected(m_ui->logTableView->currentIndex());
@@ -170,6 +172,7 @@ void CMainWindow::DiffFile(const QModelIndex& index)
 {
     m_git.DiffBlobs(index.row(), m_deltas);
 }
+
 
 void CMainWindow::DiffCurrentIndex()
 {

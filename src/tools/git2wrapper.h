@@ -16,7 +16,6 @@
 namespace quokkagit { struct SSettings; }
 class QString;
 
-
 class CGit2Wrapper : public QObject
 {
     Q_OBJECT

@@ -1,9 +1,12 @@
 #include "logfilterproxymodel.h"
 
+
+
 CLogFilterProxyModel::CLogFilterProxyModel(QObject* parent)
     : QSortFilterProxyModel(parent)
 {
 }
+
 
 bool CLogFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const
 {

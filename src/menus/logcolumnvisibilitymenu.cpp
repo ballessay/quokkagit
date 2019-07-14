@@ -2,6 +2,7 @@
 #include "data/logentry.h"
 #include <QAction>
 
+
 namespace
 {
     QAction* CreateAction(QMenu* parent, const QString& /*sName*/, int id, bool bChecked)
@@ -15,6 +16,8 @@ namespace
         return action;
     }
 }
+
+
 
 CLogColumnVisibilityMenu::CLogColumnVisibilityMenu(QWidget* parent)
     : QMenu(parent)
@@ -30,10 +33,12 @@ CLogColumnVisibilityMenu::CLogColumnVisibilityMenu(QWidget* parent)
     AddAction(tr(quokkagit::SLogEntry::authorDate), quokkagit::SLogEntry::AuthorDate, true);
 }
 
+
 CLogColumnVisibilityMenu::~CLogColumnVisibilityMenu()
 {
 
 }
+
 
 void CLogColumnVisibilityMenu::EmitState()
 {
@@ -42,6 +47,7 @@ void CLogColumnVisibilityMenu::EmitState()
         emit ToggleColumn(action->data().toInt(), action->isChecked());
     }
 }
+
 
 void CLogColumnVisibilityMenu::Toggled(bool enabled)
 {
@@ -52,6 +58,7 @@ void CLogColumnVisibilityMenu::Toggled(bool enabled)
         emit ToggleColumn(i, enabled);
     }
 }
+
 
 void CLogColumnVisibilityMenu::AddAction(const QString& sName, int id, bool enabled)
 {

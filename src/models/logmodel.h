@@ -4,7 +4,6 @@
 #include "data/logentry.h"
 #include <QAbstractTableModel>
 
-
 class CLogModel : public QAbstractTableModel
 {
 public:

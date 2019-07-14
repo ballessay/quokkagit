@@ -19,6 +19,7 @@ CBlameModel::CBlameModel(const quokkagit::BlameData& data, QObject* pParent)
 {
 }
 
+
 void CBlameModel::SetData(const quokkagit::BlameData& data)
 {
     beginResetModel();
@@ -32,6 +33,7 @@ void CBlameModel::SetData(const quokkagit::BlameData& data)
     endResetModel();
 }
 
+
 void CBlameModel::SetColors(const QColor& fg, const QColor& bg)
 {
     m_fg = QColor(Qt::white);
@@ -40,15 +42,18 @@ void CBlameModel::SetColors(const QColor& fg, const QColor& bg)
     CalculateBackgroundColors();
 }
 
+
 int CBlameModel::rowCount(const QModelIndex&) const
 {
     return static_cast<int>(m_data.size());
 }
 
+
 int CBlameModel::columnCount(const QModelIndex&) const
 {
     return Column::Count;
 }
+
 
 QVariant CBlameModel::data(const QModelIndex& index, int role) const
 {
@@ -93,6 +98,7 @@ QVariant CBlameModel::data(const QModelIndex& index, int role) const
 
     return QVariant();
 }
+
 
 void CBlameModel::CalculateBackgroundColors()
 {

@@ -1,6 +1,8 @@
 #include "debuglogdialog.h"
 #include "ui_debuglogdialog.h"
 
+
+
 CDebugLogDialog::CDebugLogDialog(QWidget *parent) :
     QDialog(parent),
     m_ui(new Ui::CDebugLogDialog)
@@ -8,9 +10,11 @@ CDebugLogDialog::CDebugLogDialog(QWidget *parent) :
     m_ui->setupUi(this);
 }
 
+
 CDebugLogDialog::~CDebugLogDialog()
 {
 }
+
 
 void CDebugLogDialog::AddMessage(QString msg)
 {

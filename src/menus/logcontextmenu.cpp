@@ -1,6 +1,7 @@
 #include "logcontextmenu.h"
 #include "data/logentry.h"
 
+
 CLogContextMenu::CLogContextMenu(QWidget* parent)
     : QMenu(parent)
 {
@@ -21,6 +22,7 @@ CLogFilesContextMenu::CLogFilesContextMenu(QWidget* parent)
     pAction = new QAction("Blame", this);
     addAction(pAction);
 }
+
 
 CLogSearchContextMenu::CLogSearchContextMenu(QWidget* parent)
     : QMenu(parent)

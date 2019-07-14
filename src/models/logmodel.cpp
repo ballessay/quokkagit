@@ -2,11 +2,14 @@
 #include <cassert>
 #include <QFontMetrics>
 
+
+
 CLogModel::CLogModel(const quokkagit::LogEntries& log, QObject* pParent)
     : QAbstractTableModel(pParent),
       m_log(log)
 {
 }
+
 
 void CLogModel::SetLog(const quokkagit::LogEntries& log)
 {
@@ -19,16 +22,19 @@ void CLogModel::SetLog(const quokkagit::LogEntries& log)
     endResetModel();
 }
 
+
 int CLogModel::rowCount(const QModelIndex&) const
 {
     return static_cast<int>(m_log.size());
 }
+
 
 int CLogModel::columnCount(const QModelIndex&) const
 {
     int i = quokkagit::SLogEntry::NumberOfFields;
     return i;
 }
+
 
 QVariant CLogModel::data(const QModelIndex& index, int role) const
 {
@@ -72,6 +78,7 @@ QVariant CLogModel::data(const QModelIndex& index, int role) const
 
     return QVariant();
 }
+
 
 QVariant CLogModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
