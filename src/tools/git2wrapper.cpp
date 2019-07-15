@@ -4,7 +4,6 @@
 #include "data/logentry.h"
 #include "data/settings.h"
 
-
 #include "git2cpp/repo.h"
 #include "git2cpp/reference.h"
 #include "git2cpp/id_to_str.h"
@@ -34,7 +33,6 @@ namespace
         return opts;
     }
 }
-
 
 
 CGit2Wrapper::CGit2Wrapper(const quokkagit::SSettings& settings)

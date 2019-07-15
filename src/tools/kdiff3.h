@@ -3,7 +3,6 @@
 
 #include "difftool.h"
 
-
 class CKdiff3 : public CDiffTool
 {
 public:

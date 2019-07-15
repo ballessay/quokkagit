@@ -3,7 +3,6 @@
 #include "data/settings.h"
 
 
-
 CDiffTool::CDiffTool(const quokkagit::SDiffSettings& settings,
                      const quokkagit::SDiffEntry& entry,
                      int index)

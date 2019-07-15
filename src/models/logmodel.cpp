@@ -3,7 +3,6 @@
 #include <QFontMetrics>
 
 
-
 CLogModel::CLogModel(const quokkagit::LogEntries& log, QObject* pParent)
     : QAbstractTableModel(pParent),
       m_log(log)

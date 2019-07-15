@@ -11,7 +11,6 @@
 #include <QHeaderView>
 
 
-
 CMainWindow::CMainWindow(CGit2Wrapper& git,
                          quokkagit::SSettings& settings,
                          QWidget *parent) :

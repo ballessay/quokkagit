@@ -7,7 +7,6 @@
 #include <set>
 
 
-
 CBlameModel::CBlameModel(const CGit2Wrapper& git, QObject* parent)
     : QAbstractTableModel(parent),
       m_data(),

@@ -18,7 +18,6 @@ namespace
 }
 
 
-
 CLogColumnVisibilityMenu::CLogColumnVisibilityMenu(QWidget* parent)
     : QMenu(parent)
 {

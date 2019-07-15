@@ -5,6 +5,7 @@
 
 #include "dialogs/debuglogdialog.h"
 #include "models/logmodel.h"
+#include "models/filelogmodel.h"
 
 #include <QMainWindow>
 #include <memory>

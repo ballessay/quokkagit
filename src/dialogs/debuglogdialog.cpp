@@ -2,7 +2,6 @@
 #include "ui_debuglogdialog.h"
 
 
-
 CDebugLogDialog::CDebugLogDialog(QWidget *parent) :
     QDialog(parent),
     m_ui(new Ui::CDebugLogDialog)

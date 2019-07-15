@@ -17,7 +17,6 @@ namespace
 }
 
 
-
 CBlameDialog::CBlameDialog(SData& data, QWidget* parent) :
     QDialog(parent),
     m_ui(new Ui::CBlameDialog),

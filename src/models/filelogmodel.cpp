@@ -2,7 +2,6 @@
 #include <QIcon>
 
 
-
 CFileLogModel::CFileLogModel(const vFiles& log, QObject* pParent)
     : QAbstractTableModel(pParent),
       m_log(log)

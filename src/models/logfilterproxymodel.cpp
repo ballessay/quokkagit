@@ -1,14 +1,23 @@
 #include "logfilterproxymodel.h"
 
 
-
 CLogFilterProxyModel::CLogFilterProxyModel(QObject* parent)
     : QSortFilterProxyModel(parent)
 {
 }
 
 
-bool CLogFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const
+void CLogFilterProxyModel::SetFilter(const QString& filter,
+                                     const QList<QAction*>& flags)
+{
+    m_filter = filter;
+    m_flags = flags;
+    invalidateFilter();
+}
+
+
+bool CLogFilterProxyModel::filterAcceptsRow(int sourceRow,
+                                            const QModelIndex& sourceParent) const
 {
     if(m_filter.isEmpty()) return true;
 
@@ -16,7 +25,9 @@ bool CLogFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex& so
     {
         if (action->isChecked())
         {
-            QModelIndex index = sourceModel()->index(sourceRow, action->data().toInt(), sourceParent);
+            QModelIndex index = sourceModel()->index(sourceRow,
+                                                     action->data().toInt(),
+                                                     sourceParent);
             if(index.isValid())
                 if(index.data().toString().contains(m_filter))
                     return true;

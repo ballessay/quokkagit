@@ -3,7 +3,6 @@
 #include "git2cpp/id_to_str.h"
 
 
-
 namespace
 {
     QDateTime FromGitTime(git_time time)

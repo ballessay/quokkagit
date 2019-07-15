@@ -3,6 +3,7 @@
 #include <QTreeWidgetItem>
 #include <QList>
 
+
 namespace
 {
     const int column = 0;
@@ -74,7 +75,6 @@ namespace
         BuildTree(parts, items, branchIndex, i);
     }
 }
-
 
 
 CBranchSelectionDialog::CBranchSelectionDialog(const CGit2Wrapper::vBranches& branches,
