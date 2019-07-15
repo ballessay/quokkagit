@@ -150,7 +150,8 @@ void CGit2Wrapper::DiffFinished(int index)
 
 
 
-git::Tree CGit2Wrapper::resolve_to_tree(git::Repository const & repo, const QString& identifier)
+git::Tree CGit2Wrapper::resolve_to_tree(git::Repository const & repo,
+                                        const QString& identifier)
 {
     git::Object obj = git::revparse_single(repo, identifier.toUtf8().constData());
 
@@ -193,7 +194,8 @@ git::Diff CGit2Wrapper::find_diff(git::Repository const & repo, git::Tree & t1, 
 }
 
 
-CGit2Wrapper::vDeltas CGit2Wrapper::DiffWithParent(int index, const quokkagit::LogEntries& entries)
+CGit2Wrapper::vDeltas CGit2Wrapper::DiffWithParent(int index,
+                                                   const quokkagit::LogEntries& entries)
 {
     vDeltas deltas;
 
@@ -338,7 +340,7 @@ void CGit2Wrapper::DiffBlobs(int deltaIndex, const vDeltas& deltas)
 
 
 quokkagit::BlameData CGit2Wrapper::BlameFile(const QString& path,
-                                               const QString& oid)
+                                             const QString& oid)
 {
     quokkagit::BlameData vData;
 
@@ -391,4 +393,14 @@ quokkagit::BlameData CGit2Wrapper::BlameFile(const QString& path,
     }
 
     return vData;
+}
+
+
+quokkagit::SLogEntry CGit2Wrapper::CommitLookup(const QString& hash) const
+{
+  git_oid oid = git::str_to_id(hash.toUtf8().constData());
+
+  git::Commit commit = m_repo.commit_lookup(oid);
+
+  return quokkagit::SLogEntry::FromCommit(commit);
 }

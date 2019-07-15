@@ -21,7 +21,7 @@ namespace
 CBlameDialog::CBlameDialog(SData& data, QWidget* parent) :
     QDialog(parent),
     m_ui(new Ui::CBlameDialog),
-    m_model(new CBlameModel(this)),
+    m_model(new CBlameModel(data.git, this)),
     m_data(data)
 {
     m_ui->setupUi(this);

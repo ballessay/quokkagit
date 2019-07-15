@@ -44,6 +44,8 @@ public:
 
     quokkagit::BlameData BlameFile(const QString& sPath, const QString& oid);
 
+    quokkagit::SLogEntry CommitLookup(const QString& hash) const;
+
 signals:
     void NewFile(const QStringList& list);
     void Message(const QString& message) const;

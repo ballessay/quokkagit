@@ -1,4 +1,6 @@
 #include "blamemodel.h"
+#include "data/logentry.h"
+#include "tools/git2wrapper.h"
 #include <QBrush>
 #include <QString>
 #include <cassert>
@@ -6,16 +8,18 @@
 
 
 
-CBlameModel::CBlameModel(QObject* parent)
+CBlameModel::CBlameModel(const CGit2Wrapper& git, QObject* parent)
     : QAbstractTableModel(parent),
-      m_data()
+      m_data(),
+      m_git(git)
 {
 
 }
 
-CBlameModel::CBlameModel(const quokkagit::BlameData& data, QObject* pParent)
+CBlameModel::CBlameModel(const CGit2Wrapper& git, const quokkagit::BlameData& data, QObject* pParent)
     : QAbstractTableModel(pParent),
-      m_data(data)
+      m_data(data),
+      m_git(git)
 {
 }
 
@@ -66,7 +70,7 @@ QVariant CBlameModel::data(const QModelIndex& index, int role) const
         {
             const auto& entry = m_data.at(row);
 
-            if (Qt::DisplayRole == role )
+            if (Qt::DisplayRole == role || Qt::EditRole == role)
             {
                 switch(column)
                 {
@@ -87,6 +91,18 @@ QVariant CBlameModel::data(const QModelIndex& index, int role) const
             {
                 const auto& it = m_colors.find(entry.hash);
                 return it != m_colors.end() ? it->second : QBrush(m_fg);
+            }
+            else if (Qt::ToolTipRole == role)
+            {
+              quokkagit::SLogEntry e = m_git.CommitLookup(entry.hash);
+              return QString("Author: %1 %2 %3\nCommiter: %4 %5 %6\n\n%7")
+                        .arg(e.sAuthor)
+                        .arg(e.sAuthorEmail)
+                        .arg(e.qauthorDate.toString(Qt::ISODate))
+                        .arg(e.sCommiter)
+                        .arg(e.sCommiterEmail)
+                        .arg(e.qcommitDate.toString(Qt::ISODate))
+                        .arg(e.sMessage);
             }
 //            else if (Qt::BackgroundRole == role)
 //            {

@@ -6,6 +6,7 @@
 #include <QColor>
 #include <map>
 
+class CGit2Wrapper;
 class QBrush;
 class QString;
 
@@ -22,8 +23,9 @@ public:
         Count
     };
 
-    explicit CBlameModel(QObject* parent = nullptr);
-    CBlameModel(const quokkagit::BlameData& data,
+    explicit CBlameModel(const CGit2Wrapper& git, QObject* parent = nullptr);
+    CBlameModel(const CGit2Wrapper& git,
+                const quokkagit::BlameData& data,
                 QObject* pParent = nullptr);
 
     void SetData(const quokkagit::BlameData& Log);
@@ -46,6 +48,7 @@ private:
     std::map<QString, QBrush> m_colors;
     QColor m_fg;
     QColor m_bg;
+    const CGit2Wrapper& m_git;
 };
 
 #endif // BLAMEMODEL_H
