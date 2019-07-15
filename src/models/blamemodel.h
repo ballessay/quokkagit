@@ -41,6 +41,8 @@ public:
 
     //QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
 
+    void SetSelectedHash(const QString& hash);
+
 private:
     void CalculateBackgroundColors();
 
@@ -49,6 +51,7 @@ private:
     QColor m_fg;
     QColor m_bg;
     const CGit2Wrapper& m_git;
+    QString m_selectedHash;
 };
 
 #endif // BLAMEMODEL_H

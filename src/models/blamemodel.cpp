@@ -94,25 +94,35 @@ QVariant CBlameModel::data(const QModelIndex& index, int role) const
             }
             else if (Qt::ToolTipRole == role)
             {
-              quokkagit::SLogEntry e = m_git.CommitLookup(entry.hash);
-              return QString("Author: %1 %2 %3\nCommiter: %4 %5 %6\n\n%7")
-                        .arg(e.sAuthor)
-                        .arg(e.sAuthorEmail)
-                        .arg(e.qauthorDate.toString(Qt::ISODate))
-                        .arg(e.sCommiter)
-                        .arg(e.sCommiterEmail)
-                        .arg(e.qcommitDate.toString(Qt::ISODate))
-                        .arg(e.sMessage);
+                quokkagit::SLogEntry e = m_git.CommitLookup(entry.hash);
+                return QString("Author: %1 %2 %3\nCommiter: %4 %5 %6\n\n%7")
+                          .arg(e.sAuthor)
+                          .arg(e.sAuthorEmail)
+                          .arg(e.qauthorDate.toString(Qt::ISODate))
+                          .arg(e.sCommiter)
+                          .arg(e.sCommiterEmail)
+                          .arg(e.qcommitDate.toString(Qt::ISODate))
+                          .arg(e.sMessage);
             }
-//            else if (Qt::BackgroundRole == role)
-//            {
-//                const auto& it = m_colors.find(entry.oid);
-//                return it != m_colors.end() ? it->second : QBrush(m_fg);
-//            }
+            else if (Qt::BackgroundRole == role)
+            {
+                if (m_selectedHash == entry.hash)
+                  return QColor(40, 40, 40);
+            }
         }
     }
 
     return QVariant();
+}
+
+
+void CBlameModel::SetSelectedHash(const QString& hash)
+{
+    beginResetModel();
+
+    m_selectedHash = hash;
+
+    endResetModel();
 }
 
 
