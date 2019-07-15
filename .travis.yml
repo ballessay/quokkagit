@@ -4,6 +4,10 @@ dist: xenial
 
 os: linux
 
+branches:
+  only:
+  - master
+  - /^v\d.*$/
 
 before_script:
   - sudo add-apt-repository --yes ppa:beineri/opt-qt-5.12.3-xenial
