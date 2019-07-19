@@ -11,10 +11,10 @@ int main(int argc, char** argv)
 {
     auto_git_initializer;
 
+    CApplication app(argc, argv);
+
     try
     {
-        CApplication app(argc, argv);
-
         CGit2Wrapper git(app.settings());
         git.Initialize();
 
