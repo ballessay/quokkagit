@@ -42,6 +42,12 @@ CGit2::CGit2(const quokkagit::SSettings& settings)
 }
 
 
+void CGit2::ChangeRepository(const QString& sPath)
+{
+    m_repo = git::Repository(sPath.toUtf8().constData());
+}
+
+
 void CGit2::SetHead(const QString& sHead)
 {
     m_repo.set_head(sHead.toUtf8().constData());
@@ -57,17 +63,11 @@ QString CGit2::HeadRef() const
 }
 
 
-void CGit2::Initialize()
-{
-    m_branches = m_repo.branches(git::branch_type::ALL);
-}
-
-
 CGit2::vBranches CGit2::Branches() const
 {
     vBranches branches;
 
-    for(const auto& ref : m_branches)
+    for(const auto& ref : m_repo.branches(git::branch_type::ALL))
     {
         if(ref.type() != GIT_REF_SYMBOLIC)
         {

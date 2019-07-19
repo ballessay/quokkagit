@@ -21,16 +21,15 @@ class CGit2 : public QObject
     Q_OBJECT
 
 public:
-    using vReferences = std::vector<git::Reference>;
     using vBranches = std::vector<std::pair<QString, git_oid>>;
     using vDeltas = std::vector<quokkagit::SDelta>;
 
     CGit2(const quokkagit::SSettings& settings);
 
+    void ChangeRepository(const QString& sPath);
+
     void SetHead(const QString& sHead);
     QString HeadRef() const;
-
-    void Initialize();
 
     vBranches Branches() const;
 
@@ -60,7 +59,6 @@ private:
 
 private:
     git::Repository m_repo;
-    vReferences m_branches;
     std::vector<CDiffTool> m_diffs;
     const quokkagit::SSettings& m_settings;
 };

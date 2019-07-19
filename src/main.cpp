@@ -16,7 +16,6 @@ int main(int argc, char** argv)
     try
     {
         CGit2 git(app.settings());
-        git.Initialize();
 
         CMainWindow w(git, app.settings());
         w.show();
