@@ -7,7 +7,7 @@
 #include <set>
 
 
-CBlameModel::CBlameModel(const CGit2Wrapper& git, QObject* parent)
+CBlameModel::CBlameModel(const CGit2& git, QObject* parent)
     : QAbstractTableModel(parent),
       m_data(),
       m_git(git)
@@ -15,7 +15,7 @@ CBlameModel::CBlameModel(const CGit2Wrapper& git, QObject* parent)
 
 }
 
-CBlameModel::CBlameModel(const CGit2Wrapper& git, const quokkagit::BlameData& data, QObject* pParent)
+CBlameModel::CBlameModel(const CGit2& git, const quokkagit::BlameData& data, QObject* pParent)
     : QAbstractTableModel(pParent),
       m_data(data),
       m_git(git)

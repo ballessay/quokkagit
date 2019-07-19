@@ -1,6 +1,8 @@
 #ifndef DIFFTOOL_H
 #define DIFFTOOL_H
 
+#include "data/diffentry.h"
+#include "data/settings.h"
 #include <QObject>
 #include <QProcess>
 #include <QString>
@@ -39,8 +41,8 @@ protected:
     virtual QStringList args() const;
 
     int m_index;
-    const quokkagit::SDiffSettings& m_settings;
-    const quokkagit::SDiffEntry& m_entry;
+    quokkagit::SDiffSettings m_settings;
+    quokkagit::SDiffEntry m_entry;
     std::shared_ptr<QProcess> m_process;
     std::shared_ptr<QTemporaryFile> m_old;
     std::shared_ptr<QTemporaryFile> m_new;

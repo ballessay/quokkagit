@@ -6,7 +6,7 @@
 #include <memory>
 
 class CBlameModel;
-class CGit2Wrapper;
+class CGit2;
 namespace Ui {
     class CBlameDialog;
 }
@@ -18,7 +18,7 @@ class CBlameDialog : public QDialog
 public:
     struct SData
     {
-        CGit2Wrapper& git;
+        CGit2& git;
         QString hash;
         QString path;
     };

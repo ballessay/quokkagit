@@ -1,6 +1,4 @@
 #include "difftool.h"
-#include "data/diffentry.h"
-#include "data/settings.h"
 
 
 CDiffTool::CDiffTool(const quokkagit::SDiffSettings& settings,
@@ -64,8 +62,8 @@ CDiffTool::CDiffTool(const CDiffTool&& diff)
 CDiffTool& CDiffTool::operator=(const CDiffTool& other)
 {
     m_index = other.m_index;
-//    m_settings = other.m_settings;
-//    m_entry = other.m_entry;
+    m_settings = other.m_settings;
+    m_entry = other.m_entry;
     m_process = other.m_process;
     m_old = other.m_old;
     m_new = other.m_new;

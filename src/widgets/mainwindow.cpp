@@ -13,7 +13,7 @@
 #include <QHeaderView>
 
 
-CMainWindow::CMainWindow(CGit2Wrapper& git,
+CMainWindow::CMainWindow(CGit2& git,
                          quokkagit::SSettings& settings,
                          QWidget *parent) :
     QMainWindow(parent),
@@ -27,7 +27,7 @@ CMainWindow::CMainWindow(CGit2Wrapper& git,
     m_ui->setupUi(this);
 
     QString head = m_git.HeadRef();
-    CGit2Wrapper::vBranches branches = m_git.Branches();
+    CGit2::vBranches branches = m_git.Branches();
     int index = 0;
     for (const auto& branch : branches)
     {
@@ -120,10 +120,10 @@ CMainWindow::CMainWindow(CGit2Wrapper& git,
     connect(m_ui->searchOptionsToolButton, &QToolButton::clicked,
             m_ui->searchOptionsToolButton, &QToolButton::showMenu);
 
-    connect(&m_git, &CGit2Wrapper::NewFiles,
+    connect(&m_git, &CGit2::NewFiles,
             this, &CMainWindow::AddFiles);
 
-    connect(&m_git, &CGit2Wrapper::Message,
+    connect(&m_git, &CGit2::Message,
             this, &CMainWindow::AddMessage);
 
     connect(m_ui->pFilesTableView, &QAbstractItemView::doubleClicked,
@@ -233,7 +233,7 @@ void CMainWindow::on_actionOpen_log_triggered()
 
 void CMainWindow::on_branchSelectionToolButton_clicked()
 {
-    CGit2Wrapper::vBranches b = m_git.Branches();
+    CGit2::vBranches b = m_git.Branches();
 
     CBranchSelectionDialog d(b, this);
     if(d.exec() == QDialog::Accepted)

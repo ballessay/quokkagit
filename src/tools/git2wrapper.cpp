@@ -35,14 +35,14 @@ namespace
 }
 
 
-CGit2Wrapper::CGit2Wrapper(const quokkagit::SSettings& settings)
-    : m_repo(settings.repoPath.toUtf8().constData()),
+CGit2::CGit2(const quokkagit::SSettings& settings)
+    : m_repo("."),
       m_settings(settings)
 {
 }
 
 
-void CGit2Wrapper::SetHead(const QString& sHead)
+void CGit2::SetHead(const QString& sHead)
 {
     m_repo.set_head(sHead.toUtf8().constData());
 
@@ -50,20 +50,20 @@ void CGit2Wrapper::SetHead(const QString& sHead)
 }
 
 
-QString CGit2Wrapper::HeadRef() const
+QString CGit2::HeadRef() const
 {
     git::Reference ref = m_repo.head();
     return ref.name();
 }
 
 
-void CGit2Wrapper::Initialize()
+void CGit2::Initialize()
 {
     m_branches = m_repo.branches(git::branch_type::ALL);
 }
 
 
-CGit2Wrapper::vBranches CGit2Wrapper::Branches() const
+CGit2::vBranches CGit2::Branches() const
 {
     vBranches branches;
 
@@ -81,9 +81,9 @@ CGit2Wrapper::vBranches CGit2Wrapper::Branches() const
 }
 
 
-quokkagit::LogEntries CGit2Wrapper::Log(int branch,
-                                         const CGit2Wrapper::vBranches& b,
-                                         const QString& path) const
+quokkagit::LogEntries CGit2::Log(int branch,
+                                 const CGit2::vBranches& b,
+                                 const QString& path) const
 {
     quokkagit::LogEntries entries;
 
@@ -139,15 +139,15 @@ quokkagit::LogEntries CGit2Wrapper::Log(int branch,
 }
 
 
-void CGit2Wrapper::DiffFinished(int index)
+void CGit2::DiffFinished(int index)
 {
     m_diffs.erase(m_diffs.begin() + index);
 }
 
 
 
-git::Tree CGit2Wrapper::resolve_to_tree(git::Repository const & repo,
-                                        const QString& identifier)
+git::Tree CGit2::resolve_to_tree(git::Repository const & repo,
+                                 const QString& identifier)
 {
     git::Object obj = git::revparse_single(repo, identifier.toUtf8().constData());
 
@@ -171,7 +171,8 @@ git::Tree CGit2Wrapper::resolve_to_tree(git::Repository const & repo,
 }
 
 
-git::Diff CGit2Wrapper::find_diff(git::Repository const & repo, git::Tree & t1, git::Tree & t2)
+git::Diff CGit2::find_diff(git::Repository const & repo,
+                           git::Tree & t1, git::Tree & t2)
 {
     git_diff_options opts;
     git_diff_init_options(&opts, GIT_DIFF_OPTIONS_VERSION);
@@ -190,8 +191,8 @@ git::Diff CGit2Wrapper::find_diff(git::Repository const & repo, git::Tree & t1, 
 }
 
 
-CGit2Wrapper::vDeltas CGit2Wrapper::DiffWithParent(int index,
-                                                   const quokkagit::LogEntries& entries)
+CGit2::vDeltas CGit2::DiffWithParent(int index,
+                                     const quokkagit::LogEntries& entries)
 {
     vDeltas deltas;
 
@@ -293,7 +294,7 @@ CGit2Wrapper::vDeltas CGit2Wrapper::DiffWithParent(int index,
 }
 
 
-void CGit2Wrapper::DiffBlobs(int deltaIndex, const vDeltas& deltas)
+void CGit2::DiffBlobs(int deltaIndex, const vDeltas& deltas)
 {
     if(deltaIndex < 0) return;
 
@@ -329,15 +330,15 @@ void CGit2Wrapper::DiffBlobs(int deltaIndex, const vDeltas& deltas)
     m_diffs.back().Open();
 
     connect(&m_diffs.back(), &CDiffTool::Message,
-            this, &CGit2Wrapper::Message);
+            this, &CGit2::Message);
 
     connect(&m_diffs.back(), &CDiffTool::ProgrammFinished,
-            this, &CGit2Wrapper::DiffFinished);
+            this, &CGit2::DiffFinished);
 }
 
 
-quokkagit::BlameData CGit2Wrapper::BlameFile(const QString& path,
-                                             const QString& oid)
+quokkagit::BlameData CGit2::BlameFile(const QString& path,
+                                      const QString& oid)
 {
     quokkagit::BlameData vData;
 
@@ -393,7 +394,7 @@ quokkagit::BlameData CGit2Wrapper::BlameFile(const QString& path,
 }
 
 
-quokkagit::SLogEntry CGit2Wrapper::CommitLookup(const QString& hash) const
+quokkagit::SLogEntry CGit2::CommitLookup(const QString& hash) const
 {
   git_oid oid = git::str_to_id(hash.toUtf8().constData());
 

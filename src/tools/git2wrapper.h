@@ -16,7 +16,7 @@
 namespace quokkagit { struct SSettings; }
 class QString;
 
-class CGit2Wrapper : public QObject
+class CGit2 : public QObject
 {
     Q_OBJECT
 
@@ -25,7 +25,7 @@ public:
     using vBranches = std::vector<std::pair<QString, git_oid>>;
     using vDeltas = std::vector<quokkagit::SDelta>;
 
-    CGit2Wrapper(const quokkagit::SSettings& settings);
+    CGit2(const quokkagit::SSettings& settings);
 
     void SetHead(const QString& sHead);
     QString HeadRef() const;

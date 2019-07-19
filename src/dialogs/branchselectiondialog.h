@@ -15,7 +15,7 @@ class CBranchSelectionDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit CBranchSelectionDialog(const CGit2Wrapper::vBranches& branches,
+    explicit CBranchSelectionDialog(const CGit2::vBranches& branches,
                                     QWidget* parent = nullptr);
     ~CBranchSelectionDialog();
 
@@ -26,7 +26,7 @@ public slots:
 
 private:
     std::unique_ptr<Ui::CBranchSelectionDialog> m_ui;
-    CGit2Wrapper::vBranches m_branches;
+    CGit2::vBranches m_branches;
 };
 
 #endif // BRANCHSELECTIONDIALOG_H

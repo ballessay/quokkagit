@@ -11,7 +11,7 @@
 #include <memory>
 
 namespace quokkagit { struct SSettings; }
-class CGit2Wrapper;
+class CGit2;
 class CLogModel;
 class CFileLogModel;
 class CLogFilterProxyModel;
@@ -24,7 +24,7 @@ class CMainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit CMainWindow(CGit2Wrapper& git,
+    explicit CMainWindow(CGit2& git,
                          quokkagit::SSettings& settings,
                          QWidget *parent = nullptr);
     ~CMainWindow();
@@ -54,12 +54,12 @@ public slots:
 
 private:
     std::unique_ptr<Ui::CMainWindow> m_ui;
-    CGit2Wrapper& m_git;
+    CGit2& m_git;
     CLogModel* m_pLogModel;
     CFileLogModel* m_logFileModel;
     CLogFilterProxyModel* m_logProxy;
     CDebugLogDialog m_dbgLogDialog;
-    CGit2Wrapper::vDeltas m_deltas;
+    CGit2::vDeltas m_deltas;
     quokkagit::SSettings& m_settings;
 };
 
