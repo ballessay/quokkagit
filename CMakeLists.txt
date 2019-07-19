@@ -33,6 +33,9 @@ add_executable(${PROJECT_NAME}
   src/dialogs/debuglogdialog.cpp
   src/dialogs/debuglogdialog.h
   src/dialogs/debuglogdialog.ui
+  src/dialogs/settingsdialog.cpp
+  src/dialogs/settingsdialog.h
+  src/dialogs/settingsdialog.ui
   src/menus/logcolumnvisibilitymenu.cpp
   src/menus/logcolumnvisibilitymenu.h
   src/menus/logcontextmenu.cpp

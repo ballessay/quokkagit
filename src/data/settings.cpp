@@ -10,6 +10,13 @@ namespace
     const char* const diff_path = "diff.path";
     const char* const diff_arguments = "diff.arguments";
 
+    const QStringList kdiff3Args = QStringList() << "--L1"
+                                                 << "%fo@%io"
+                                                 << "--L2"
+                                                 << "%fn@%in"
+                                                 << "%po"
+                                                 << "%pn";
+
     const char* const settings_repo_path = "settings.repoPath";
     const char* const settings_font = "settings.font";
 }
@@ -19,7 +26,7 @@ namespace
 void SDiffSettings::Load(const QSettings& settings)
 {
     path = settings.value(diff_path, "kdiff3").toString();
-    arguments = settings.value(diff_arguments).toStringList();
+    arguments = settings.value(diff_arguments, kdiff3Args).toStringList();
 }
 
 

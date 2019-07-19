@@ -49,6 +49,9 @@ public slots:
     void on_branchSelectionToolButton_clicked();
     void on_searchLineEdit_returnPressed();
 
+    void OnOpenActionTriggered();
+    void OnSettingsActionTriggered();
+
 private:
     std::unique_ptr<Ui::CMainWindow> m_ui;
     CGit2Wrapper& m_git;

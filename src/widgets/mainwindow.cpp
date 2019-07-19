@@ -1,10 +1,12 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "data/settings.h"
 #include "models/logmodel.h"
 #include "models/filelogmodel.h"
 #include "models/logfilterproxymodel.h"
 #include "dialogs/branchselectiondialog.h"
 #include "dialogs/blamedialog.h"
+#include "dialogs/settingsdialog.h"
 #include "menus/logcolumnvisibilitymenu.h"
 #include "menus/logcontextmenu.h"
 #include "tools/git2wrapper.h"
@@ -129,6 +131,13 @@ CMainWindow::CMainWindow(CGit2Wrapper& git,
 
     connect(m_ui->pFilesTableView, &CTableWidget::enterOrReturnPressed,
             this, &CMainWindow::DiffCurrentIndex);
+
+
+    connect(m_ui->actionOpen_repository, &QAction::triggered,
+            this, &CMainWindow::OnOpenActionTriggered);
+
+    connect(m_ui->actionSettings, &QAction::triggered,
+            this, &CMainWindow::OnSettingsActionTriggered);
 }
 
 
@@ -247,4 +256,20 @@ void CMainWindow::on_searchLineEdit_returnPressed()
     QList<QAction*> actions = m_ui->searchOptionsToolButton->menu()->actions();
 
     m_logProxy->SetFilter(m_ui->searchLineEdit->text(), actions);
+}
+
+
+void CMainWindow::OnOpenActionTriggered()
+{
+
+}
+
+
+void CMainWindow::OnSettingsActionTriggered()
+{
+    CSettingsDialog d(m_settings, this);
+    if (d.exec()  == QDialog::Accepted)
+    {
+        m_settings = d.currentSettings();
+    }
 }
