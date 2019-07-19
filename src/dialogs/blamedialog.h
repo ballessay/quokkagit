@@ -32,7 +32,7 @@ public:
 
 private slots:
     void OnBlameHereTriggered();
-    void on_tableView_pressed(const QModelIndex&);
+    void OnTableViewPressed(const QModelIndex&);
 
 private:
     std::unique_ptr<Ui::CBlameDialog> m_ui;

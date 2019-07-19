@@ -44,10 +44,10 @@ public slots:
 
     void AddMessage(QString msg);
 
-    void on_actionOpen_log_triggered();
+    void OnOpenLogActionTriggered();
 
-    void on_branchSelectionToolButton_clicked();
-    void on_searchLineEdit_returnPressed();
+    void OnBranchSelectionToolButtonClicked();
+    void OnSearchLineEditReturnPressed();
 
     void OnOpenActionTriggered();
     void OnSettingsActionTriggered();
@@ -55,9 +55,9 @@ public slots:
 private:
     std::unique_ptr<Ui::CMainWindow> m_ui;
     CGit2& m_git;
-    CLogModel* m_pLogModel;
-    CFileLogModel* m_logFileModel;
-    CLogFilterProxyModel* m_logProxy;
+    std::unique_ptr<CLogModel> m_logModel;
+    std::unique_ptr<CFileLogModel> m_logFileModel;
+    std::unique_ptr<CLogFilterProxyModel> m_logProxy;
     CDebugLogDialog m_dbgLogDialog;
     CGit2::vDeltas m_deltas;
     quokkagit::SSettings& m_settings;

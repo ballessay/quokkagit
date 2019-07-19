@@ -96,6 +96,9 @@ CBranchSelectionDialog::CBranchSelectionDialog(const CGit2::vBranches& branches,
 
     m_ui->treeWidget->addTopLevelItems(items);
     m_ui->treeWidget->expandAll();
+
+    connect(m_ui->treeWidget, &QTreeWidget::itemDoubleClicked,
+            this, &CBranchSelectionDialog::OnTreeWidgetItemDoubleClicked);
 }
 
 
@@ -121,8 +124,8 @@ int CBranchSelectionDialog::currentSelection() const
 }
 
 
-void CBranchSelectionDialog::on_treeWidget_itemDoubleClicked(QTreeWidgetItem* item,
-                                                             int)
+void CBranchSelectionDialog::OnTreeWidgetItemDoubleClicked(QTreeWidgetItem* item,
+                                                           int)
 {
     m_ui->treeWidget->setCurrentItem(item);
 

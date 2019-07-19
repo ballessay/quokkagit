@@ -22,7 +22,7 @@ public:
     int currentSelection() const;
 
 public slots:
-    void on_treeWidget_itemDoubleClicked(QTreeWidgetItem*, int);
+    void OnTreeWidgetItemDoubleClicked(QTreeWidgetItem*, int);
 
 private:
     std::unique_ptr<Ui::CBranchSelectionDialog> m_ui;

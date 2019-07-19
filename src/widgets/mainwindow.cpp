@@ -19,7 +19,7 @@ CMainWindow::CMainWindow(CGit2& git,
     QMainWindow(parent),
     m_ui(new Ui::CMainWindow),
     m_git(git),
-    m_pLogModel(nullptr),
+    m_logModel(nullptr),
     m_logFileModel(nullptr),
     m_logProxy(nullptr),
     m_settings(settings)
@@ -42,19 +42,19 @@ CMainWindow::CMainWindow(CGit2& git,
     if (args.size() > 1)
         path = args.at(1);
 
-    m_pLogModel = new CLogModel(git.Log(index, branches, path), this);
+    m_logModel.reset(new CLogModel(git.Log(index, branches, path), this));
 
     m_ui->branchLabel->setText(m_git.HeadRef());
 
-    m_logProxy = new CLogFilterProxyModel(this);
-    m_logProxy->setSourceModel(m_pLogModel);
-    m_ui->logTableView->setModel(m_logProxy);
+    m_logProxy.reset(new CLogFilterProxyModel(this));
+    m_logProxy->setSourceModel(m_logModel.get());
+    m_ui->logTableView->setModel(m_logProxy.get());
 
     m_ui->logTableView->horizontalHeader()->hideSection(quokkagit::SLogEntry::Message);
     m_ui->logTableView->horizontalHeader()->setSectionsMovable(true);
     m_ui->logTableView->horizontalHeader()->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Preferred);
 
-    int columns = m_pLogModel->columnCount();
+    int columns = m_logModel->columnCount();
     for(int i = 0; i < columns; ++i)
     {
         if(i != quokkagit::SLogEntry::Summary)
@@ -88,9 +88,9 @@ CMainWindow::CMainWindow(CGit2& git,
 
     CFileLogModel::vFiles files;
 
-    m_logFileModel = new CFileLogModel(files, this);
+    m_logFileModel.reset(new CFileLogModel(files, this));
 
-    m_ui->pFilesTableView->setModel(m_logFileModel);
+    m_ui->pFilesTableView->setModel(m_logFileModel.get());
 
     m_ui->logTableView->setContextMenuPolicy(Qt::ActionsContextMenu);
     CLogContextMenu* pMenu = new CLogContextMenu(this);
@@ -133,11 +133,23 @@ CMainWindow::CMainWindow(CGit2& git,
             this, &CMainWindow::DiffCurrentIndex);
 
 
+    // menu
     connect(m_ui->actionOpen_repository, &QAction::triggered,
             this, &CMainWindow::OnOpenActionTriggered);
 
     connect(m_ui->actionSettings, &QAction::triggered,
             this, &CMainWindow::OnSettingsActionTriggered);
+
+    connect(m_ui->actionOpen_log, &QAction::triggered,
+            this, &CMainWindow::OnOpenLogActionTriggered);
+
+
+    // tool buttons
+    connect(m_ui->branchSelectionToolButton, &QToolButton::clicked,
+            this, &CMainWindow::OnBranchSelectionToolButtonClicked);
+
+    connect(m_ui->searchLineEdit, &QLineEdit::returnPressed,
+            this, &CMainWindow::OnSearchLineEditReturnPressed);
 }
 
 
@@ -154,13 +166,13 @@ void CMainWindow::LogItemSelected(const QModelIndex& index)
 
     int r = i.row();
 
-    const QString msg = m_pLogModel->data(m_pLogModel->index(r, quokkagit::SLogEntry::Message)).toString();
+    const QString msg = m_logModel->data(m_logModel->index(r, quokkagit::SLogEntry::Message)).toString();
 
     m_ui->pMessageTextEdit->setText(msg);
 
-    m_ui->logTableView->setCurrentIndex(m_pLogModel->index(r, 0));
+    m_ui->logTableView->setCurrentIndex(m_logModel->index(r, 0));
 
-    m_deltas = m_git.DiffWithParent(r, m_pLogModel->Log());
+    m_deltas = m_git.DiffWithParent(r, m_logModel->Log());
 }
 
 
@@ -188,9 +200,9 @@ void CMainWindow::BlameFile(const QModelIndex& index)
 
     const auto& delta = m_deltas.at(r);
 
-    const QModelIndex i = m_pLogModel->index(m_ui->logTableView->currentIndex().row(),
+    const QModelIndex i = m_logModel->index(m_ui->logTableView->currentIndex().row(),
                                              quokkagit::SLogEntry::Sha);
-    const QString hash = m_pLogModel->data(i).toString();
+    const QString hash = m_logModel->data(i).toString();
 
     CBlameDialog::SData data = {m_git, hash, delta.newFile.path};
     CBlameDialog d(data, this);
@@ -225,13 +237,13 @@ void CMainWindow::AddMessage(QString msg)
 }
 
 
-void CMainWindow::on_actionOpen_log_triggered()
+void CMainWindow::OnOpenLogActionTriggered()
 {
     m_dbgLogDialog.exec();
 }
 
 
-void CMainWindow::on_branchSelectionToolButton_clicked()
+void CMainWindow::OnBranchSelectionToolButtonClicked()
 {
     CGit2::vBranches b = m_git.Branches();
 
@@ -243,7 +255,7 @@ void CMainWindow::on_branchSelectionToolButton_clicked()
         {
             quokkagit::LogEntries entries = m_git.Log(d.currentSelection(), b);
 
-            m_pLogModel->SetLog(entries);
+            m_logModel->SetLog(entries);
 
             m_ui->branchLabel->setText(b.at(static_cast<quokkagit::LogEntries::size_type>(index)).first);
         }
@@ -251,7 +263,7 @@ void CMainWindow::on_branchSelectionToolButton_clicked()
 }
 
 
-void CMainWindow::on_searchLineEdit_returnPressed()
+void CMainWindow::OnSearchLineEditReturnPressed()
 {
     QList<QAction*> actions = m_ui->searchOptionsToolButton->menu()->actions();
 

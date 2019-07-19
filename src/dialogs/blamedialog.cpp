@@ -36,6 +36,9 @@ CBlameDialog::CBlameDialog(SData& data, QWidget* parent) :
             this, &CBlameDialog::OnBlameHereTriggered);
     m_ui->tableView->addAction(action);
     m_ui->tableView->setContextMenuPolicy(Qt::ActionsContextMenu);
+
+    connect(m_ui->tableView, &QTableView::pressed,
+            this, &CBlameDialog::OnTableViewPressed);
 }
 
 
@@ -74,7 +77,7 @@ void CBlameDialog::OnBlameHereTriggered()
 }
 
 
-void CBlameDialog::on_tableView_pressed(const QModelIndex& index)
+void CBlameDialog::OnTableViewPressed(const QModelIndex& index)
 {
     const QModelIndex in{m_model->index(index.row(), CBlameModel::Sha)};
     const QString hash{m_model->data(in).toString()};
