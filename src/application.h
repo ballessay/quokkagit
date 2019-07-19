@@ -10,8 +10,6 @@ public:
     CApplication(int& argc, char** argv);
     ~CApplication() override;
 
-    QString InitialRepoPath() const;
-
     quokkagit::SSettings& settings() { return m_settings; }
     const quokkagit::SSettings& settings() const { return m_settings; }
 

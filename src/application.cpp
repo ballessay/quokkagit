@@ -28,13 +28,3 @@ CApplication::CApplication(int& argc, char** argv)
 CApplication::~CApplication()
 {
 }
-
-
-QString CApplication::InitialRepoPath() const
-{
-    if(arguments().size() > 1) {
-        return arguments().at(1);
-    } else {
-        return ".";
-    }
-}
