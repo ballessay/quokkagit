@@ -20,6 +20,8 @@ add_executable(${PROJECT_NAME}
   src/application.h
   src/data/blamedata.h
   src/data/diffentry.h
+  src/data/helpers.cpp
+  src/data/helpers.h
   src/data/logentry.cpp
   src/data/logentry.h
   src/data/settings.cpp

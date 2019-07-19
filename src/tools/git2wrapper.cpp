@@ -1,6 +1,7 @@
 #include "git2wrapper.h"
 
 #include "data/diffentry.h"
+#include "data/helpers.h"
 #include "data/logentry.h"
 #include "data/settings.h"
 
@@ -15,6 +16,9 @@
 #include <QProcess>
 #include <QString>
 #include <QTextStream>
+
+
+using namespace quokkagit;
 
 
 namespace
@@ -71,9 +75,12 @@ CGit2::vBranches CGit2::Branches() const
     {
         if(ref.type() != GIT_REF_SYMBOLIC)
         {
-            branches.push_back(std::make_pair(QString::fromLocal8Bit(ref.name()), ref.target()));
+            branches.push_back(std::make_pair(QString::fromLocal8Bit(ref.name()),
+                                              ref.target()));
 
-            emit Message(QString("%1 at %2").arg(branches.back().first).arg(git::id_to_str(ref.target()).c_str()));
+            emit Message(QString("%1 at %2")
+                            .arg(branches.back().first)
+                            .arg(helpers::QStringFrom(ref.target())));
         }
     }
 
@@ -85,7 +92,7 @@ quokkagit::LogEntries CGit2::Log(int branch,
                                  const CGit2::vBranches& b,
                                  const QString& path) const
 {
-    quokkagit::LogEntries entries;
+    LogEntries entries;
 
     if (branch >= 0 && branch < static_cast<int>(b.size()))
     {
@@ -103,7 +110,7 @@ quokkagit::LogEntries CGit2::Log(int branch,
         while (auto commit = walk.next())
         {
             if (path.isEmpty())
-                entries.push_back(quokkagit::SLogEntry::FromCommit(commit));
+                entries.push_back(SLogEntry::FromCommit(commit));
             else
             {
                 std::size_t parents = commit.parents_num();
@@ -113,7 +120,7 @@ quokkagit::LogEntries CGit2::Log(int branch,
                     if (i != 0)
                         continue;
                     else
-                        entries.push_back(quokkagit::SLogEntry::FromCommit(commit));
+                        entries.push_back(SLogEntry::FromCommit(commit));
                 }
                 else if (parents == 1)
                 {
@@ -123,7 +130,7 @@ quokkagit::LogEntries CGit2::Log(int branch,
                     auto diff = commit.repo().diff(p_tree, c_tree, diffopts);
 
                     if (diff.deltas_num() > 0)
-                        entries.push_back(quokkagit::SLogEntry::FromCommit(commit));
+                        entries.push_back(SLogEntry::FromCommit(commit));
                     else continue;
                 }
                 else
@@ -197,9 +204,9 @@ CGit2::vDeltas CGit2::DiffWithParent(int index,
     vDeltas deltas;
 
     if(index > 0 ||
-       static_cast<quokkagit::LogEntries::size_type>(index) < entries.size())
+       static_cast<LogEntries::size_type>(index) < entries.size())
     {
-        quokkagit::SLogEntry entry = entries.at(static_cast<quokkagit::LogEntries::size_type>(index));
+        SLogEntry entry = entries.at(static_cast<LogEntries::size_type>(index));
 
         git_oid oid = entry.oid();
 
@@ -301,7 +308,7 @@ void CGit2::DiffBlobs(int deltaIndex, const vDeltas& deltas)
     static const QString c_msgTempl("Size: %1");
     const auto& delta = deltas.at(static_cast<size_t>(deltaIndex));
 
-    quokkagit::SDiffEntry e;
+    SDiffEntry e;
 
     if(delta.newFile.id != InvaliOid())
     {
@@ -340,13 +347,13 @@ void CGit2::DiffBlobs(int deltaIndex, const vDeltas& deltas)
 quokkagit::BlameData CGit2::BlameFile(const QString& path,
                                       const QString& oid)
 {
-    quokkagit::BlameData vData;
+    BlameData vData;
 
     try
     {
         auto revspec  = m_repo.revparse("HEAD");
 
-        git_oid id = git::str_to_id(oid.toUtf8().constData());
+        git_oid id = helpers::OidFrom(oid);
 
         git_blame_options opts = GIT_BLAME_OPTIONS_INIT;
         opts.newest_commit = id;
@@ -373,7 +380,7 @@ quokkagit::BlameData CGit2::BlameFile(const QString& path,
             auto hunk = blame.hunk_byline(line);
             if (nullptr == hunk) break;
 
-            quokkagit::SBlameData d;
+            SBlameData d;
             d.hash = git::id_to_str(hunk->orig_commit_id).c_str();
             d.signature = QString("%1 <%2>").arg(hunk->final_signature->name)
                           .arg(hunk->final_signature->email);
@@ -396,9 +403,9 @@ quokkagit::BlameData CGit2::BlameFile(const QString& path,
 
 quokkagit::SLogEntry CGit2::CommitLookup(const QString& hash) const
 {
-  git_oid oid = git::str_to_id(hash.toUtf8().constData());
+  git_oid oid = helpers::OidFrom(hash);
 
   git::Commit commit = m_repo.commit_lookup(oid);
 
-  return quokkagit::SLogEntry::FromCommit(commit);
+  return SLogEntry::FromCommit(commit);
 }

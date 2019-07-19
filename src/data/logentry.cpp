@@ -1,4 +1,5 @@
 #include "logentry.h"
+#include "helpers.h"
 #include "git2cpp/commit.h"
 #include "git2cpp/id_to_str.h"
 
@@ -56,6 +57,6 @@ namespace quokkagit
 
     git_oid SLogEntry::oid() const
     {
-        return git::str_to_id(sSha.toUtf8().constData());
+        return helpers::OidFrom(sSha);
     }
 }
