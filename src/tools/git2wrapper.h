@@ -28,14 +28,16 @@ public:
 
     void ChangeRepository(const QString& sPath);
 
+    QString Path() const;
+
     void SetHead(const QString& sHead);
     QString HeadRef() const;
 
     vBranches Branches() const;
 
     quokkagit::LogEntries Log(int branch,
-                               const vBranches& b,
-                               const QString& path = QString()) const;
+                              const vBranches& b,
+                              const QString& path = QString()) const;
 
     vDeltas DiffWithParent(int index, const quokkagit::LogEntries& entries);
 
@@ -58,7 +60,7 @@ private:
     git::Diff find_diff(git::Repository const & repo, git::Tree & t1, git::Tree & t2);
 
 private:
-    git::Repository m_repo;
+    std::unique_ptr<git::Repository> m_repo;
     std::vector<CDiffTool> m_diffs;
     const quokkagit::SSettings& m_settings;
 };

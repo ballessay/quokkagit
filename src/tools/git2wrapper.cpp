@@ -40,7 +40,7 @@ namespace
 
 
 CGit2::CGit2(const quokkagit::SSettings& settings)
-    : m_repo("."),
+    : m_repo(),
       m_settings(settings)
 {
 }
@@ -48,30 +48,45 @@ CGit2::CGit2(const quokkagit::SSettings& settings)
 
 void CGit2::ChangeRepository(const QString& sPath)
 {
-    m_repo = git::Repository(sPath.toUtf8().constData());
+    try
+    {
+        m_repo.reset(new git::Repository(sPath.toUtf8().constData()));
+    }
+    catch(std::exception& ex)
+    {
+        QMessageBox::information(nullptr, tr("Failure"),
+                                 tr("Failure to open repository: %1")
+                                    .arg(ex.what()));
+    }
+}
+
+
+QString CGit2::Path() const
+{
+    return nullptr != m_repo ? m_repo->path() : QString();
 }
 
 
 void CGit2::SetHead(const QString& sHead)
 {
-    m_repo.set_head(sHead.toUtf8().constData());
+    if (nullptr == m_repo) return;
 
-    vBranches b = Branches();
+    m_repo->set_head(sHead.toUtf8().constData());
 }
 
 
 QString CGit2::HeadRef() const
 {
-    git::Reference ref = m_repo.head();
-    return ref.name();
+    return nullptr != m_repo ? m_repo->head().name() : QString();
 }
 
 
 CGit2::vBranches CGit2::Branches() const
 {
     vBranches branches;
+    if (nullptr == m_repo) return branches;
 
-    for(const auto& ref : m_repo.branches(git::branch_type::ALL))
+    for(const auto& ref : m_repo->branches(git::branch_type::ALL))
     {
         if(ref.type() != GIT_REF_SYMBOLIC)
         {
@@ -93,6 +108,7 @@ quokkagit::LogEntries CGit2::Log(int branch,
                                  const QString& path) const
 {
     LogEntries entries;
+    if (nullptr == m_repo) return entries;
 
     if (branch >= 0 && branch < static_cast<int>(b.size()))
     {
@@ -104,7 +120,7 @@ quokkagit::LogEntries CGit2::Log(int branch,
         diffopts.pathspec.count = 1;
         git::Pathspec ps(diffopts.pathspec);
 
-        git::RevWalker walk =  m_repo.rev_walker();
+        git::RevWalker walk =  m_repo->rev_walker();
         walk.sort(git::revwalker::sorting::topological);
         walk.push(oid);
         while (auto commit = walk.next())
@@ -202,6 +218,7 @@ CGit2::vDeltas CGit2::DiffWithParent(int index,
                                      const quokkagit::LogEntries& entries)
 {
     vDeltas deltas;
+    if (nullptr == m_repo) return deltas;
 
     if(index > 0 ||
        static_cast<LogEntries::size_type>(index) < entries.size())
@@ -210,7 +227,7 @@ CGit2::vDeltas CGit2::DiffWithParent(int index,
 
         git_oid oid = entry.oid();
 
-        git::Commit commit = m_repo.commit_lookup(oid);
+        git::Commit commit = m_repo->commit_lookup(oid);
 
         git::Tree commitTree = commit.tree();
 
@@ -219,13 +236,13 @@ CGit2::vDeltas CGit2::DiffWithParent(int index,
 
         git_oid parent_oid = commit.parent_id(0);
 
-        git::Commit parentCommit = m_repo.commit_lookup(parent_oid);
+        git::Commit parentCommit = m_repo->commit_lookup(parent_oid);
 
         git::Tree parentTree = parentCommit.tree(); // resolve_to_tree(m_repo, parentId);
 
         git_diff_options opts;
         git_diff_init_options(&opts, GIT_DIFF_OPTIONS_VERSION);
-        git::Diff diff = m_repo.diff(parentTree, commitTree, opts);
+        git::Diff diff = m_repo->diff(parentTree, commitTree, opts);
         git_diff_find_options findopts = GIT_DIFF_FIND_OPTIONS_INIT;
         diff.find_similar(findopts);
 
@@ -303,6 +320,7 @@ CGit2::vDeltas CGit2::DiffWithParent(int index,
 
 void CGit2::DiffBlobs(int deltaIndex, const vDeltas& deltas)
 {
+    if (nullptr == m_repo) return;
     if(deltaIndex < 0) return;
 
     static const QString c_msgTempl("Size: %1");
@@ -315,7 +333,7 @@ void CGit2::DiffBlobs(int deltaIndex, const vDeltas& deltas)
         e.newFilename = delta.newFile.path;
         e.newHash = delta.newFile.id.left(10);
 
-        git::Blob blobNew = m_repo.blob_lookup(delta.newFile.oid);
+        git::Blob blobNew = m_repo->blob_lookup(delta.newFile.oid);
         e.newData = QByteArray(reinterpret_cast<const char*>(blobNew.content()),
                                static_cast<int>(blobNew.size()));
     }
@@ -325,7 +343,7 @@ void CGit2::DiffBlobs(int deltaIndex, const vDeltas& deltas)
         e.oldFilename = delta.oldFile.path;
         e.oldHash = delta.oldFile.id.left(10);
 
-        git::Blob blobOld = m_repo.blob_lookup(delta.oldFile.oid);
+        git::Blob blobOld = m_repo->blob_lookup(delta.oldFile.oid);
         e.oldData = QByteArray(reinterpret_cast<const char*>(blobOld.content()),
                                static_cast<int>(blobOld.size()));
     }
@@ -348,10 +366,11 @@ quokkagit::BlameData CGit2::BlameFile(const QString& path,
                                       const QString& oid)
 {
     BlameData vData;
+    if (nullptr == m_repo) return vData;
 
     try
     {
-        auto revspec  = m_repo.revparse("HEAD");
+        auto revspec  = m_repo->revparse("HEAD");
 
         git_oid id = helpers::OidFrom(oid);
 
@@ -360,12 +379,12 @@ quokkagit::BlameData CGit2::BlameFile(const QString& path,
         opts.flags |= GIT_BLAME_TRACK_COPIES_SAME_COMMIT_MOVES;
         opts.flags |= GIT_BLAME_TRACK_COPIES_SAME_COMMIT_COPIES;
         opts.flags |= GIT_BLAME_FIRST_PARENT;
-        git::Blame blame = m_repo.blame_file(path.toUtf8().constData(), opts);
+        git::Blame blame = m_repo->blame_file(path.toUtf8().constData(), opts);
 
         QString spec = oid + ":" + path;
-        auto fileid = m_repo.revparse(spec.toUtf8().constData());
+        auto fileid = m_repo->revparse(spec.toUtf8().constData());
 
-        auto blob = m_repo.blob_lookup(fileid.single()->id());
+        auto blob = m_repo->blob_lookup(fileid.single()->id());
 
         const char* data = static_cast<const char*>(blob.content());
         auto size = blob.size();
@@ -403,9 +422,11 @@ quokkagit::BlameData CGit2::BlameFile(const QString& path,
 
 quokkagit::SLogEntry CGit2::CommitLookup(const QString& hash) const
 {
+  if (nullptr == m_repo) return SLogEntry();
+
   git_oid oid = helpers::OidFrom(hash);
 
-  git::Commit commit = m_repo.commit_lookup(oid);
+  git::Commit commit = m_repo->commit_lookup(oid);
 
   return SLogEntry::FromCommit(commit);
 }

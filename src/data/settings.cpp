@@ -17,7 +17,8 @@ namespace
                                                  << "%po"
                                                  << "%pn";
 
-    const char* const settings_repo_path = "settings.repoPath";
+    const char* const settings_last_repos = "settings.lastRepos";
+    const char* const settings_max_last_repos = "settings.maxLastRepos";
     const char* const settings_font = "settings.font";
 }
 
@@ -56,7 +57,8 @@ void SSettings::Load()
 {
     QSettings settings;
 
-    repoPath = settings.value(settings_repo_path, ".").toString();
+    lastRepos = settings.value(settings_last_repos, QStringList()).toStringList();
+    maxLastRepos = settings.value(settings_max_last_repos, 10).toInt();
     font = settings.value(settings_font, QFont("Hack", 8)).value<QFont>();
 
     diff.Load(settings);
@@ -67,8 +69,29 @@ void SSettings::Save() const
 {
     QSettings settings;
 
-    settings.setValue(settings_repo_path, repoPath);
+    settings.setValue(settings_last_repos, lastRepos);
+    settings.setValue(settings_max_last_repos, maxLastRepos);
     settings.setValue(settings_font, font);
 
     diff.Save(settings);
+}
+
+
+void SSettings::AddRepoPath(const QString& path)
+{
+    const auto& it  = std::find(lastRepos.begin(), lastRepos.end(), path);
+    if (it != lastRepos.end())
+    {
+        lastRepos.erase(it);
+    }
+
+    if (!path.isEmpty())
+    {
+        lastRepos.push_front(path);
+    }
+
+    if (lastRepos.size() > maxLastRepos)
+    {
+        lastRepos.pop_back();
+    }
 }

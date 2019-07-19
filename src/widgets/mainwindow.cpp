@@ -1,16 +1,38 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "data/settings.h"
-#include "models/logmodel.h"
-#include "models/filelogmodel.h"
-#include "models/logfilterproxymodel.h"
 #include "dialogs/branchselectiondialog.h"
 #include "dialogs/blamedialog.h"
 #include "dialogs/settingsdialog.h"
 #include "menus/logcolumnvisibilitymenu.h"
 #include "menus/logcontextmenu.h"
+#include "models/logmodel.h"
+#include "models/filelogmodel.h"
+#include "models/logfilterproxymodel.h"
 #include "tools/git2wrapper.h"
+
 #include <QHeaderView>
+#include <QFileDialog>
+
+
+namespace
+{
+    int FindCurrentBranchIndex(const CGit2::vBranches& branches,
+                               const QString& head)
+    {
+        int index = 0;
+
+        for (const auto& branch : branches)
+        {
+            if(branch.first == head)
+                break;
+            else
+                ++index;
+        }
+
+        return index;
+    }
+}
 
 
 CMainWindow::CMainWindow(CGit2& git,
@@ -26,16 +48,11 @@ CMainWindow::CMainWindow(CGit2& git,
 {
     m_ui->setupUi(this);
 
-    QString head = m_git.HeadRef();
-    CGit2::vBranches branches = m_git.Branches();
-    int index = 0;
-    for (const auto& branch : branches)
-    {
-        if(branch.first == head)
-            break;
-        else
-            ++index;
-    }
+    m_settings.AddRepoPath(m_git.Path());
+
+    const QString head = m_git.HeadRef();
+    const CGit2::vBranches branches = m_git.Branches();
+    int index = FindCurrentBranchIndex(branches, head);
 
     QString path;
     QStringList args(qApp->arguments());
@@ -44,7 +61,7 @@ CMainWindow::CMainWindow(CGit2& git,
 
     m_logModel.reset(new CLogModel(git.Log(index, branches, path), this));
 
-    m_ui->branchLabel->setText(m_git.HeadRef());
+    m_ui->branchLabel->setText(head);
 
     m_logProxy.reset(new CLogFilterProxyModel(this));
     m_logProxy->setSourceModel(m_logModel.get());
@@ -113,6 +130,8 @@ CMainWindow::CMainWindow(CGit2& git,
 
         connect(action, &QAction::triggered, dispatch);
     }
+
+    CreateHistoryMenu();
 
     CLogSearchContextMenu* searchMenu = new CLogSearchContextMenu(this);
     m_ui->searchOptionsToolButton->setMenu(searchMenu);
@@ -273,7 +292,11 @@ void CMainWindow::OnSearchLineEditReturnPressed()
 
 void CMainWindow::OnOpenActionTriggered()
 {
-
+    const QString path =
+            QFileDialog::getExistingDirectory(this,
+                                              tr("Select git repository..."),
+                                              m_git.Path());
+    ChangeRepository(path);
 }
 
 
@@ -283,5 +306,49 @@ void CMainWindow::OnSettingsActionTriggered()
     if (d.exec()  == QDialog::Accepted)
     {
         m_settings = d.currentSettings();
+    }
+}
+
+
+void CMainWindow::OnHistoryActionTriggered()
+{
+    auto action = qobject_cast<QAction*>(sender());
+    const auto path = action->text();
+
+    ChangeRepository(path);
+}
+
+
+void CMainWindow::CreateHistoryMenu()
+{
+    m_ui->menuRecent->clear();
+
+    for (const auto& path : m_settings.LastRepos())
+    {
+        auto action = m_ui->menuRecent->addAction(path);
+        connect(action, &QAction::triggered,
+                this, &CMainWindow::OnHistoryActionTriggered);
+    }
+}
+
+
+void CMainWindow::ChangeRepository(const QString path)
+{
+    if (!path.isEmpty())
+    {
+        m_git.ChangeRepository(path);
+
+        const QString repoPath = m_git.Path();
+        m_settings.AddRepoPath(repoPath);
+
+        QString head = m_git.HeadRef();
+        CGit2::vBranches branches = m_git.Branches();
+        int index = FindCurrentBranchIndex(branches, head);
+        QString path;
+        m_logModel->SetLog(m_git.Log(index, branches, path));
+
+        m_logFileModel->SetLog(CFileLogModel::vFiles());
+
+        CreateHistoryMenu();
     }
 }

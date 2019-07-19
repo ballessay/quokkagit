@@ -27,9 +27,15 @@ namespace quokkagit
         void Load();
         void Save() const;
 
-        QString repoPath;
+        void AddRepoPath(const QString& path);
+        const QStringList& LastRepos() const { return lastRepos; }
+
         QFont font;
         SDiffSettings diff;
+
+    private:
+        QStringList lastRepos;
+        int maxLastRepos;
     };
 }
 

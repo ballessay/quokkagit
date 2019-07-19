@@ -16,6 +16,7 @@ int main(int argc, char** argv)
     try
     {
         CGit2 git(app.settings());
+        git.ChangeRepository(".");
 
         CMainWindow w(git, app.settings());
         w.show();

@@ -29,7 +29,7 @@ public:
                          QWidget *parent = nullptr);
     ~CMainWindow();
 
-public slots:
+private slots:
     void LogItemSelected(const QModelIndex& index);
     void LogItemKeyPressed();
 
@@ -52,7 +52,12 @@ public slots:
     void OnOpenActionTriggered();
     void OnSettingsActionTriggered();
 
+    void OnHistoryActionTriggered();
+
 private:
+    void CreateHistoryMenu();
+    void ChangeRepository(const QString path);
+
     std::unique_ptr<Ui::CMainWindow> m_ui;
     CGit2& m_git;
     std::unique_ptr<CLogModel> m_logModel;
