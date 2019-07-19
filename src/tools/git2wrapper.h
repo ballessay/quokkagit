@@ -5,7 +5,7 @@
 #include "data/diffentry.h"
 #include "data/logentry.h"
 #include "models/filelogmodel.h"
-#include "tools/kdiff3.h"
+#include "tools/difftool.h"
 #include "git2cpp/repo.h"
 #include "git2cpp/diff.h"
 #include <QStringList>
@@ -61,7 +61,7 @@ private:
 private:
     git::Repository m_repo;
     vReferences m_branches;
-    std::vector<CKdiff3> m_diffs;
+    std::vector<CDiffTool> m_diffs;
     const quokkagit::SSettings& m_settings;
 };
 

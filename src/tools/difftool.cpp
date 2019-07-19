@@ -88,7 +88,20 @@ void CDiffTool::Open()
 
 QStringList CDiffTool::args() const
 {
-    QStringList args;
-    args << m_settings.arguments << m_old->fileName() << m_new->fileName();
+    auto replacePlaceholders = [this](QString& text)
+        {
+            text.replace("%fn", m_entry.oldFilename);
+            text.replace("%fo", m_entry.newFilename);
+            text.replace("%in", m_entry.newHash);
+            text.replace("%io", m_entry.oldHash);
+            text.replace("%pn", m_new->fileName());
+            text.replace("%po", m_old->fileName());
+        };
+
+    QStringList args{m_settings.arguments};
+
+    for (auto& arg : args)
+        replacePlaceholders(arg);
+
     return args;
 }

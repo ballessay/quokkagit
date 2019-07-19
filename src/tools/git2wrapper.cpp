@@ -67,8 +67,6 @@ CGit2Wrapper::vBranches CGit2Wrapper::Branches() const
 {
     vBranches branches;
 
-    //std::vector<git::Reference> vBranches = m_repo.branches(git::branch_type::ALL);
-
     for(const auto& ref : m_branches)
     {
         if(ref.type() != GIT_REF_SYMBOLIC)
@@ -272,7 +270,6 @@ CGit2Wrapper::vDeltas CGit2Wrapper::DiffWithParent(int index,
                             .arg(d.oldFile.path)
                             .arg(d.newFile.path)
                             .arg(delta.similarity));
-            //        emit Message(QString("old id: %1 - new id: %2").arg(it::id_to_str(delta.old_file.id).c_str()).arg(git::id_to_str(delta.new_file.id).c_str()));
 
             if(GIT_DELTA_RENAMED == delta.status)
             {
@@ -326,14 +323,16 @@ void CGit2Wrapper::DiffBlobs(int deltaIndex, const vDeltas& deltas)
     }
 
 
-    m_diffs.push_back(CKdiff3(m_settings.diff, e, static_cast<int>(m_diffs.size())));
+    m_diffs.push_back(CDiffTool(m_settings.diff, e,
+                                static_cast<int>(m_diffs.size())));
 
     m_diffs.back().Open();
 
-    connect(&m_diffs.back(), &CKdiff3::Message,
+    connect(&m_diffs.back(), &CDiffTool::Message,
             this, &CGit2Wrapper::Message);
 
-    connect(&m_diffs.back(), &CKdiff3::ProgrammFinished, this, &CGit2Wrapper::DiffFinished);
+    connect(&m_diffs.back(), &CDiffTool::ProgrammFinished,
+            this, &CGit2Wrapper::DiffFinished);
 }
 
 
