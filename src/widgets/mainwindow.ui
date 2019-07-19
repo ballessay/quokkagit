@@ -237,6 +237,14 @@
     <property name="title">
      <string>File</string>
     </property>
+    <widget class="QMenu" name="menuRecent">
+     <property name="title">
+      <string>Recent</string>
+     </property>
+    </widget>
+    <addaction name="actionOpen_repository"/>
+    <addaction name="menuRecent"/>
+    <addaction name="actionSettings"/>
     <addaction name="actionOpen_log"/>
     <addaction name="actionQuit"/>
    </widget>
@@ -262,6 +270,29 @@
    </property>
    <property name="text">
     <string>Open log ...</string>
+   </property>
+  </action>
+  <action name="actionSettings">
+   <property name="icon">
+    <iconset resource="../../resources/resources.qrc">
+     <normaloff>:/settings.png</normaloff>:/settings.png</iconset>
+   </property>
+   <property name="text">
+    <string>Settings ...</string>
+   </property>
+  </action>
+  <action name="actionOpen_repository">
+   <property name="icon">
+    <iconset resource="../../resources/resources.qrc">
+     <normaloff>:/repository.png</normaloff>:/repository.png</iconset>
+   </property>
+   <property name="text">
+    <string>Open repository ...</string>
+   </property>
+  </action>
+  <action name="actionLastEntry">
+   <property name="text">
+    <string>LastEntry</string>
    </property>
   </action>
  </widget>
