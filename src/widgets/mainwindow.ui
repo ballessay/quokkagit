@@ -289,6 +289,10 @@
      <property name="title">
       <string>Recent</string>
      </property>
+     <property name="icon">
+      <iconset resource="../../resources/resources.qrc">
+       <normaloff>:/history.png</normaloff>:/history.png</iconset>
+     </property>
     </widget>
     <addaction name="actionOpen_repository"/>
     <addaction name="menuRecent"/>
