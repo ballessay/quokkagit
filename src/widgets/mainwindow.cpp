@@ -59,17 +59,19 @@ CMainWindow::CMainWindow(CGit2& git,
     if (args.size() > 1)
         path = args.at(1);
 
-    m_logModel.reset(new CLogModel(git.Log(index, branches, path), this));
-
     m_ui->branchLabel->setText(head);
+
+    m_logModel.reset(new CLogModel(git.Log(index, branches, path), this));
 
     m_logProxy.reset(new CLogFilterProxyModel(this));
     m_logProxy->setSourceModel(m_logModel.get());
+
     m_ui->logTableView->setModel(m_logProxy.get());
 
     m_ui->logTableView->horizontalHeader()->hideSection(quokkagit::SLogEntry::Message);
     m_ui->logTableView->horizontalHeader()->setSectionsMovable(true);
-    m_ui->logTableView->horizontalHeader()->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Preferred);
+    m_ui->logTableView->horizontalHeader()->setSizePolicy(QSizePolicy::Maximum,
+                                                          QSizePolicy::Preferred);
 
     int columns = m_logModel->columnCount();
     for(int i = 0; i < columns; ++i)
@@ -107,7 +109,14 @@ CMainWindow::CMainWindow(CGit2& git,
 
     m_logFileModel.reset(new CFileLogModel(files, this));
 
-    m_ui->pFilesTableView->setModel(m_logFileModel.get());
+    m_logFileProxy.reset(new QSortFilterProxyModel(this));
+    m_logFileProxy->setFilterKeyColumn(1);
+    m_logFileProxy->setSourceModel(m_logFileModel.get());
+
+    connect(m_ui->fileSearchLineEdit, &QLineEdit::textChanged,
+            m_logFileProxy.get(), &QSortFilterProxyModel::setFilterFixedString);
+
+    m_ui->pFilesTableView->setModel(m_logFileProxy.get());
 
     m_ui->logTableView->setContextMenuPolicy(Qt::ActionsContextMenu);
     CLogContextMenu* pMenu = new CLogContextMenu(this);
@@ -122,7 +131,7 @@ CMainWindow::CMainWindow(CGit2& git,
     {
         auto dispatch = [this, action]() {
             if ("Diff" == action->text())
-                DiffFile(m_ui->pFilesTableView->currentIndex());
+                DiffCurrentIndex();
             if ("Blame" == action->text())
                 BlameFile(m_ui->pFilesTableView->currentIndex());
         };
@@ -167,7 +176,7 @@ CMainWindow::CMainWindow(CGit2& git,
     connect(m_ui->branchSelectionToolButton, &QToolButton::clicked,
             this, &CMainWindow::OnBranchSelectionToolButtonClicked);
 
-    connect(m_ui->searchLineEdit, &QLineEdit::returnPressed,
+    connect(m_ui->logSearchLineEdit, &QLineEdit::returnPressed,
             this, &CMainWindow::OnSearchLineEditReturnPressed);
 }
 
@@ -184,8 +193,9 @@ void CMainWindow::LogItemSelected(const QModelIndex& index)
     QModelIndex i = m_logProxy->mapToSource(index);
 
     int r = i.row();
+    QModelIndex msgIndex = m_logModel->index(r, quokkagit::SLogEntry::Message);
 
-    const QString msg = m_logModel->data(m_logModel->index(r, quokkagit::SLogEntry::Message)).toString();
+    const QString msg = m_logModel->data(msgIndex).toString();
 
     m_ui->pMessageTextEdit->setText(msg);
 
@@ -203,7 +213,9 @@ void CMainWindow::LogItemKeyPressed()
 
 void CMainWindow::DiffFile(const QModelIndex& index)
 {
-    m_git.DiffBlobs(index.row(), m_deltas);
+    QModelIndex i = m_logFileProxy->mapToSource(index);
+
+    m_git.DiffBlobs(i.row(), m_deltas);
 }
 
 
@@ -215,7 +227,9 @@ void CMainWindow::DiffCurrentIndex()
 
 void CMainWindow::BlameFile(const QModelIndex& index)
 {
-    int r = index.row();
+    QModelIndex sourceIndex = m_logFileProxy->mapToSource(index);
+
+    int r = sourceIndex.row();
 
     const auto& delta = m_deltas.at(r);
 
@@ -286,7 +300,7 @@ void CMainWindow::OnSearchLineEditReturnPressed()
 {
     QList<QAction*> actions = m_ui->searchOptionsToolButton->menu()->actions();
 
-    m_logProxy->SetFilter(m_ui->searchLineEdit->text(), actions);
+    m_logProxy->SetFilter(m_ui->logSearchLineEdit->text(), actions);
 }
 
 

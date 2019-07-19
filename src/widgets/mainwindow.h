@@ -15,6 +15,7 @@ class CGit2;
 class CLogModel;
 class CFileLogModel;
 class CLogFilterProxyModel;
+class QSortFilterProxyModel;
 namespace Ui {
     class CMainWindow;
 }
@@ -63,6 +64,7 @@ private:
     std::unique_ptr<CLogModel> m_logModel;
     std::unique_ptr<CFileLogModel> m_logFileModel;
     std::unique_ptr<CLogFilterProxyModel> m_logProxy;
+    std::unique_ptr<QSortFilterProxyModel> m_logFileProxy;
     CDebugLogDialog m_dbgLogDialog;
     CGit2::vDeltas m_deltas;
     quokkagit::SSettings& m_settings;

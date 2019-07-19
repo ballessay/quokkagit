@@ -33,7 +33,9 @@ quokkagit::SSettings CSettingsDialog::currentSettings() const
     settings.font = m_ui->fontComboBox->font();
 
     settings.diff.path = m_ui->diffPathLineEdit->text();
-    settings.diff.arguments = m_ui->diffArgsPlainTextEdit->toPlainText().split(" ");
+    settings.diff.arguments =
+            m_ui->diffArgsPlainTextEdit->toPlainText().split(" ",
+                                                             QString::SkipEmptyParts);
 
     return settings;
 }
