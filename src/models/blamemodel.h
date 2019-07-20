@@ -43,6 +43,7 @@ public:
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
 
     void SetSelectedHash(const QString& hash);
+    const QString& SelectedHash() const { return m_selectedHash; }
 
 private:
     void CalculateBackgroundColors();

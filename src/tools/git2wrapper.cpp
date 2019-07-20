@@ -321,9 +321,8 @@ CGit2::vDeltas CGit2::DiffWithParent(int index,
 void CGit2::DiffBlobs(int deltaIndex, const vDeltas& deltas)
 {
     if (nullptr == m_repo) return;
-    if(deltaIndex < 0) return;
+    if(deltaIndex < 0 || deltaIndex >= deltas.size()) return;
 
-    static const QString c_msgTempl("Size: %1");
     const auto& delta = deltas.at(static_cast<size_t>(deltaIndex));
 
     SDiffEntry e;
