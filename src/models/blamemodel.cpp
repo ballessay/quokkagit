@@ -141,7 +141,7 @@ void CBlameModel::CalculateBackgroundColors()
     for (int i = 0; i <  noColors; i++) {
         h = int(HUE_BASE + (360.0 / noColors * i)) % 360;
         s = 240;
-        v = int(qMax(m_bg.value(), m_fg.value()) * 0.85);
+        v = int(qMax(m_bg.value(), m_fg.value()) * 0.70);
 
         const int M = 35;
         if ((h < m_bg.hue() + M && h > m_bg.hue() - M)
