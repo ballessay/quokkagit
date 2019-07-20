@@ -21,7 +21,9 @@ CBlameDialog::CBlameDialog(SData& data, QWidget* parent) :
     QDialog(parent),
     m_ui(new Ui::CBlameDialog),
     m_model(new CBlameModel(data.git, data.settings, this)),
-    m_data(data)
+    m_blameHereAction(nullptr),
+    m_data(data),
+    m_lastClickedRow(-1)
 {
     m_ui->setupUi(this);
 
@@ -31,10 +33,10 @@ CBlameDialog::CBlameDialog(SData& data, QWidget* parent) :
 
     ResizeTableView(m_ui->tableView);
 
-    QAction* action = new QAction("Blame here...", m_ui->tableView);
-    connect(action, &QAction::triggered,
+    m_blameHereAction = new QAction("Blame here...", m_ui->tableView);
+    connect(m_blameHereAction, &QAction::triggered,
             this, &CBlameDialog::OnBlameHereTriggered);
-    m_ui->tableView->addAction(action);
+    m_ui->tableView->addAction(m_blameHereAction);
     m_ui->tableView->setContextMenuPolicy(Qt::ActionsContextMenu);
     m_ui->tableView->horizontalHeader()->hideSection(CBlameModel::OrigPath);
 
@@ -94,4 +96,6 @@ void CBlameDialog::OnTableViewPressed(const QModelIndex& index)
     m_model->SetSelectedHash(hash);
 
     m_lastClickedRow = in.row();
+
+    m_blameHereAction->setEnabled(hash != m_data.hash);
 }

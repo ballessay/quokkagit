@@ -41,6 +41,7 @@ private slots:
 private:
     std::unique_ptr<Ui::CBlameDialog> m_ui;
     std::unique_ptr<CBlameModel> m_model;
+    QAction* m_blameHereAction;
     SData m_data;
     int m_lastClickedRow;
 };
