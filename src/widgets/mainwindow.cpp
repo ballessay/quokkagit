@@ -94,14 +94,14 @@ CMainWindow::CMainWindow(CGit2& git,
     connect(m_ui->logTableView, &CTableWidget::enterOrReturnPressed,
             this, &CMainWindow::LogItemKeyPressed);
 
-    CLogColumnVisibilityMenu* menu = new CLogColumnVisibilityMenu(this);
+    CLogColumnVisibilityMenu* menu = new CLogColumnVisibilityMenu(m_settings, this);
     m_ui->tableViewToolButton->setMenu(menu);
 
     connect(m_ui->tableViewToolButton, &QToolButton::clicked,
             m_ui->tableViewToolButton, &QToolButton::showMenu);
 
     connect(menu, &CLogColumnVisibilityMenu::ToggleColumn,
-            this, &CMainWindow::ToggleColumn);
+            this, &CMainWindow::OnToggleLogColumn);
 
     menu->EmitState();
 
@@ -142,11 +142,15 @@ CMainWindow::CMainWindow(CGit2& git,
 
     CreateHistoryMenu();
 
-    CLogSearchContextMenu* searchMenu = new CLogSearchContextMenu(this);
+    CLogSearchContextMenu* searchMenu = new CLogSearchContextMenu(m_settings, this);
     m_ui->searchOptionsToolButton->setMenu(searchMenu);
 
     connect(m_ui->searchOptionsToolButton, &QToolButton::clicked,
             m_ui->searchOptionsToolButton, &QToolButton::showMenu);
+
+    connect(searchMenu, &CLogSearchContextMenu::ToggleColumn,
+            this, &CMainWindow::OnToggleSearchColumn);
+
 
     connect(&m_git, &CGit2::NewFiles,
             this, &CMainWindow::AddFiles);
@@ -243,15 +247,38 @@ void CMainWindow::BlameFile(const QModelIndex& index)
 }
 
 
-void CMainWindow::ToggleColumn(int id, bool enabled)
+void CMainWindow::OnToggleLogColumn(int id, bool enabled)
 {
+    const QString name{quokkagit::SLogEntry::c_strings[id]};
+
     if (enabled)
     {
         m_ui->logTableView->horizontalHeader()->showSection(id);
+
+        if (!m_settings.enabledLogColumns.contains(name))
+            m_settings.enabledLogColumns.append(name);
     }
     else
     {
         m_ui->logTableView->horizontalHeader()->hideSection(id);
+
+        m_settings.enabledLogColumns.removeAll(name);
+    }
+}
+
+
+void CMainWindow::OnToggleSearchColumn(int id, bool enabled)
+{
+    const QString name{quokkagit::SLogEntry::c_strings[id]};
+
+    if (enabled)
+    {
+        if (!m_settings.enabledSearchColumns.contains(name))
+            m_settings.enabledSearchColumns.append(name);
+    }
+    else
+    {
+        m_settings.enabledSearchColumns.removeAll(name);
     }
 }
 
@@ -299,6 +326,10 @@ void CMainWindow::OnBranchSelectionToolButtonClicked()
 void CMainWindow::OnSearchLineEditReturnPressed()
 {
     QList<QAction*> actions = m_ui->searchOptionsToolButton->menu()->actions();
+
+    m_settings.enabledSearchColumns.clear();
+    for (const auto action : actions)
+        m_settings.enabledSearchColumns.append(quokkagit::SLogEntry::c_strings[action->data().toInt()]);
 
     m_logProxy->SetFilter(m_ui->logSearchLineEdit->text(), actions);
 }

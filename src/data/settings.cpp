@@ -1,4 +1,5 @@
 #include "settings.h"
+#include "data/logentry.h"
 #include <QSettings>
 #include <QCoreApplication>
 
@@ -24,6 +25,8 @@ namespace
     const char* const settings_last_repos = "settings.lastRepos";
     const char* const settings_max_last_repos = "settings.maxLastRepos";
     const char* const settings_font = "settings.font";
+    const char* const settings_enabled_search_columns = "settings.enabledSearchColumns";
+    const char* const settings_enabled_log_columns = "settings.enabledLogColumns";
 }
 
 
@@ -65,6 +68,17 @@ SSettings::SSettings()
       diff()
 {
     QSettings::setDefaultFormat(QSettings::IniFormat);
+
+    enabledSearchColumns.append(SLogEntry::sha);
+    enabledSearchColumns.append(SLogEntry::summary);
+    enabledSearchColumns.append(SLogEntry::author);
+    enabledSearchColumns.append(SLogEntry::commitDate);
+
+    enabledLogColumns.append(SLogEntry::sha);
+    enabledLogColumns.append(SLogEntry::summary);
+    enabledLogColumns.append(SLogEntry::author);
+    enabledLogColumns.append(SLogEntry::authorDate);
+    enabledLogColumns.append(SLogEntry::commitDate);
 }
 
 
@@ -82,6 +96,8 @@ void SSettings::Load()
     lastRepos = settings.value(settings_last_repos, QStringList()).toStringList();
     maxLastRepos = settings.value(settings_max_last_repos, 10).toInt();
     font = settings.value(settings_font, QFont("Hack", 8)).value<QFont>();
+    enabledSearchColumns = settings.value(settings_enabled_search_columns, enabledSearchColumns).toStringList();
+    enabledLogColumns = settings.value(settings_enabled_log_columns, enabledLogColumns).toStringList();
 
     style.Load(settings);
     diff.Load(settings);
@@ -96,6 +112,8 @@ void SSettings::Save() const
     settings.setValue(settings_last_repos, lastRepos);
     settings.setValue(settings_max_last_repos, maxLastRepos);
     settings.setValue(settings_font, font);
+    settings.setValue(settings_enabled_search_columns, enabledSearchColumns);
+    settings.setValue(settings_enabled_log_columns, enabledLogColumns);
 
     style.Save(settings);
     diff.Save(settings);

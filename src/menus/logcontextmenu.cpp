@@ -1,5 +1,6 @@
 #include "logcontextmenu.h"
 #include "data/logentry.h"
+#include "data/settings.h"
 
 
 CLogContextMenu::CLogContextMenu(QWidget* parent)
@@ -24,21 +25,47 @@ CLogFilesContextMenu::CLogFilesContextMenu(QWidget* parent)
 }
 
 
-CLogSearchContextMenu::CLogSearchContextMenu(QWidget* parent)
-    : QMenu(parent)
+CLogSearchContextMenu::CLogSearchContextMenu(const quokkagit::SSettings& settings,
+                                             QWidget* parent)
+    : QMenu(parent),
+      m_settings(settings)
 {
-    auto AddAction = [this](quokkagit::SLogEntry::Fields field, bool checked) {
-        QAction* pAction = new QAction(quokkagit::SLogEntry::c_strings[field], this);
-        pAction->setCheckable(true);
-        pAction->setChecked(checked);
-        pAction->setData(field);
-        addAction(pAction);
-        return pAction;
+    auto AddAction = [this](quokkagit::SLogEntry::Fields field) {
+        QAction* action = new QAction(quokkagit::SLogEntry::c_strings[field], this);
+        action->setCheckable(true);
+        action->setChecked(IsChecked(field));
+        action->setData(field);
+        addAction(action);
+
+        connect(action, &QAction::toggled, this, &CLogSearchContextMenu::Toggled);
+
+        return action;
     };
 
-    AddAction(quokkagit::SLogEntry::Sha, true);
-    AddAction(quokkagit::SLogEntry::Summary, true);
-    AddAction(quokkagit::SLogEntry::Author, true);
-    AddAction(quokkagit::SLogEntry::Message, false);
-    AddAction(quokkagit::SLogEntry::CommitDate, true);
+    AddAction(quokkagit::SLogEntry::Sha);
+    AddAction(quokkagit::SLogEntry::Summary);
+    AddAction(quokkagit::SLogEntry::Author);
+    AddAction(quokkagit::SLogEntry::AuthorDate);
+    AddAction(quokkagit::SLogEntry::Message);
+    AddAction(quokkagit::SLogEntry::CommitDate);
+}
+
+
+void CLogSearchContextMenu::Toggled(bool enabled)
+{
+    QAction* action = dynamic_cast<QAction*>(sender());
+    if(action != nullptr)
+    {
+        int i = action->data().toInt();
+        emit ToggleColumn(i, enabled);
+    }
+}
+
+
+bool CLogSearchContextMenu::IsChecked(int id) const
+{
+    if (id < 0 || id >= quokkagit::SLogEntry::NumberOfFields) return false;
+
+    const QString name{quokkagit::SLogEntry::c_strings[id]};
+    return m_settings.enabledSearchColumns.contains(name);
 }

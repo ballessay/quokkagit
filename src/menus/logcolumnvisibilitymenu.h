@@ -3,12 +3,15 @@
 
 #include <QMenu>
 
+namespace quokkagit { struct SSettings; }
+
 class CLogColumnVisibilityMenu : public QMenu
 {
     Q_OBJECT
 
 public:
-    CLogColumnVisibilityMenu(QWidget* parent);
+    CLogColumnVisibilityMenu(const quokkagit::SSettings& settings,
+                             QWidget* parent);
     ~CLogColumnVisibilityMenu();
 
     void EmitState();
@@ -20,7 +23,10 @@ signals:
     void ToggleColumn(int column, bool bVisible);
 
 private:
-    void AddAction(const QString& sName, int id, bool bEnabled);
+    void AddAction(int id);
+    bool IsEnabled(int column) const;
+
+    const quokkagit::SSettings& m_settings;
 };
 
 #endif // LOGCOLUMNVISIBILITYMENU_H

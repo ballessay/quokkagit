@@ -1,35 +1,23 @@
 #include "logcolumnvisibilitymenu.h"
 #include "data/logentry.h"
+#include "data/settings.h"
 #include <QAction>
 
 
-namespace
+CLogColumnVisibilityMenu::CLogColumnVisibilityMenu(const quokkagit::SSettings& settings,
+                                                   QWidget* parent)
+    : QMenu(parent),
+      m_settings(settings)
 {
-    QAction* CreateAction(QMenu* parent, const QString& /*sName*/, int id, bool bChecked)
-    {
-        QAction* action = new QAction(quokkagit::SLogEntry::c_strings[id], parent);
-        action->setCheckable(true);
-        action->setChecked(bChecked);
-        action->setData(id);
-        parent->addAction(action);
-
-        return action;
-    }
-}
-
-
-CLogColumnVisibilityMenu::CLogColumnVisibilityMenu(QWidget* parent)
-    : QMenu(parent)
-{
-    AddAction(tr(quokkagit::SLogEntry::sha), quokkagit::SLogEntry::Sha, true);
-    AddAction(tr(quokkagit::SLogEntry::summary), quokkagit::SLogEntry::Summary, true);
-    AddAction(tr(quokkagit::SLogEntry::message), quokkagit::SLogEntry::Message, false);
-    AddAction(tr(quokkagit::SLogEntry::commiter), quokkagit::SLogEntry::Commiter, false);
-    AddAction(tr(quokkagit::SLogEntry::commiterEmail), quokkagit::SLogEntry::CommiterEmail, false);
-    AddAction(tr(quokkagit::SLogEntry::commitDate), quokkagit::SLogEntry::CommitDate, true);
-    AddAction(tr(quokkagit::SLogEntry::author), quokkagit::SLogEntry::Author, true);
-    AddAction(tr(quokkagit::SLogEntry::authorEmail), quokkagit::SLogEntry::AuthorEmail, false);
-    AddAction(tr(quokkagit::SLogEntry::authorDate), quokkagit::SLogEntry::AuthorDate, true);
+    AddAction(quokkagit::SLogEntry::Sha);
+    AddAction(quokkagit::SLogEntry::Summary);
+    AddAction(quokkagit::SLogEntry::Message);
+    AddAction(quokkagit::SLogEntry::Commiter);
+    AddAction(quokkagit::SLogEntry::CommiterEmail);
+    AddAction(quokkagit::SLogEntry::CommitDate);
+    AddAction(quokkagit::SLogEntry::Author);
+    AddAction(quokkagit::SLogEntry::AuthorEmail);
+    AddAction(quokkagit::SLogEntry::AuthorDate);
 }
 
 
@@ -59,11 +47,31 @@ void CLogColumnVisibilityMenu::Toggled(bool enabled)
 }
 
 
-void CLogColumnVisibilityMenu::AddAction(const QString& sName, int id, bool enabled)
+void CLogColumnVisibilityMenu::AddAction(int id)
 {
-    QAction* action = CreateAction(this, sName, id, enabled);
+    auto CreateAction = [this](int id)
+    {
+        QAction* action = new QAction(tr(quokkagit::SLogEntry::c_strings[id]), this);
+        action->setCheckable(true);
+        action->setChecked(IsEnabled(id));
+        action->setData(id);
+
+        addAction(action);
+
+        return action;
+    };
+
+    QAction* action = CreateAction(id);
 
     connect(action, &QAction::toggled, this, &CLogColumnVisibilityMenu::Toggled);
 
-    emit ToggleColumn(id, enabled);
+    emit ToggleColumn(id, IsEnabled(id));
+}
+
+
+bool CLogColumnVisibilityMenu::IsEnabled(int column) const
+{
+    if (column < 0 || column >= quokkagit::SLogEntry::NumberOfFields) return false;
+
+    return m_settings.enabledLogColumns.contains(quokkagit::SLogEntry::c_strings[column]);
 }

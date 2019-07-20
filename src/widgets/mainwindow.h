@@ -42,7 +42,8 @@ private slots:
 
     void BlameFile(const QModelIndex& index);
 
-    void ToggleColumn(int id, bool enabled);
+    void OnToggleLogColumn(int id, bool enabled);
+    void OnToggleSearchColumn(int id, bool enabled);
 
     void AddFiles(const CFileLogModel::vFiles& files);
 

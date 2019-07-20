@@ -4,6 +4,7 @@
 #include <QString>
 #include <QStringList>
 #include <QFont>
+#include <vector>
 
 class QSettings;
 
@@ -24,6 +25,7 @@ namespace quokkagit
 
         int id;
     };
+
 
     struct SDiffSettings
     {
@@ -51,6 +53,8 @@ namespace quokkagit
         QFont font;
         SStyleSettings style;
         SDiffSettings diff;
+        QStringList enabledSearchColumns;
+        QStringList enabledLogColumns;
 
     private:
         QStringList lastRepos;
