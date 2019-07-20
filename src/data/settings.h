@@ -30,6 +30,7 @@ namespace quokkagit
         void AddRepoPath(const QString& path);
         const QStringList& LastRepos() const { return lastRepos; }
 
+        int hashDisplayLength;
         QFont font;
         SDiffSettings diff;
 

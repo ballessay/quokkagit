@@ -18,6 +18,7 @@ namespace
                                                  << "%po"
                                                  << "%pn";
 
+    const char* const settings_hash_display_length = "settings.hashDisplayLength";
     const char* const settings_last_repos = "settings.lastRepos";
     const char* const settings_max_last_repos = "settings.maxLastRepos";
     const char* const settings_font = "settings.font";
@@ -56,6 +57,7 @@ void SSettings::Load()
 {
     QSettings settings;
 
+    hashDisplayLength = settings.value(settings_hash_display_length, 10).toInt();
     lastRepos = settings.value(settings_last_repos, QStringList()).toStringList();
     maxLastRepos = settings.value(settings_max_last_repos, 10).toInt();
     font = settings.value(settings_font, QFont("Hack", 8)).value<QFont>();
@@ -68,6 +70,7 @@ void SSettings::Save() const
 {
     QSettings settings;
 
+    settings.setValue(settings_hash_display_length, hashDisplayLength);
     settings.setValue(settings_last_repos, lastRepos);
     settings.setValue(settings_max_last_repos, maxLastRepos);
     settings.setValue(settings_font, font);
