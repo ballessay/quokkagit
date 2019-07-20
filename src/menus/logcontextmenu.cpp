@@ -44,10 +44,13 @@ CLogSearchContextMenu::CLogSearchContextMenu(const quokkagit::SSettings& setting
 
     AddAction(quokkagit::SLogEntry::Sha);
     AddAction(quokkagit::SLogEntry::Summary);
-    AddAction(quokkagit::SLogEntry::Author);
-    AddAction(quokkagit::SLogEntry::AuthorDate);
     AddAction(quokkagit::SLogEntry::Message);
+    AddAction(quokkagit::SLogEntry::Commiter);
+    AddAction(quokkagit::SLogEntry::CommiterEmail);
     AddAction(quokkagit::SLogEntry::CommitDate);
+    AddAction(quokkagit::SLogEntry::Author);
+    AddAction(quokkagit::SLogEntry::AuthorEmail);
+    AddAction(quokkagit::SLogEntry::AuthorDate);
 }
 
 
