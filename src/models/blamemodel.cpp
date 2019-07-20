@@ -94,15 +94,20 @@ QVariant CBlameModel::data(const QModelIndex& index, int role) const
             }
             else if (Qt::ToolTipRole == role)
             {
-                quokkagit::SLogEntry e = m_git.CommitLookup(entry.hash);
-                return QString("Author: %1 %2 %3\nCommiter: %4 %5 %6\n\n%7")
-                          .arg(e.sAuthor)
-                          .arg(e.sAuthorEmail)
-                          .arg(e.qauthorDate.toString(Qt::ISODate))
-                          .arg(e.sCommiter)
-                          .arg(e.sCommiterEmail)
-                          .arg(e.qcommitDate.toString(Qt::ISODate))
-                          .arg(e.sMessage);
+                if (Column::Sha == column ||
+                    Column::Signature == column ||
+                    Column::LineNumber == column)
+                {
+                    quokkagit::SLogEntry e = m_git.CommitLookup(entry.hash);
+                    return QString("Author: %1 %2 %3\nCommiter: %4 %5 %6\n\n%7")
+                              .arg(e.sAuthor)
+                              .arg(e.sAuthorEmail)
+                              .arg(e.qauthorDate.toString(Qt::ISODate))
+                              .arg(e.sCommiter)
+                              .arg(e.sCommiterEmail)
+                              .arg(e.qcommitDate.toString(Qt::ISODate))
+                              .arg(e.sMessage);
+                }
             }
             else if (Qt::BackgroundRole == role)
             {
