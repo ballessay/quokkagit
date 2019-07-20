@@ -126,7 +126,12 @@ quokkagit::LogEntries CGit2::Log(int branch,
         while (auto commit = walk.next())
         {
             if (path.isEmpty())
+            {
                 entries.push_back(SLogEntry::FromCommit(commit));
+                const QString heads{HeadsAt(commit.id())};
+                if (!heads.isEmpty())
+                    entries.back().sSummary.prepend(heads);
+            }
             else
             {
                 std::size_t parents = commit.parents_num();
@@ -136,7 +141,12 @@ quokkagit::LogEntries CGit2::Log(int branch,
                     if (i != 0)
                         continue;
                     else
+                    {
                         entries.push_back(SLogEntry::FromCommit(commit));
+                        const QString heads{HeadsAt(commit.id())};
+                        if (!heads.isEmpty())
+                            entries.back().sSummary.prepend(heads);
+                    }
                 }
                 else if (parents == 1)
                 {
@@ -146,14 +156,18 @@ quokkagit::LogEntries CGit2::Log(int branch,
                     auto diff = commit.repo().diff(p_tree, c_tree, diffopts);
 
                     if (diff.deltas_num() > 0)
+                    {
                         entries.push_back(SLogEntry::FromCommit(commit));
+                        const QString heads{HeadsAt(commit.id())};
+                        if (!heads.isEmpty())
+                            entries.back().sSummary.prepend(heads);
+                    }
                     else continue;
                 }
                 else
                 {
 
                 }
-
             }
         }
     }
@@ -165,52 +179,6 @@ quokkagit::LogEntries CGit2::Log(int branch,
 void CGit2::DiffFinished(int index)
 {
     m_diffs.erase(m_diffs.begin() + index);
-}
-
-
-
-git::Tree CGit2::resolve_to_tree(git::Repository const & repo,
-                                 const QString& identifier)
-{
-    git::Object obj = git::revparse_single(repo, identifier.toUtf8().constData());
-
-    QString sMessage = QString("%1 - %2")
-                       .arg(git_object_type2string(obj.type()))
-                       .arg(helpers::QStringFrom(obj.id()));
-
-    emit Message(sMessage);
-
-    switch (obj.type())
-    {
-    case GIT_OBJ_TREE:
-        return obj.to_tree();
-    case GIT_OBJ_COMMIT:
-        return obj.to_commit().tree();
-    default:
-        break;
-    }
-
-    throw std::logic_error("Invalid Object");
-}
-
-
-git::Diff CGit2::find_diff(git::Repository const & repo,
-                           git::Tree & t1, git::Tree & t2)
-{
-    git_diff_options opts;
-    git_diff_init_options(&opts, GIT_DIFF_OPTIONS_VERSION);
-
-    if (t1 && t2)
-    {
-        return repo.diff(t1, t2, opts);
-    }
-    else
-    {
-        if (!t1)
-            t1 = resolve_to_tree(repo, "HEAD");
-
-        return repo.diff_to_index(t1, opts);
-    }
 }
 
 
@@ -461,4 +429,86 @@ quokkagit::SLogEntry CGit2::CommitLookup(const QString& hash) const
   git::Commit commit = m_repo->commit_lookup(oid);
 
   return SLogEntry::FromCommit(commit);
+}
+
+
+git::Tree CGit2::resolve_to_tree(git::Repository const & repo,
+                                 const QString& identifier)
+{
+    git::Object obj = git::revparse_single(repo, identifier.toUtf8().constData());
+
+    QString sMessage = QString("%1 - %2")
+                       .arg(git_object_type2string(obj.type()))
+                       .arg(helpers::QStringFrom(obj.id()));
+
+    emit Message(sMessage);
+
+    switch (obj.type())
+    {
+    case GIT_OBJ_TREE:
+        return obj.to_tree();
+    case GIT_OBJ_COMMIT:
+        return obj.to_commit().tree();
+    default:
+        break;
+    }
+
+    throw std::logic_error("Invalid Object");
+}
+
+
+git::Diff CGit2::find_diff(git::Repository const & repo,
+                           git::Tree & t1, git::Tree & t2)
+{
+    git_diff_options opts;
+    git_diff_init_options(&opts, GIT_DIFF_OPTIONS_VERSION);
+
+    if (t1 && t2)
+    {
+        return repo.diff(t1, t2, opts);
+    }
+    else
+    {
+        if (!t1)
+            t1 = resolve_to_tree(repo, "HEAD");
+
+        return repo.diff_to_index(t1, opts);
+    }
+}
+
+
+QString CGit2::HeadsAt(git_oid id) const
+{
+    QString text;
+    bool firstEntry = true;
+
+    auto FormatName = [](QString& text)
+    {
+        text.remove("refs/heads/");
+        text.remove("refs/remotes/");
+        return text;
+    };
+
+    const auto branches = Branches();
+    for (const auto& branch : branches)
+    {
+        if (helpers::QStringFrom(branch.second) == helpers::QStringFrom(id))
+        {
+            QString b = branch.first;
+            if (firstEntry)
+            {
+                text = "(" + FormatName(b);
+                firstEntry = false;
+            }
+            else
+            {
+                text += QString(", ") + FormatName(b);
+            }
+        }
+    }
+
+    if (!text.isEmpty())
+        text += ") ";
+
+    return text;
 }

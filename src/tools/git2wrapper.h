@@ -58,6 +58,7 @@ protected slots:
 private:
     git::Tree resolve_to_tree(git::Repository const & repo, const QString& identifier);
     git::Diff find_diff(git::Repository const & repo, git::Tree & t1, git::Tree & t2);
+    QString HeadsAt(git_oid id) const;
 
 private:
     std::unique_ptr<git::Repository> m_repo;
