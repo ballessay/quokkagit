@@ -42,6 +42,7 @@ private:
     std::unique_ptr<Ui::CBlameDialog> m_ui;
     std::unique_ptr<CBlameModel> m_model;
     SData m_data;
+    int m_lastClickedRow;
 };
 
 #endif // BLAMEDIALOG_H

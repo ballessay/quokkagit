@@ -22,6 +22,7 @@ public:
         Signature,
         LineNumber,
         LineData,
+        OrigPath,
         // must be last
         Count
     };

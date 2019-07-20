@@ -400,11 +400,12 @@ quokkagit::BlameData CGit2::BlameFile(const QString& path,
             if (nullptr == hunk) break;
 
             SBlameData d;
-            d.hash = git::id_to_str(hunk->orig_commit_id).c_str();
+            d.hash = helpers::QStringFrom(hunk->orig_commit_id);
             d.signature = QString("%1 <%2>").arg(hunk->final_signature->name)
                           .arg(hunk->final_signature->email);
             d.line = line;
             d.data = sLine;
+            d.origPath = hunk->orig_path;
 
             vData.push_back(d);
 

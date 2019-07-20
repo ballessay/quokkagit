@@ -82,6 +82,8 @@ QVariant CBlameModel::data(const QModelIndex& index, int role) const
                     return QVariant::fromValue(entry.line);
                 case Column::LineData:
                     return entry.data;
+                case Column::OrigPath:
+                    return entry.origPath;
                 default:
                     assert(false);
                     break;
@@ -95,8 +97,7 @@ QVariant CBlameModel::data(const QModelIndex& index, int role) const
             else if (Qt::ToolTipRole == role)
             {
                 if (Column::Sha == column ||
-                    Column::Signature == column ||
-                    Column::LineNumber == column)
+                    Column::Signature == column)
                 {
                     quokkagit::SLogEntry e = m_git.CommitLookup(entry.hash);
                     return QString("Author: %1 %2 %3\nCommiter: %4 %5 %6\n\n%7")

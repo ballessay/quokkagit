@@ -12,6 +12,7 @@ namespace quokkagit
         QString signature;
         std::size_t line;
         QString data;
+        QString origPath;
     };
 
     using BlameData = std::vector<SBlameData>;

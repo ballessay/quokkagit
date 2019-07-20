@@ -36,6 +36,7 @@ CBlameDialog::CBlameDialog(SData& data, QWidget* parent) :
             this, &CBlameDialog::OnBlameHereTriggered);
     m_ui->tableView->addAction(action);
     m_ui->tableView->setContextMenuPolicy(Qt::ActionsContextMenu);
+    m_ui->tableView->horizontalHeader()->hideSection(CBlameModel::OrigPath);
 
     connect(m_ui->tableView, &QTableView::pressed,
             this, &CBlameDialog::OnTableViewPressed);
@@ -55,7 +56,7 @@ int CBlameDialog::exec()
 
 int CBlameDialog::exec(const QString& path, const QString& hash)
 {
-    quokkagit::BlameData data = m_data.git.BlameFile(path, hash);
+    const quokkagit::BlameData data{m_data.git.BlameFile(path, hash)};
 
     m_model->SetData(data);
 
@@ -67,13 +68,18 @@ int CBlameDialog::exec(const QString& path, const QString& hash)
 
 void CBlameDialog::OnBlameHereTriggered()
 {
-    QModelIndex index = m_ui->tableView->currentIndex();
+    //const QModelIndex index{m_ui->tableView->currentIndex()};
+    //const int row{m_lastIndex.row()};
+    const int row{m_lastClickedRow};
 
-    const QModelIndex in{m_model->index(index.row(), CBlameModel::Sha)};
-    const QString hash{m_model->data(in, Qt::UserRole).toString()};
+    const QModelIndex hashIndex{m_model->index(row, CBlameModel::Sha)};
+    const QString hash{m_model->data(hashIndex, Qt::UserRole).toString()};
+
+    const QModelIndex pathIndex{m_model->index(row, CBlameModel::OrigPath)};
+    const QString path{m_model->data(pathIndex).toString()};
 
     CBlameDialog d(m_data, this);
-    d.exec(m_data.path, hash);
+    d.exec(path, hash);
 }
 
 
@@ -83,4 +89,6 @@ void CBlameDialog::OnTableViewPressed(const QModelIndex& index)
     const QString hash{m_model->data(in, Qt::UserRole).toString()};
 
     m_model->SetSelectedHash(hash);
+
+    m_lastClickedRow = in.row();
 }
