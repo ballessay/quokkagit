@@ -12,6 +12,8 @@ CSettingsDialog::CSettingsDialog(const quokkagit::SSettings& settings,
     m_ui->setupUi(this);
 
     m_ui->fontComboBox->setFont(settings.font);
+    m_ui->hashLengthSpinBox->setValue(settings.hashDisplayLength);
+    m_ui->maxHistroySpinBox->setValue(settings.maxLastRepos);
 
     m_ui->diffPathLineEdit->setText(settings.diff.path);
     m_ui->diffArgsPlainTextEdit->setPlainText(settings.diff.arguments.join(" "));
@@ -31,6 +33,8 @@ quokkagit::SSettings CSettingsDialog::currentSettings() const
     quokkagit::SSettings settings;
 
     settings.font = m_ui->fontComboBox->font();
+    settings.hashDisplayLength = m_ui->hashLengthSpinBox->value();
+    settings.maxLastRepos = m_ui->maxHistroySpinBox->value();
 
     settings.diff.path = m_ui->diffPathLineEdit->text();
     settings.diff.arguments =

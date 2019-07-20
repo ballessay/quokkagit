@@ -31,12 +31,12 @@ namespace quokkagit
         const QStringList& LastRepos() const { return lastRepos; }
 
         int hashDisplayLength;
+        int maxLastRepos;
         QFont font;
         SDiffSettings diff;
 
     private:
         QStringList lastRepos;
-        int maxLastRepos;
     };
 }
 
