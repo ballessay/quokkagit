@@ -30,6 +30,9 @@ public:
                          QWidget *parent = nullptr);
     ~CMainWindow();
 
+signals:
+    void SettingsChanged();
+
 private slots:
     void LogItemSelected(const QModelIndex& index);
     void LogItemKeyPressed();

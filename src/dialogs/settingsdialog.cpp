@@ -11,6 +11,9 @@ CSettingsDialog::CSettingsDialog(const quokkagit::SSettings& settings,
 {
     m_ui->setupUi(this);
 
+    m_ui->styleComboBox->addItems(quokkagit::SStyleSettings::StyleNames());
+    m_ui->styleComboBox->setCurrentIndex(settings.style.id);
+
     m_ui->fontComboBox->setFont(settings.font);
     m_ui->hashLengthSpinBox->setValue(settings.hashDisplayLength);
     m_ui->maxHistroySpinBox->setValue(settings.maxLastRepos);
@@ -32,7 +35,10 @@ quokkagit::SSettings CSettingsDialog::currentSettings() const
 {
     quokkagit::SSettings settings;
 
-    settings.font = m_ui->fontComboBox->font();
+    settings.style.id = m_ui->styleComboBox->currentIndex();
+
+    settings.font = m_ui->fontComboBox->currentFont();
+    const QString sName = settings.font.family();
     settings.hashDisplayLength = m_ui->hashLengthSpinBox->value();
     settings.maxLastRepos = m_ui->maxHistroySpinBox->value();
 
@@ -48,6 +54,11 @@ quokkagit::SSettings CSettingsDialog::currentSettings() const
 void CSettingsDialog::OnFontToolButtonTriggered()
 {
     QFontDialog d(m_ui->fontComboBox->font(), this);
+    d.setOption(QFontDialog::ScalableFonts, false);
+    d.setOption(QFontDialog::NonScalableFonts, false);
+    d.setOption(QFontDialog::MonospacedFonts, true);
+    d.setOption(QFontDialog::ProportionalFonts, false);
+
     if (d.exec() == QDialog::Accepted)
     {
         m_ui->fontComboBox->setFont(d.selectedFont());

@@ -21,6 +21,9 @@ int main(int argc, char** argv)
         CMainWindow w(git, app.settings());
         w.show();
 
+        QObject::connect(&w, &CMainWindow::SettingsChanged,
+                         &app, &CApplication::OnSettingsChanged);
+
         return app.exec();
     }
     catch(std::exception& ex)

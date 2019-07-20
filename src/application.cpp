@@ -13,18 +13,43 @@ CApplication::CApplication(int& argc, char** argv)
 
     m_settings.Load();
 
-    QFile stylesheet(":/QTDark.stylesheet");
-    if (stylesheet.open(QFile::ReadOnly | QFile::Text))
-    {
-        QTextStream ts(&stylesheet);
-
-        setStyleSheet(ts.readAll());
-    }
-
-    setFont(m_settings.font);
+    OnSettingsChanged();
 }
 
 
 CApplication::~CApplication()
 {
+}
+
+
+void CApplication::OnSettingsChanged()
+{
+    SetStyle();
+
+    SetFont();
+}
+
+
+void CApplication::SetFont()
+{
+    setFont(m_settings.font);
+}
+
+
+void CApplication::SetStyle()
+{
+    if (quokkagit::SStyleSettings::Dark == m_settings.style.id)
+    {
+        QFile stylesheet(":/QTDark.stylesheet");
+        if (stylesheet.open(QFile::ReadOnly | QFile::Text))
+        {
+            QTextStream ts(&stylesheet);
+
+            setStyleSheet(ts.readAll());
+        }
+    }
+    else
+    {
+        setStyleSheet(QString());
+    }
 }

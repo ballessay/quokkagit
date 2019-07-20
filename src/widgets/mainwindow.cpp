@@ -320,6 +320,8 @@ void CMainWindow::OnSettingsActionTriggered()
     if (d.exec()  == QDialog::Accepted)
     {
         m_settings = d.currentSettings();
+
+        emit SettingsChanged();
     }
 }
 
@@ -360,6 +362,8 @@ void CMainWindow::ChangeRepository(const QString path)
         int index = FindCurrentBranchIndex(branches, head);
         QString path;
         m_logModel->SetLog(m_git.Log(index, branches, path));
+
+        m_ui->logTableView->resizeColumnsToContents();
 
         m_logFileModel->SetLog(CFileLogModel::vFiles());
 

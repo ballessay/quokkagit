@@ -9,6 +9,22 @@ class QSettings;
 
 namespace quokkagit
 {
+    struct SStyleSettings
+    {
+        enum Styles
+        {
+            Default,
+            Dark
+        };
+
+        void Load(const QSettings& settings);
+        void Save(QSettings& settings) const;
+
+        static QStringList StyleNames();
+
+        int id;
+    };
+
     struct SDiffSettings
     {
         void Load(const QSettings& settings);
@@ -33,6 +49,7 @@ namespace quokkagit
         int hashDisplayLength;
         int maxLastRepos;
         QFont font;
+        SStyleSettings style;
         SDiffSettings diff;
 
     private:

@@ -8,6 +8,8 @@ using namespace quokkagit;
 
 namespace
 {
+    const char* const style_id = "style.id";
+
     const char* const diff_path = "diff.path";
     const char* const diff_arguments = "diff.arguments";
 
@@ -22,6 +24,25 @@ namespace
     const char* const settings_last_repos = "settings.lastRepos";
     const char* const settings_max_last_repos = "settings.maxLastRepos";
     const char* const settings_font = "settings.font";
+}
+
+
+void SStyleSettings::Load(const QSettings& settings)
+{
+    id = settings.value(style_id,  Default).toInt();
+}
+
+
+void SStyleSettings::Save(QSettings& settings) const
+{
+    settings.setValue(style_id, id);
+}
+
+QStringList SStyleSettings::StyleNames()
+{
+    static const QStringList names = QStringList() << "Default"
+                                                   << "Dark";
+    return names;
 }
 
 
@@ -62,6 +83,7 @@ void SSettings::Load()
     maxLastRepos = settings.value(settings_max_last_repos, 10).toInt();
     font = settings.value(settings_font, QFont("Hack", 8)).value<QFont>();
 
+    style.Load(settings);
     diff.Load(settings);
 }
 
@@ -75,6 +97,7 @@ void SSettings::Save() const
     settings.setValue(settings_max_last_repos, maxLastRepos);
     settings.setValue(settings_font, font);
 
+    style.Save(settings);
     diff.Save(settings);
 }
 

@@ -13,7 +13,13 @@ public:
     quokkagit::SSettings& settings() { return m_settings; }
     const quokkagit::SSettings& settings() const { return m_settings; }
 
+public slots:
+    void OnSettingsChanged();
+
 private:
+    void SetFont();
+    void SetStyle();
+
     quokkagit::SSettings m_settings;
 };
 
