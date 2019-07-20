@@ -46,6 +46,8 @@ add_executable(${PROJECT_NAME}
   src/models/blamemodel.h
   src/models/filelogmodel.cpp
   src/models/filelogmodel.h
+  src/models/filelogproxymodel.cpp
+  src/models/filelogproxymodel.h
   src/models/logfilterproxymodel.cpp
   src/models/logfilterproxymodel.h
   src/models/logmodel.cpp

@@ -8,6 +8,7 @@
 #include "menus/logcontextmenu.h"
 #include "models/logmodel.h"
 #include "models/filelogmodel.h"
+#include "models/filelogproxymodel.h"
 #include "models/logfilterproxymodel.h"
 #include "tools/git2wrapper.h"
 
@@ -109,12 +110,11 @@ CMainWindow::CMainWindow(CGit2& git,
 
     m_logFileModel.reset(new CFileLogModel(files, this));
 
-    m_logFileProxy.reset(new QSortFilterProxyModel(this));
-    m_logFileProxy->setFilterKeyColumn(1);
+    m_logFileProxy.reset(new CFileLogProxyModel(this));
     m_logFileProxy->setSourceModel(m_logFileModel.get());
 
     connect(m_ui->fileSearchLineEdit, &QLineEdit::textChanged,
-            m_logFileProxy.get(), &QSortFilterProxyModel::setFilterFixedString);
+            m_logFileProxy.get(), &CFileLogProxyModel::SetFilter);
 
     m_ui->filesTableView->setModel(m_logFileProxy.get());
 

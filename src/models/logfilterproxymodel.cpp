@@ -29,7 +29,7 @@ bool CLogFilterProxyModel::filterAcceptsRow(int sourceRow,
                                                      action->data().toInt(),
                                                      sourceParent);
             if(index.isValid())
-                if(index.data().toString().contains(m_filter))
+                if(index.data().toString().contains(m_filter, Qt::CaseInsensitive))
                     return true;
         }
     }
