@@ -56,6 +56,9 @@ int CBlameDialog::exec()
 
 int CBlameDialog::exec(const QString& path, const QString& hash)
 {
+    m_data.path = path;
+    m_data.hash = hash;
+
     const quokkagit::BlameData data{m_data.git.BlameFile(path, hash)};
 
     m_model->SetData(data);
@@ -72,6 +75,8 @@ void CBlameDialog::OnBlameHereTriggered()
 
     const QModelIndex hashIndex{m_model->index(row, CBlameModel::Sha)};
     const QString hash{m_model->data(hashIndex, Qt::UserRole).toString()};
+
+    if (hash == m_data.hash) return;
 
     const QModelIndex pathIndex{m_model->index(row, CBlameModel::OrigPath)};
     const QString path{m_model->data(pathIndex).toString()};
