@@ -356,9 +356,10 @@ void CMainWindow::OnSettingsActionTriggered()
 
         // must be called after the settings change has propagated
         m_ui->logTableView->resizeColumnsToContents();
-        m_ui->logTableView->horizontalHeader()->stretchLastSection();
+        m_ui->logTableView->horizontalHeader()->setStretchLastSection(true);
+        m_ui->logTableView->horizontalHeader()->resizeSection(quokkagit::SLogEntry::Summary, 350);
         m_ui->filesTableView->resizeColumnsToContents();
-        m_ui->filesTableView->horizontalHeader()->stretchLastSection();
+        m_ui->filesTableView->horizontalHeader()->setStretchLastSection(true);
     }
 }
 
@@ -400,7 +401,10 @@ void CMainWindow::ChangeRepository(const QString path)
         QString path;
         m_logModel->SetLog(m_git.Log(index, branches, path));
 
-        m_ui->logTableView->resizeColumnsToContents();
+//        m_ui->logTableView->resizeColumnsToContents();
+//        m_ui->logTableView->horizontalHeader()->setStretchLastSection(true);
+//        m_ui->filesTableView->resizeColumnsToContents();
+//        m_ui->filesTableView->horizontalHeader()->setStretchLastSection(true);
 
         m_logFileModel->SetLog(CFileLogModel::vFiles());
 
