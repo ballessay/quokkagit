@@ -68,8 +68,6 @@ int CBlameDialog::exec(const QString& path, const QString& hash)
 
 void CBlameDialog::OnBlameHereTriggered()
 {
-    //const QModelIndex index{m_ui->tableView->currentIndex()};
-    //const int row{m_lastIndex.row()};
     const int row{m_lastClickedRow};
 
     const QModelIndex hashIndex{m_model->index(row, CBlameModel::Sha)};

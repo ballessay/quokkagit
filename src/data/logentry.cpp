@@ -40,7 +40,7 @@ namespace quokkagit
     {
         SLogEntry entry;
 
-        entry.sSha = QString::fromStdString(git::id_to_str(commit.id()));
+        entry.sSha = helpers::QStringFrom(commit.id());
         entry.sSummary = commit.summary();
         entry.sMessage = commit.message();
 

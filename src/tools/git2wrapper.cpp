@@ -176,7 +176,7 @@ git::Tree CGit2::resolve_to_tree(git::Repository const & repo,
 
     QString sMessage = QString("%1 - %2")
                        .arg(git_object_type2string(obj.type()))
-                       .arg(QString::fromStdString(git::id_to_str(obj.id())));
+                       .arg(helpers::QStringFrom(obj.id()));
 
     emit Message(sMessage);
 
@@ -259,10 +259,10 @@ CGit2::vDeltas CGit2::DiffWithParent(int index,
 
             d.oldFile.oid = delta.old_file.id;
             d.oldFile.path = QString::fromLocal8Bit(delta.old_file.path);
-            d.oldFile.id = git::id_to_str(delta.old_file.id).c_str();
+            d.oldFile.id = helpers::QStringFrom(delta.old_file.id);
             d.newFile.oid = delta.new_file.id;
             d.newFile.path = QString::fromLocal8Bit(delta.new_file.path);
-            d.newFile.id = git::id_to_str(delta.new_file.id).c_str();
+            d.newFile.id = helpers::QStringFrom(delta.new_file.id);
 
             QString status;
             switch (delta.status)
