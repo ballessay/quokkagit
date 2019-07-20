@@ -7,6 +7,9 @@
 #include <map>
 
 class CGit2;
+namespace quokkagit {
+    struct SSettings;
+}
 class QBrush;
 class QString;
 
@@ -23,10 +26,9 @@ public:
         Count
     };
 
-    explicit CBlameModel(const CGit2& git, QObject* parent = nullptr);
-    CBlameModel(const CGit2& git,
-                const quokkagit::BlameData& data,
-                QObject* pParent = nullptr);
+    explicit CBlameModel(const CGit2& git,
+                         const quokkagit::SSettings& settings,
+                         QObject* parent = nullptr);
 
     void SetData(const quokkagit::BlameData& Log);
     const quokkagit::BlameData& Data() const { return m_data; }
@@ -39,8 +41,6 @@ public:
 
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
 
-    //QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
-
     void SetSelectedHash(const QString& hash);
 
 private:
@@ -52,6 +52,7 @@ private:
     QColor m_bg;
     const CGit2& m_git;
     QString m_selectedHash;
+    const quokkagit::SSettings& m_settings;
 };
 
 #endif // BLAMEMODEL_H

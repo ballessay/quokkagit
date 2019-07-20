@@ -61,7 +61,7 @@ CMainWindow::CMainWindow(CGit2& git,
 
     m_ui->branchLabel->setText(head);
 
-    m_logModel.reset(new CLogModel(git.Log(index, branches, path), this));
+    m_logModel.reset(new CLogModel(git.Log(index, branches, path), settings, this));
 
     m_logProxy.reset(new CLogFilterProxyModel(this));
     m_logProxy->setSourceModel(m_logModel.get());
@@ -235,9 +235,9 @@ void CMainWindow::BlameFile(const QModelIndex& index)
 
     const QModelIndex i = m_logModel->index(m_ui->logTableView->currentIndex().row(),
                                              quokkagit::SLogEntry::Sha);
-    const QString hash = m_logModel->data(i).toString();
+    const QString hash = m_logModel->data(i, Qt::UserRole).toString();
 
-    CBlameDialog::SData data = {m_git, hash, delta.newFile.path};
+    CBlameDialog::SData data = {m_git, hash, delta.newFile.path, m_settings};
     CBlameDialog d(data, this);
     d.exec();
 }

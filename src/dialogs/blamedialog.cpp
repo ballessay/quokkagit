@@ -20,7 +20,7 @@ namespace
 CBlameDialog::CBlameDialog(SData& data, QWidget* parent) :
     QDialog(parent),
     m_ui(new Ui::CBlameDialog),
-    m_model(new CBlameModel(data.git, this)),
+    m_model(new CBlameModel(data.git, data.settings, this)),
     m_data(data)
 {
     m_ui->setupUi(this);
@@ -70,7 +70,7 @@ void CBlameDialog::OnBlameHereTriggered()
     QModelIndex index = m_ui->tableView->currentIndex();
 
     const QModelIndex in{m_model->index(index.row(), CBlameModel::Sha)};
-    const QString hash{m_model->data(in).toString()};
+    const QString hash{m_model->data(in, Qt::UserRole).toString()};
 
     CBlameDialog d(m_data, this);
     d.exec(m_data.path, hash);
@@ -80,7 +80,7 @@ void CBlameDialog::OnBlameHereTriggered()
 void CBlameDialog::OnTableViewPressed(const QModelIndex& index)
 {
     const QModelIndex in{m_model->index(index.row(), CBlameModel::Sha)};
-    const QString hash{m_model->data(in).toString()};
+    const QString hash{m_model->data(in, Qt::UserRole).toString()};
 
     m_model->SetSelectedHash(hash);
 }

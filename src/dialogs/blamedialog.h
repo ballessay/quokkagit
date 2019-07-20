@@ -7,6 +7,9 @@
 
 class CBlameModel;
 class CGit2;
+namespace quokkagit {
+    struct SSettings;
+}
 namespace Ui {
     class CBlameDialog;
 }
@@ -21,6 +24,7 @@ public:
         CGit2& git;
         QString hash;
         QString path;
+        quokkagit::SSettings& settings;
     };
 
     explicit CBlameDialog(SData& data,

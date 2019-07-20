@@ -4,10 +4,17 @@
 #include "data/logentry.h"
 #include <QAbstractTableModel>
 
+namespace quokkagit
+{
+    struct SSettings;
+}
+
 class CLogModel : public QAbstractTableModel
 {
 public:
-    CLogModel(const quokkagit::LogEntries& Log, QObject* pParent = nullptr);
+    CLogModel(const quokkagit::LogEntries& log,
+              const quokkagit::SSettings& settings,
+              QObject* pParent = nullptr);
 
     void SetLog(const quokkagit::LogEntries& Log);
     const quokkagit::LogEntries& Log() const { return m_log; }
@@ -22,6 +29,7 @@ public:
 
 private:
     quokkagit::LogEntries m_log;
+    const quokkagit::SSettings& m_settings;
 };
 
 #endif // LOGMODEL_H

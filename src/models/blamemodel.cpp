@@ -7,19 +7,15 @@
 #include <set>
 
 
-CBlameModel::CBlameModel(const CGit2& git, QObject* parent)
+CBlameModel::CBlameModel(const CGit2& git,
+                         const quokkagit::SSettings& settings,
+                         QObject* parent)
     : QAbstractTableModel(parent),
       m_data(),
-      m_git(git)
+      m_git(git),
+      m_settings(settings)
 {
 
-}
-
-CBlameModel::CBlameModel(const CGit2& git, const quokkagit::BlameData& data, QObject* pParent)
-    : QAbstractTableModel(pParent),
-      m_data(data),
-      m_git(git)
-{
 }
 
 
@@ -69,12 +65,17 @@ QVariant CBlameModel::data(const QModelIndex& index, int role) const
         {
             const auto& entry = m_data.at(row);
 
-            if (Qt::DisplayRole == role || Qt::EditRole == role)
+            if (Qt::DisplayRole == role ||
+                Qt::EditRole == role ||
+                Qt::UserRole == role)
             {
                 switch(column)
                 {
                 case Column::Sha:
-                    return entry.hash;
+                    if (Qt::DisplayRole == role)
+                        return entry.hash.left(m_settings.hashDisplayLength);
+                    else
+                        return entry.hash;
                 case Column::Signature:
                     return entry.signature;
                 case Column::LineNumber:

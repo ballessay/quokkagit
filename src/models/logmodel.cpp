@@ -1,11 +1,15 @@
 #include "logmodel.h"
-#include <cassert>
+#include "data/settings.h"
 #include <QFontMetrics>
+#include <cassert>
 
 
-CLogModel::CLogModel(const quokkagit::LogEntries& log, QObject* pParent)
+CLogModel::CLogModel(const quokkagit::LogEntries& log,
+                     const quokkagit::SSettings& settings,
+                     QObject* pParent)
     : QAbstractTableModel(pParent),
-      m_log(log)
+      m_log(log),
+      m_settings(settings)
 {
 }
 
@@ -37,40 +41,49 @@ int CLogModel::columnCount(const QModelIndex&) const
 
 QVariant CLogModel::data(const QModelIndex& index, int role) const
 {
-    if (Qt::DisplayRole == role && index.isValid())
+    if (index.isValid())
     {
         int column = index.column();
         int row = index.row();
 
-
-        if (row < static_cast<int>(m_log.size()))
+        if(Qt::DisplayRole == role || Qt::UserRole == role)
         {
-            const auto& entry = m_log.at(row);
-            switch(column)
+            if (row < static_cast<int>(m_log.size()))
             {
-            case quokkagit::SLogEntry::Sha:
-                return entry.sSha;
-            case quokkagit::SLogEntry::Summary:
-            {
-                return entry.sSummary;
-            }
-            case quokkagit::SLogEntry::Message:
-                return entry.sMessage;
-            case quokkagit::SLogEntry::Commiter:
-                return entry.sCommiter;
-            case quokkagit::SLogEntry::CommiterEmail:
-                return entry.sCommiterEmail;
-            case quokkagit::SLogEntry::CommitDate:
-                return entry.qcommitDate.toString(Qt::ISODate);;
-            case quokkagit::SLogEntry::Author:
-                return entry.sAuthor;
-            case quokkagit::SLogEntry::AuthorEmail:
-                return entry.sAuthorEmail;
-            case quokkagit::SLogEntry::AuthorDate:
-                return entry.qauthorDate.toString(Qt::ISODate);
-            default:
-                assert(false);
-                break;
+                const auto& entry = m_log.at(row);
+                switch(column)
+                {
+                case quokkagit::SLogEntry::Sha:
+                    if (Qt::DisplayRole == role)
+                    {
+                        return entry.sSha.left(m_settings.hashDisplayLength);
+                    }
+                    else
+                    {
+                        return entry.sSha;
+                    }
+                case quokkagit::SLogEntry::Summary:
+                {
+                    return entry.sSummary;
+                }
+                case quokkagit::SLogEntry::Message:
+                    return entry.sMessage;
+                case quokkagit::SLogEntry::Commiter:
+                    return entry.sCommiter;
+                case quokkagit::SLogEntry::CommiterEmail:
+                    return entry.sCommiterEmail;
+                case quokkagit::SLogEntry::CommitDate:
+                    return entry.qcommitDate.toString(Qt::ISODate);
+                case quokkagit::SLogEntry::Author:
+                    return entry.sAuthor;
+                case quokkagit::SLogEntry::AuthorEmail:
+                    return entry.sAuthorEmail;
+                case quokkagit::SLogEntry::AuthorDate:
+                    return entry.qauthorDate.toString(Qt::ISODate);
+                default:
+                    assert(false);
+                    break;
+                }
             }
         }
     }
