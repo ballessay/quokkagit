@@ -182,7 +182,7 @@
        <property name="orientation">
         <enum>Qt::Vertical</enum>
        </property>
-       <widget class="QTextEdit" name="pMessageTextEdit">
+       <widget class="QTextEdit" name="messageTextEdit">
         <property name="readOnly">
          <bool>true</bool>
         </property>
@@ -235,7 +235,7 @@
           </layout>
          </item>
          <item row="0" column="0">
-          <widget class="CTableWidget" name="pFilesTableView">
+          <widget class="CTableWidget" name="filesTableView">
            <property name="selectionMode">
             <enum>QAbstractItemView::SingleSelection</enum>
            </property>
@@ -357,7 +357,7 @@
  </customwidgets>
  <tabstops>
   <tabstop>logTableView</tabstop>
-  <tabstop>pMessageTextEdit</tabstop>
+  <tabstop>messageTextEdit</tabstop>
   <tabstop>logSearchLineEdit</tabstop>
   <tabstop>searchOptionsToolButton</tabstop>
   <tabstop>branchSelectionToolButton</tabstop>

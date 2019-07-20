@@ -116,7 +116,7 @@ CMainWindow::CMainWindow(CGit2& git,
     connect(m_ui->fileSearchLineEdit, &QLineEdit::textChanged,
             m_logFileProxy.get(), &QSortFilterProxyModel::setFilterFixedString);
 
-    m_ui->pFilesTableView->setModel(m_logFileProxy.get());
+    m_ui->filesTableView->setModel(m_logFileProxy.get());
 
     m_ui->logTableView->setContextMenuPolicy(Qt::ActionsContextMenu);
     CLogContextMenu* pMenu = new CLogContextMenu(this);
@@ -125,7 +125,7 @@ CMainWindow::CMainWindow(CGit2& git,
         m_ui->logTableView->addAction(action);
     }
 
-    m_ui->pFilesTableView->setContextMenuPolicy(Qt::ActionsContextMenu);
+    m_ui->filesTableView->setContextMenuPolicy(Qt::ActionsContextMenu);
     CLogFilesContextMenu* pFileMenu = new CLogFilesContextMenu(this);
     for (auto& action : pFileMenu->actions())
     {
@@ -133,9 +133,9 @@ CMainWindow::CMainWindow(CGit2& git,
             if ("Diff" == action->text())
                 DiffCurrentIndex();
             if ("Blame" == action->text())
-                BlameFile(m_ui->pFilesTableView->currentIndex());
+                BlameFile(m_ui->filesTableView->currentIndex());
         };
-        m_ui->pFilesTableView->addAction(action);
+        m_ui->filesTableView->addAction(action);
 
         connect(action, &QAction::triggered, dispatch);
     }
@@ -154,10 +154,10 @@ CMainWindow::CMainWindow(CGit2& git,
     connect(&m_git, &CGit2::Message,
             this, &CMainWindow::AddMessage);
 
-    connect(m_ui->pFilesTableView, &QAbstractItemView::doubleClicked,
+    connect(m_ui->filesTableView, &QAbstractItemView::doubleClicked,
             this, &CMainWindow::DiffFile);
 
-    connect(m_ui->pFilesTableView, &CTableWidget::enterOrReturnPressed,
+    connect(m_ui->filesTableView, &CTableWidget::enterOrReturnPressed,
             this, &CMainWindow::DiffCurrentIndex);
 
 
@@ -197,7 +197,7 @@ void CMainWindow::LogItemSelected(const QModelIndex& index)
 
     const QString msg = m_logModel->data(msgIndex).toString();
 
-    m_ui->pMessageTextEdit->setText(msg);
+    m_ui->messageTextEdit->setText(msg);
 
     m_ui->logTableView->setCurrentIndex(m_logModel->index(r, 0));
 
@@ -221,7 +221,7 @@ void CMainWindow::DiffFile(const QModelIndex& index)
 
 void CMainWindow::DiffCurrentIndex()
 {
-    DiffFile(m_ui->pFilesTableView->currentIndex());
+    DiffFile(m_ui->filesTableView->currentIndex());
 }
 
 
@@ -260,7 +260,7 @@ void CMainWindow::AddFiles(const CFileLogModel::vFiles& files)
 {
     m_logFileModel->SetLog(files);
 
-    m_ui->pFilesTableView->resizeColumnToContents(0);
+    m_ui->filesTableView->resizeColumnToContents(0);
 }
 
 
@@ -322,6 +322,12 @@ void CMainWindow::OnSettingsActionTriggered()
         m_settings = d.currentSettings();
 
         emit SettingsChanged();
+
+        // must be called after the settings change has propagated
+        m_ui->logTableView->resizeColumnsToContents();
+        m_ui->logTableView->horizontalHeader()->stretchLastSection();
+        m_ui->filesTableView->resizeColumnsToContents();
+        m_ui->filesTableView->horizontalHeader()->stretchLastSection();
     }
 }
 
