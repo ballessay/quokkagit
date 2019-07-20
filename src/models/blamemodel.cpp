@@ -113,7 +113,12 @@ QVariant CBlameModel::data(const QModelIndex& index, int role) const
             else if (Qt::BackgroundRole == role)
             {
                 if (m_selectedHash == entry.hash)
-                  return QColor(40, 40, 40);
+                {
+                    if (m_settings.style.id == quokkagit::SStyleSettings::Dark)
+                        return QColor(40, 40, 40);
+                    else
+                        return QColor(240, 240, 240);
+                }
             }
         }
     }
