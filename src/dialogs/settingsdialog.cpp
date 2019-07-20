@@ -7,7 +7,8 @@
 CSettingsDialog::CSettingsDialog(const quokkagit::SSettings& settings,
                                  QWidget *parent) :
     QDialog(parent),
-    m_ui(new Ui::CSettingsDialog)
+    m_ui(new Ui::CSettingsDialog),
+    m_settings(settings)
 {
     m_ui->setupUi(this);
 
@@ -33,7 +34,7 @@ CSettingsDialog::~CSettingsDialog()
 
 quokkagit::SSettings CSettingsDialog::currentSettings() const
 {
-    quokkagit::SSettings settings;
+    quokkagit::SSettings settings{m_settings};
 
     settings.style.id = m_ui->styleComboBox->currentIndex();
 

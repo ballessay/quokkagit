@@ -25,6 +25,7 @@ protected slots:
 
 private:
     std::unique_ptr<Ui::CSettingsDialog> m_ui;
+    const quokkagit::SSettings& m_settings;
 };
 
 #endif // SETTINGSDIALOG_H
