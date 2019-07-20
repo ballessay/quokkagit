@@ -391,6 +391,7 @@ quokkagit::BlameData CGit2::BlameFile(const QString& path,
         QByteArray ba(data, size);
         QTextStream s(&ba);
 
+        /*
         QString sLine;
         std::size_t line = 1;
         while (s.readLineInto(&sLine))
@@ -410,6 +411,37 @@ quokkagit::BlameData CGit2::BlameFile(const QString& path,
 
             ++line;
         }
+        */
+
+        const auto hunkCount = blame.hunk_count();
+        std::size_t lineCount = 1;
+        QString line;
+        for (uint32_t i = 0; i < hunkCount; ++i)
+        {
+            auto hunk = blame.hunk_byindex(i);
+            if(nullptr == hunk) break;
+
+            auto lines = hunk->lines_in_hunk;
+            while (lines > 0)
+            {
+                if (s.readLineInto(&line))
+                {
+                    SBlameData d;
+                    d.hash = helpers::QStringFrom(hunk->orig_commit_id);
+                    d.signature = QString("%1 <%2>")
+                                        .arg(hunk->final_signature->name)
+                                        .arg(hunk->final_signature->email);
+                    d.line = lineCount++;
+                    d.data = line;
+                    d.origPath = hunk->orig_path;
+
+                    vData.push_back(d);
+                }
+                --lines;
+            }
+        }
+
+        assert(!s.readLineInto(&line) && "Here should be no data left");
     }
     catch(std::exception& ex)
     {
