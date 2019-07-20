@@ -57,8 +57,6 @@ add_executable(${PROJECT_NAME}
   src/tools/difftool.h
   src/tools/git2wrapper.cpp
   src/tools/git2wrapper.h
-  src/tools/kdiff3.cpp
-  src/tools/kdiff3.h
   src/widgets/mainwindow.cpp
   src/widgets/mainwindow.h
   src/widgets/mainwindow.ui
