@@ -5,6 +5,7 @@
 
 using namespace quokkagit;
 
+
 namespace
 {
     const char* const diff_path = "diff.path";
@@ -23,7 +24,6 @@ namespace
 }
 
 
-
 void SDiffSettings::Load(const QSettings& settings)
 {
     path = settings.value(diff_path, "kdiff3").toString();
@@ -36,7 +36,6 @@ void SDiffSettings::Save(QSettings& settings) const
     settings.setValue(diff_path, path);
     settings.setValue(diff_arguments, arguments);
 }
-
 
 
 SSettings::SSettings()
