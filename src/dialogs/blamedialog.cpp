@@ -27,6 +27,8 @@ CBlameDialog::CBlameDialog(SData& data, QWidget* parent) :
 {
     m_ui->setupUi(this);
 
+    setWindowTitle(tr("Blame: %1").arg(data.path));
+
     m_model->SetColors(palette().windowText().color(),
                      palette().window().color());
     m_ui->tableView->setModel(m_model.get());
@@ -60,6 +62,8 @@ int CBlameDialog::exec(const QString& path, const QString& hash)
 {
     m_data.path = path;
     m_data.hash = hash;
+
+    setWindowTitle(tr("Blame: %1").arg(m_data.path));
 
     const quokkagit::BlameData data{m_data.git.BlameFile(path, hash)};
 

@@ -302,6 +302,7 @@ void CMainWindow::OnBranchSelectionToolButtonClicked()
     if(d.exec() == QDialog::Accepted)
     {
         const auto branch = d.currentSelection();
+        if (branch.isEmpty()) return;
 
         quokkagit::LogEntries entries = m_git.Log(branch, b);
 

@@ -496,6 +496,7 @@ QString CGit2::HeadsAt(const CGit2::Branches& branches, const QString& id) const
     {
         text.remove("refs/heads/");
         text.remove("refs/remotes/");
+        //return QString("<p style=\"color: red;\"> %1 </p>").arg(text);
         return text;
     };
 
