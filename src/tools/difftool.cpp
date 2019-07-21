@@ -88,8 +88,8 @@ QStringList CDiffTool::args() const
 {
     auto replacePlaceholders = [this](QString& text)
         {
-            text.replace("%fn", m_entry.oldFilename);
-            text.replace("%fo", m_entry.newFilename);
+            text.replace("%fn", m_entry.newFilename);
+            text.replace("%fo", m_entry.oldFilename);
             text.replace("%in", m_entry.newHash);
             text.replace("%io", m_entry.oldHash);
             text.replace("%pn", m_new->fileName());
