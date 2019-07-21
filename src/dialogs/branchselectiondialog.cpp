@@ -34,14 +34,14 @@ namespace
 
     void BuildTree(QStringList& parts,
                    QList<QTreeWidgetItem*>& items,
-                   int branchIndex,
+                   const QString& branch,
                    QTreeWidgetItem* item = nullptr)
     {
         if (parts.isEmpty())
         {
             if (item != nullptr)
             {
-                item->setData(column, Qt::UserRole, branchIndex);
+                item->setData(column, Qt::UserRole, branch);
             }
             return;
         }
@@ -72,12 +72,12 @@ namespace
         }
 
         parts.pop_front();
-        BuildTree(parts, items, branchIndex, i);
+        BuildTree(parts, items, branch, i);
     }
 }
 
 
-CBranchSelectionDialog::CBranchSelectionDialog(const CGit2::vBranches& branches,
+CBranchSelectionDialog::CBranchSelectionDialog(const CGit2::Branches& branches,
                                                QWidget* parent) :
     QDialog(parent),
     m_ui(new Ui::CBranchSelectionDialog),
@@ -86,12 +86,11 @@ CBranchSelectionDialog::CBranchSelectionDialog(const CGit2::vBranches& branches,
     m_ui->setupUi(this);
 
     QList<QTreeWidgetItem*> items;
-    int branchIndex = 0;
     for(const auto& branch : branches)
     {
         QStringList refParts = branch.first.split("/");
 
-        BuildTree(refParts, items, branchIndex++);
+        BuildTree(refParts, items, branch.first);
     }
 
     m_ui->treeWidget->addTopLevelItems(items);
@@ -107,20 +106,19 @@ CBranchSelectionDialog::~CBranchSelectionDialog()
 }
 
 
-int CBranchSelectionDialog::currentSelection() const
+QString CBranchSelectionDialog::currentSelection() const
 {
-    int index = 0;
+    QString branch;
 
     QTreeWidgetItem* item = m_ui->treeWidget->currentItem();
     QVariant v = item->data(column, Qt::UserRole);
     if (v.isValid())
     {
-        bool ok = false;
-        int i = v.toInt(&ok);
-        if (ok) index = i;
+        const auto i = v.toString();
+        branch = i;
     }
 
-    return index;
+    return branch;
 }
 
 

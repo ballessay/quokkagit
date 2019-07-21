@@ -102,6 +102,9 @@
              <property name="text">
               <string>Branch</string>
              </property>
+             <property name="textFormat">
+              <enum>Qt::RichText</enum>
+             </property>
             </widget>
            </item>
           </layout>

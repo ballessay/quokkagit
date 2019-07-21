@@ -18,20 +18,11 @@
 
 namespace
 {
-    int FindCurrentBranchIndex(const CGit2::vBranches& branches,
-                               const QString& head)
+    QString FindCurrentBranchName(const CGit2::Branches& branches,
+                                   const QString& head)
     {
-        int index = 0;
-
-        for (const auto& branch : branches)
-        {
-            if(branch.first == head)
-                break;
-            else
-                ++index;
-        }
-
-        return index;
+        const auto it = branches.find(head);
+        return it != branches.end() ? it->first : QString();
     }
 }
 
@@ -51,9 +42,9 @@ CMainWindow::CMainWindow(CGit2& git,
 
     m_settings.AddRepoPath(m_git.Path());
 
-    const QString head = m_git.HeadRef();
-    const CGit2::vBranches branches = m_git.Branches();
-    int index = FindCurrentBranchIndex(branches, head);
+    const auto head = m_git.HeadRef();
+    const auto branches = m_git.AllBranches();
+    const auto branchName = FindCurrentBranchName(branches, head);
 
     QString path;
     QStringList args(qApp->arguments());
@@ -62,7 +53,7 @@ CMainWindow::CMainWindow(CGit2& git,
 
     m_ui->branchLabel->setText(head);
 
-    m_logModel.reset(new CLogModel(git.Log(index, branches, path), settings, this));
+    m_logModel.reset(new CLogModel(git.Log(branchName, branches, path), settings, this));
 
     m_logProxy.reset(new CLogFilterProxyModel(this));
     m_logProxy->setSourceModel(m_logModel.get());
@@ -305,20 +296,18 @@ void CMainWindow::OnOpenLogActionTriggered()
 
 void CMainWindow::OnBranchSelectionToolButtonClicked()
 {
-    CGit2::vBranches b = m_git.Branches();
+    CGit2::Branches b = m_git.AllBranches();
 
     CBranchSelectionDialog d(b, this);
     if(d.exec() == QDialog::Accepted)
     {
-        int index = d.currentSelection();
-        if(index >= 0 && index < static_cast<int>(b.size()))
-        {
-            quokkagit::LogEntries entries = m_git.Log(d.currentSelection(), b);
+        const auto branch = d.currentSelection();
 
-            m_logModel->SetLog(entries);
+        quokkagit::LogEntries entries = m_git.Log(branch, b);
 
-            m_ui->branchLabel->setText(b.at(static_cast<quokkagit::LogEntries::size_type>(index)).first);
-        }
+        m_logModel->SetLog(entries);
+
+        m_ui->branchLabel->setText(branch);
     }
 }
 
@@ -392,14 +381,14 @@ void CMainWindow::ChangeRepository(const QString path)
     {
         m_git.ChangeRepository(path);
 
-        const QString repoPath = m_git.Path();
+        const auto repoPath = m_git.Path();
         m_settings.AddRepoPath(repoPath);
 
-        QString head = m_git.HeadRef();
-        CGit2::vBranches branches = m_git.Branches();
-        int index = FindCurrentBranchIndex(branches, head);
+        const auto head = m_git.HeadRef();
+        const auto branches = m_git.AllBranches();
+        const auto branchName = FindCurrentBranchName(branches, head);
         QString path;
-        m_logModel->SetLog(m_git.Log(index, branches, path));
+        m_logModel->SetLog(m_git.Log(branchName, branches, path));
 
 //        m_ui->logTableView->resizeColumnsToContents();
 //        m_ui->logTableView->horizontalHeader()->setStretchLastSection(true);

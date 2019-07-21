@@ -81,21 +81,21 @@ QString CGit2::HeadRef() const
 }
 
 
-CGit2::vBranches CGit2::Branches() const
+CGit2::Branches CGit2::AllBranches() const
 {
-    vBranches branches;
+    Branches branches;
     if (nullptr == m_repo) return branches;
 
     for(const auto& ref : m_repo->branches(git::branch_type::ALL))
     {
         if(ref.type() != GIT_REF_SYMBOLIC)
         {
-            branches.push_back(std::make_pair(QString::fromLocal8Bit(ref.name()),
-                                              ref.target()));
+            const QString hash = helpers::QStringFrom(ref.target());
+            const QString name = QString::fromLocal8Bit(ref.name());
 
-            emit Message(QString("%1 at %2")
-                            .arg(branches.back().first)
-                            .arg(helpers::QStringFrom(ref.target())));
+            branches[name] = hash;
+
+            emit Message(QString("%1 at %2").arg(name).arg(hash));
         }
     }
 
@@ -103,16 +103,27 @@ CGit2::vBranches CGit2::Branches() const
 }
 
 
-quokkagit::LogEntries CGit2::Log(int branch,
-                                 const CGit2::vBranches& b,
+quokkagit::LogEntries CGit2::Log(const QString& branch,
+                                 const CGit2::Branches& b,
                                  const QString& path) const
 {
     LogEntries entries;
     if (nullptr == m_repo) return entries;
 
-    if (branch >= 0 && branch < static_cast<int>(b.size()))
+    std::map<QString, QString> idToNameMap;
+    auto Transform = [this, &idToNameMap](const Branches& branches)
     {
-        git_oid oid = b.at(static_cast<vBranches::size_type>(branch)).second;
+        for (const auto& branch : branches)
+        {
+            idToNameMap[branch.second] = HeadsAt(branches, branch.second);
+        }
+    };
+    Transform(b);
+
+    const auto it = b.find(branch);
+    if (it != b.end())
+    {
+        git_oid oid = helpers::OidFrom(it->second);
 
         char* p = path.toUtf8().data();
         git_diff_options diffopts = GIT_DIFF_OPTIONS_INIT;
@@ -123,14 +134,17 @@ quokkagit::LogEntries CGit2::Log(int branch,
         git::RevWalker walk =  m_repo->rev_walker();
         walk.sort(git::revwalker::sorting::topological);
         walk.push(oid);
+        SLogEntry e;
         while (auto commit = walk.next())
         {
+            e = SLogEntry::FromCommit(commit);
+            const auto it = idToNameMap.find(e.sSha);
+            if (it != idToNameMap.end())
+                e.sSummary.prepend(it->second);
+
             if (path.isEmpty())
             {
-                entries.push_back(SLogEntry::FromCommit(commit));
-                const QString heads{HeadsAt(commit.id())};
-                if (!heads.isEmpty())
-                    entries.back().sSummary.prepend(heads);
+                entries.push_back(e);
             }
             else
             {
@@ -142,10 +156,7 @@ quokkagit::LogEntries CGit2::Log(int branch,
                         continue;
                     else
                     {
-                        entries.push_back(SLogEntry::FromCommit(commit));
-                        const QString heads{HeadsAt(commit.id())};
-                        if (!heads.isEmpty())
-                            entries.back().sSummary.prepend(heads);
+                        entries.push_back(e);
                     }
                 }
                 else if (parents == 1)
@@ -157,10 +168,7 @@ quokkagit::LogEntries CGit2::Log(int branch,
 
                     if (diff.deltas_num() > 0)
                     {
-                        entries.push_back(SLogEntry::FromCommit(commit));
-                        const QString heads{HeadsAt(commit.id())};
-                        if (!heads.isEmpty())
-                            entries.back().sSummary.prepend(heads);
+                        entries.push_back(e);
                     }
                     else continue;
                 }
@@ -477,10 +485,12 @@ git::Diff CGit2::find_diff(git::Repository const & repo,
 }
 
 
-QString CGit2::HeadsAt(git_oid id) const
+QString CGit2::HeadsAt(const CGit2::Branches& branches, const QString& id) const
 {
     QString text;
     bool firstEntry = true;
+
+    std::map<QString, QString> m;
 
     auto FormatName = [](QString& text)
     {
@@ -489,10 +499,9 @@ QString CGit2::HeadsAt(git_oid id) const
         return text;
     };
 
-    const auto branches = Branches();
     for (const auto& branch : branches)
     {
-        if (helpers::QStringFrom(branch.second) == helpers::QStringFrom(id))
+        if (branch.second == id)
         {
             QString b = branch.first;
             if (firstEntry)

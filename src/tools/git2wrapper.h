@@ -8,8 +8,10 @@
 #include "tools/difftool.h"
 #include "git2cpp/repo.h"
 #include "git2cpp/diff.h"
+
 #include <QStringList>
 #include <QObject>
+
 #include <memory>
 #include <vector>
 
@@ -21,7 +23,7 @@ class CGit2 : public QObject
     Q_OBJECT
 
 public:
-    using vBranches = std::vector<std::pair<QString, git_oid>>;
+    using Branches = std::map<QString, QString>;
     using vDeltas = std::vector<quokkagit::SDelta>;
 
     CGit2(const quokkagit::SSettings& settings);
@@ -33,10 +35,10 @@ public:
     void SetHead(const QString& sHead);
     QString HeadRef() const;
 
-    vBranches Branches() const;
+    Branches AllBranches() const;
 
-    quokkagit::LogEntries Log(int branch,
-                              const vBranches& b,
+    quokkagit::LogEntries Log(const QString& branch,
+                              const Branches& b,
                               const QString& path = QString()) const;
 
     vDeltas DiffWithParent(int index, const quokkagit::LogEntries& entries);
@@ -58,7 +60,7 @@ protected slots:
 private:
     git::Tree resolve_to_tree(git::Repository const & repo, const QString& identifier);
     git::Diff find_diff(git::Repository const & repo, git::Tree & t1, git::Tree & t2);
-    QString HeadsAt(git_oid id) const;
+    QString HeadsAt(const CGit2::Branches& branches, const QString& id) const;
 
 private:
     std::unique_ptr<git::Repository> m_repo;
