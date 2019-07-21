@@ -281,7 +281,7 @@ CGit2::vDeltas CGit2::DiffWithParent(int index,
                 d.display = d.newFile.path;
             }
 
-            files.push_back(std::make_pair(status, d.newFile.path));
+            files.push_back(std::make_pair(status, d.display));
             deltas.push_back(d);
         };
 
