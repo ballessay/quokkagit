@@ -1,5 +1,6 @@
 #include "blamemodel.h"
 #include "data/logentry.h"
+#include "data/settings.h"
 #include "tools/git2wrapper.h"
 #include <QBrush>
 #include <QString>

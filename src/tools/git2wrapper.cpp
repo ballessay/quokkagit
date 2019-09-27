@@ -1,5 +1,7 @@
 #include "git2wrapper.h"
 
+#include "tools/difftool.h"
+
 #include "data/diffentry.h"
 #include "data/helpers.h"
 #include "data/logentry.h"
@@ -184,9 +186,16 @@ quokkagit::LogEntries CGit2::Log(const QString& branch,
 }
 
 
-void CGit2::DiffFinished(int index)
+void CGit2::DiffFinished()
 {
-    m_diffs.erase(m_diffs.begin() + index);
+    QObject* s = sender();
+    CDiffTool* d = dynamic_cast<CDiffTool*>(s);
+    auto it = m_diffs.find(d);
+    if (it != m_diffs.end())
+    {
+        m_diffs.erase(it);
+        delete *it;
+    }
 }
 
 
@@ -323,17 +332,19 @@ void CGit2::DiffBlobs(int deltaIndex, const vDeltas& deltas)
                                static_cast<int>(blobOld.size()));
     }
 
+    CDiffTool* d = new CDiffTool(m_settings.diff, e);
 
-    m_diffs.push_back(CDiffTool(m_settings.diff, e,
-                                static_cast<int>(m_diffs.size())));
-
-    m_diffs.back().Open();
-
-    connect(&m_diffs.back(), &CDiffTool::Message,
+    connect(d, &CDiffTool::Message,
             this, &CGit2::Message);
 
-    connect(&m_diffs.back(), &CDiffTool::ProgrammFinished,
+    connect(d, &CDiffTool::ProgrammFinished,
             this, &CGit2::DiffFinished);
+
+    d->Open();
+
+    m_diffs.insert(d);
+
+
 }
 
 

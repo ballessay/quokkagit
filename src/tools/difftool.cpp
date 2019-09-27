@@ -2,10 +2,8 @@
 
 
 CDiffTool::CDiffTool(const quokkagit::SDiffSettings& settings,
-                     const quokkagit::SDiffEntry& entry,
-                     int index)
-    : m_index(index),
-      m_settings(settings),
+                     const quokkagit::SDiffEntry& entry)
+    : m_settings(settings),
       m_entry(entry),
       m_process(new QProcess),
       m_old(new QTemporaryFile),
@@ -31,8 +29,7 @@ CDiffTool::CDiffTool(const quokkagit::SDiffSettings& settings,
 
 
 CDiffTool::CDiffTool(const CDiffTool& diff)
-    : m_index(diff.m_index),
-      m_settings(diff.m_settings),
+    : m_settings(diff.m_settings),
       m_entry(diff.m_entry),
       m_process(diff.m_process),
       m_old(diff.m_old),
@@ -44,8 +41,7 @@ CDiffTool::CDiffTool(const CDiffTool& diff)
 
 
 CDiffTool::CDiffTool(const CDiffTool&& diff)
-    : m_index(std::move(diff.m_index)),
-      m_settings(std::move(diff.m_settings)),
+    : m_settings(std::move(diff.m_settings)),
       m_entry(std::move(diff.m_entry)),
       m_process(std::move(diff.m_process)),
       m_old(std::move(diff.m_old)),
@@ -61,7 +57,6 @@ CDiffTool::CDiffTool(const CDiffTool&& diff)
 
 CDiffTool& CDiffTool::operator=(const CDiffTool& other)
 {
-    m_index = other.m_index;
     m_settings = other.m_settings;
     m_entry = other.m_entry;
     m_process = other.m_process;
@@ -74,7 +69,7 @@ CDiffTool& CDiffTool::operator=(const CDiffTool& other)
 
 void CDiffTool::Finished(int)
 {
-    emit ProgrammFinished(m_index);
+    emit ProgrammFinished();
 }
 
 

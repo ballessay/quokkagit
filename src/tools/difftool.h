@@ -21,15 +21,14 @@ class CDiffTool : public QObject
 
 public:
     CDiffTool(const quokkagit::SDiffSettings& settings,
-              const quokkagit::SDiffEntry& entry,
-              int index);
+              const quokkagit::SDiffEntry& entry);
     CDiffTool(const CDiffTool& diff);
     CDiffTool(const CDiffTool&& diff);
     CDiffTool& operator=(const CDiffTool& other);
 
 signals:
     void Message(QString);
-    void ProgrammFinished(int index);
+    void ProgrammFinished();
 
 protected slots:
     void Finished(int exitCode);
@@ -40,7 +39,6 @@ public slots:
 protected:
     virtual QStringList args() const;
 
-    int m_index;
     quokkagit::SDiffSettings m_settings;
     quokkagit::SDiffEntry m_entry;
     std::shared_ptr<QProcess> m_process;

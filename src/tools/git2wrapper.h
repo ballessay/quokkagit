@@ -5,7 +5,6 @@
 #include "data/diffentry.h"
 #include "data/logentry.h"
 #include "models/filelogmodel.h"
-#include "tools/difftool.h"
 #include "git2cpp/repo.h"
 #include "git2cpp/diff.h"
 
@@ -13,9 +12,10 @@
 #include <QObject>
 
 #include <memory>
-#include <vector>
+#include <set>
 
 namespace quokkagit { struct SSettings; }
+class CDiffTool;
 class QString;
 
 class CGit2 : public QObject
@@ -55,7 +55,7 @@ signals:
     void NewFiles(CFileLogModel::vFiles files);
 
 protected slots:
-    void DiffFinished(int index);
+    void DiffFinished();
 
 private:
     git::Tree resolve_to_tree(git::Repository const & repo, const QString& identifier);
@@ -64,7 +64,7 @@ private:
 
 private:
     std::unique_ptr<git::Repository> m_repo;
-    std::vector<CDiffTool> m_diffs;
+    std::set<CDiffTool*> m_diffs;
     const quokkagit::SSettings& m_settings;
 };
 
