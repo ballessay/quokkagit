@@ -146,7 +146,7 @@
        <item row="1" column="1">
         <widget class="QPlainTextEdit" name="diffArgsPlainTextEdit">
          <property name="toolTip">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The following variables will be replaced:&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;%fn  - new file name&lt;/p&gt;&lt;p&gt;%fo  - old file path&lt;/p&gt;&lt;p&gt;%in  - new file id&lt;/p&gt;&lt;p&gt;%io  - old file id&lt;/p&gt;&lt;p&gt;%pn - new file path&lt;/p&gt;&lt;p&gt;%po - old file path&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The following variables will be replaced:&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;%fn - new file name&lt;/p&gt;&lt;p&gt;%fo - old file path&lt;/p&gt;&lt;p&gt;%in - new file id&lt;/p&gt;&lt;p&gt;%io - old file id&lt;/p&gt;&lt;p&gt;%pn - new file path&lt;/p&gt;&lt;p&gt;%po - old file path&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
         </widget>
        </item>
