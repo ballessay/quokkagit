@@ -19,6 +19,8 @@
 #include <QString>
 #include <QTextStream>
 
+#include <cassert>
+
 
 using namespace quokkagit;
 
