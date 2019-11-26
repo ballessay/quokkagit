@@ -196,7 +196,7 @@ void CGit2::DiffFinished()
     if (it != m_diffs.end())
     {
         m_diffs.erase(it);
-        delete *it;
+        (*it)->deleteLater();
     }
 }
 
