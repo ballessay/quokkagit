@@ -129,10 +129,13 @@ quokkagit::LogEntries CGit2::Log(const QString& branch,
     {
         git_oid oid = helpers::OidFrom(it->second);
 
-        char* p = path.toUtf8().data();
+        char* p = strdup(path.toUtf8().constData());
+        git_strarray a;
+        a.strings = &p;
+        a.count = 1;
+
         git_diff_options diffopts = GIT_DIFF_OPTIONS_INIT;
-        diffopts.pathspec.strings = &p;
-        diffopts.pathspec.count = 1;
+        git_strarray_copy(&diffopts.pathspec, &a);
         git::Pathspec ps(diffopts.pathspec);
 
         git::RevWalker walk =  m_repo->rev_walker();
@@ -182,6 +185,8 @@ quokkagit::LogEntries CGit2::Log(const QString& branch,
                 }
             }
         }
+
+        free(p);
     }
 
     return entries;
@@ -196,7 +201,6 @@ void CGit2::DiffFinished()
     if (it != m_diffs.end())
     {
         m_diffs.erase(it);
-        (*it)->deleteLater();
     }
 }
 
