@@ -92,7 +92,7 @@ CGit2::Branches CGit2::AllBranches() const
 
     for(const auto& ref : m_repo->branches(git::branch_type::ALL))
     {
-        if(ref.type() != GIT_REF_SYMBOLIC)
+        if(ref.type() != GIT_REFERENCE_SYMBOLIC)
         {
             const QString hash = helpers::QStringFrom(ref.target());
             const QString name = QString::fromLocal8Bit(ref.name());
@@ -470,9 +470,9 @@ git::Tree CGit2::resolve_to_tree(git::Repository const & repo,
 
     switch (obj.type())
     {
-    case GIT_OBJ_TREE:
+    case GIT_OBJECT_TREE:
         return obj.to_tree();
-    case GIT_OBJ_COMMIT:
+    case GIT_OBJECT_COMMIT:
         return obj.to_commit().tree();
     default:
         break;
