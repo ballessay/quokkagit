@@ -5,6 +5,7 @@
 
 namespace quokkagit { struct SSettings; }
 
+
 class CLogContextMenu : public QMenu
 {
 public:
@@ -12,11 +13,13 @@ public:
 };
 
 
+
 class CLogFilesContextMenu : public QMenu
 {
 public:
     CLogFilesContextMenu(QWidget* parent);
 };
+
 
 
 class CLogSearchContextMenu : public QMenu

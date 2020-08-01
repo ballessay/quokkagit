@@ -18,6 +18,7 @@ namespace quokkagit { struct SSettings; }
 class CDiffTool;
 class QString;
 
+
 class CGit2 : public QObject
 {
     Q_OBJECT

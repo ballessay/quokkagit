@@ -3,6 +3,7 @@
 
 #include <QAbstractTableModel>
 
+
 class CFileLogModel : public QAbstractTableModel
 {
 public:

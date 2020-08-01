@@ -4,6 +4,7 @@
 #include <QString>
 #include <vector>
 
+
 namespace quokkagit
 {
     struct SBlameData

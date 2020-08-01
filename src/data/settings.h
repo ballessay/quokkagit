@@ -8,6 +8,7 @@
 
 class QSettings;
 
+
 namespace quokkagit
 {
     struct SStyleSettings

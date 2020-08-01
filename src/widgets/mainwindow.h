@@ -20,6 +20,7 @@ namespace Ui {
     class CMainWindow;
 }
 
+
 class CMainWindow : public QMainWindow
 {
     Q_OBJECT

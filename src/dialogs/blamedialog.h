@@ -14,6 +14,7 @@ namespace Ui {
     class CBlameDialog;
 }
 
+
 class CBlameDialog : public QDialog
 {
     Q_OBJECT

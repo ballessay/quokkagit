@@ -9,6 +9,7 @@ namespace Ui {
     class CSettingsDialog;
 }
 
+
 class CSettingsDialog : public QDialog
 {
     Q_OBJECT

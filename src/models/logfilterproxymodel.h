@@ -5,6 +5,7 @@
 #include <QList>
 #include <QAction>
 
+
 class CLogFilterProxyModel : public QSortFilterProxyModel
 {
     Q_OBJECT

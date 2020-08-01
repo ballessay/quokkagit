@@ -5,6 +5,7 @@
 
 namespace quokkagit { struct SSettings; }
 
+
 class CLogColumnVisibilityMenu : public QMenu
 {
     Q_OBJECT

@@ -3,6 +3,7 @@
 
 #include <QSortFilterProxyModel>
 
+
 class CFileLogProxyModel : public QSortFilterProxyModel
 {
     Q_OBJECT

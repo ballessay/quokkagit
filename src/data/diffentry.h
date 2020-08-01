@@ -6,6 +6,7 @@
 #include <QByteArray>
 #include <QString>
 
+
 namespace quokkagit
 {
     struct SFile

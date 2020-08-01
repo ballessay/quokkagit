@@ -10,6 +10,7 @@ namespace Ui {
     class CBranchSelectionDialog;
 }
 
+
 class CBranchSelectionDialog : public QDialog
 {
     Q_OBJECT

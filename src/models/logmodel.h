@@ -9,6 +9,7 @@ namespace quokkagit
     struct SSettings;
 }
 
+
 class CLogModel : public QAbstractTableModel
 {
 public:

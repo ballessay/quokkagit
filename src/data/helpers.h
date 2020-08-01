@@ -4,6 +4,7 @@
 struct git_oid;
 class QString;
 
+
 namespace quokkagit
 {
     namespace helpers

@@ -8,6 +8,7 @@ namespace Ui {
     class CDebugLogDialog;
 }
 
+
 class CDebugLogDialog : public QDialog
 {
     Q_OBJECT

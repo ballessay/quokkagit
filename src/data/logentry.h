@@ -9,6 +9,7 @@
 
 namespace git { class Commit; }
 
+
 namespace quokkagit
 {
     struct SLogEntry

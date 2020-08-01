@@ -3,7 +3,6 @@
 #include <QSettings>
 #include <QCoreApplication>
 
-
 using namespace quokkagit;
 
 

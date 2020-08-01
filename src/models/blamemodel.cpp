@@ -16,7 +16,6 @@ CBlameModel::CBlameModel(const CGit2& git,
       m_git(git),
       m_settings(settings)
 {
-
 }
 
 

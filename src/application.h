@@ -4,6 +4,7 @@
 #include "data/settings.h"
 #include <QApplication>
 
+
 class CApplication : public QApplication
 {
 public:

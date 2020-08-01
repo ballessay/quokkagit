@@ -15,6 +15,7 @@ namespace quokkagit
     struct SDiffSettings;
 }
 
+
 class CDiffTool : public QObject
 {
     Q_OBJECT

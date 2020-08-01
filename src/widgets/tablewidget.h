@@ -5,6 +5,7 @@
 
 class QKeyEvent;
 
+
 class CTableWidget : public QTableView
 {
     Q_OBJECT

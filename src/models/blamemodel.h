@@ -13,6 +13,7 @@ namespace quokkagit {
 class QBrush;
 class QString;
 
+
 class CBlameModel : public QAbstractTableModel
 {
 public:
