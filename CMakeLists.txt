@@ -15,6 +15,10 @@ set(CMAKE_AUTORCC ON)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
 add_executable(${PROJECT_NAME}
     src/application.cpp
     src/application.h
