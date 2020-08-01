@@ -15,26 +15,27 @@ namespace
 
 namespace quokkagit
 {
-    const char* SLogEntry::sha = "Sha";
-    const char* SLogEntry::summary = "Summary";
-    const char* SLogEntry::message = "Message";
-    const char* SLogEntry::commiter = "Commiter";
-    const char* SLogEntry::commiterEmail = "Commiter Email";
-    const char* SLogEntry::commitDate = "Commit Date";
-    const char* SLogEntry::author = "Author";
-    const char* SLogEntry::authorEmail = "Author Email";
-    const char* SLogEntry::authorDate = "Author Date";
+    const char SLogEntry::sha[] = "Sha";
+    const char SLogEntry::summary[] = "Summary";
+    const char SLogEntry::message[] = "Message";
+    const char SLogEntry::commiter[] = "Commiter";
+    const char SLogEntry::commiterEmail[] = "Commiter Email";
+    const char SLogEntry::commitDate[] = "Commit Date";
+    const char SLogEntry::author[] = "Author";
+    const char SLogEntry::authorEmail[] = "Author Email";
+    const char SLogEntry::authorDate[] = "Author Date";
 
-    const char* SLogEntry::c_strings[] = { SLogEntry::sha,
-                                           SLogEntry::summary,
-                                           SLogEntry::message,
-                                           SLogEntry::commiter,
-                                           SLogEntry::commiterEmail,
-                                           SLogEntry::commitDate,
-                                           SLogEntry::author,
-                                           SLogEntry::authorEmail,
-                                           SLogEntry::authorDate
-                                         };
+    const char* const SLogEntry::c_strings[NumberOfFields] = {
+        SLogEntry::sha,
+        SLogEntry::summary,
+        SLogEntry::message,
+        SLogEntry::commiter,
+        SLogEntry::commiterEmail,
+        SLogEntry::commitDate,
+        SLogEntry::author,
+        SLogEntry::authorEmail,
+        SLogEntry::authorDate
+    };
 
     SLogEntry SLogEntry::FromCommit(const git::Commit& commit)
     {

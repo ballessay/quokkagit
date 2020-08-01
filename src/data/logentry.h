@@ -29,17 +29,17 @@ namespace quokkagit
             NumberOfFields
         };
 
-        static const char* sha;
-        static const char* summary;
-        static const char* message;
-        static const char* commiter;
-        static const char* commiterEmail;
-        static const char* commitDate;
-        static const char* author;
-        static const char* authorEmail;
-        static const char* authorDate;
+        static const char sha[];
+        static const char summary[];
+        static const char message[];
+        static const char commiter[];
+        static const char commiterEmail[];
+        static const char commitDate[];
+        static const char author[];
+        static const char authorEmail[];
+        static const char authorDate[];
 
-        static const char* c_strings[];
+        static const char* const c_strings[NumberOfFields];
 
         static SLogEntry FromCommit(const git::Commit& commit);
 
