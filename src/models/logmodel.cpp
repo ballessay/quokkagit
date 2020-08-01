@@ -1,11 +1,14 @@
 #include "logmodel.h"
 #include "data/settings.h"
 #include <QFontMetrics>
+#include <algorithm>
 #include <cassert>
 
+using namespace quokkagit;
 
-CLogModel::CLogModel(const quokkagit::LogEntries& log,
-                     const quokkagit::SSettings& settings,
+
+CLogModel::CLogModel(const LogEntries& log,
+                     const SSettings& settings,
                      QObject* pParent)
     : QAbstractTableModel(pParent),
       m_log(log),
@@ -14,7 +17,7 @@ CLogModel::CLogModel(const quokkagit::LogEntries& log,
 }
 
 
-void CLogModel::SetLog(const quokkagit::LogEntries& log)
+void CLogModel::SetLog(const LogEntries& log)
 {
     beginResetModel();
 
@@ -34,7 +37,7 @@ int CLogModel::rowCount(const QModelIndex&) const
 
 int CLogModel::columnCount(const QModelIndex&) const
 {
-    int i = quokkagit::SLogEntry::NumberOfFields;
+    int i = SLogEntry::NumberOfFields;
     return i;
 }
 
@@ -53,7 +56,7 @@ QVariant CLogModel::data(const QModelIndex& index, int role) const
                 const auto& entry = m_log.at(row);
                 switch(column)
                 {
-                case quokkagit::SLogEntry::Sha:
+                case SLogEntry::Sha:
                     if (Qt::DisplayRole == role)
                     {
                         return entry.sSha.left(m_settings.hashDisplayLength);
@@ -62,23 +65,23 @@ QVariant CLogModel::data(const QModelIndex& index, int role) const
                     {
                         return entry.sSha;
                     }
-                case quokkagit::SLogEntry::Summary:
+                case SLogEntry::Summary:
                 {
                     return entry.sSummary;
                 }
-                case quokkagit::SLogEntry::Message:
+                case SLogEntry::Message:
                     return entry.sMessage;
-                case quokkagit::SLogEntry::Commiter:
+                case SLogEntry::Commiter:
                     return entry.sCommiter;
-                case quokkagit::SLogEntry::CommiterEmail:
+                case SLogEntry::CommiterEmail:
                     return entry.sCommiterEmail;
-                case quokkagit::SLogEntry::CommitDate:
+                case SLogEntry::CommitDate:
                     return entry.qcommitDate.toString(Qt::ISODate);
-                case quokkagit::SLogEntry::Author:
+                case SLogEntry::Author:
                     return entry.sAuthor;
-                case quokkagit::SLogEntry::AuthorEmail:
+                case SLogEntry::AuthorEmail:
                     return entry.sAuthorEmail;
-                case quokkagit::SLogEntry::AuthorDate:
+                case SLogEntry::AuthorDate:
                     return entry.qauthorDate.toString(Qt::ISODate);
                 default:
                     assert(false);
@@ -98,29 +101,14 @@ QVariant CLogModel::headerData(int section, Qt::Orientation orientation, int rol
     {
         if(Qt::Horizontal == orientation)
         {
-            switch(section)
+            if(section >= 0 &&
+               static_cast<std::size_t>(section) < std::size(SLogEntry::c_strings))
             {
-            case quokkagit::SLogEntry::Sha:
-                return tr(quokkagit::SLogEntry::sha);
-            case quokkagit::SLogEntry::Summary:
-                return tr(quokkagit::SLogEntry::summary);
-            case quokkagit::SLogEntry::Message:
-                return tr(quokkagit::SLogEntry::message);
-            case quokkagit::SLogEntry::Commiter:
-                return tr(quokkagit::SLogEntry::commiter);
-            case quokkagit::SLogEntry::CommiterEmail:
-                return tr(quokkagit::SLogEntry::commiterEmail);
-            case quokkagit::SLogEntry::CommitDate:
-                return tr(quokkagit::SLogEntry::commitDate);
-            case quokkagit::SLogEntry::Author:
-                return tr(quokkagit::SLogEntry::author);
-            case quokkagit::SLogEntry::AuthorEmail:
-                return tr(quokkagit::SLogEntry::authorEmail);
-            case quokkagit::SLogEntry::AuthorDate:
-                return tr(quokkagit::SLogEntry::authorDate);
-            default:
-                assert(false);
-                break;
+                return tr(SLogEntry::c_strings[section]);
+            }
+            else
+            {
+                assert(false && "Unknown header section.");
             }
         }
         else
