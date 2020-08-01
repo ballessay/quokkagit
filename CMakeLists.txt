@@ -117,5 +117,5 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
 
 endif(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
 
-#target_compile_options(${PROJECT_NAME} PRIVATE -fsanitize=address)
-#target_link_options(${PROJECT_NAME} PRIVATE -fsanitize=address)
+target_compile_options(${PROJECT_NAME} PRIVATE -fsanitize=address)
+target_link_options(${PROJECT_NAME} PRIVATE -fsanitize=address)

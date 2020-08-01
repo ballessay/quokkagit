@@ -22,7 +22,8 @@ class CDiffTool : public QObject
 
 public:
     CDiffTool(const quokkagit::SDiffSettings& settings,
-              const quokkagit::SDiffEntry& entry);
+              const quokkagit::SDiffEntry& entry,
+              QObject* pParent);
     CDiffTool(const CDiffTool& diff);
     CDiffTool(const CDiffTool&& diff);
     CDiffTool& operator=(const CDiffTool& other);

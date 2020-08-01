@@ -186,6 +186,8 @@ quokkagit::LogEntries CGit2::Log(const QString& branch,
             }
         }
 
+        git_strarray_free(&diffopts.pathspec);
+
         free(p);
     }
 
@@ -338,7 +340,7 @@ void CGit2::DiffBlobs(int deltaIndex, const vDeltas& deltas)
                                static_cast<int>(blobOld.size()));
     }
 
-    CDiffTool* d = new CDiffTool(m_settings.diff, e);
+    CDiffTool* d = new CDiffTool(m_settings.diff, e, this);
 
     connect(d, &CDiffTool::Message,
             this, &CGit2::Message);

@@ -2,8 +2,10 @@
 
 
 CDiffTool::CDiffTool(const quokkagit::SDiffSettings& settings,
-                     const quokkagit::SDiffEntry& entry)
-    : m_settings(settings),
+                     const quokkagit::SDiffEntry& entry,
+                     QObject* pParent)
+    : QObject(pParent),
+      m_settings(settings),
       m_entry(entry),
       m_process(new QProcess),
       m_old(new QTemporaryFile),
