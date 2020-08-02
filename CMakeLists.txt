@@ -7,7 +7,7 @@ option(BUNDLE_LIBGIT2 ON)
 option(BUILD_LIBGIT2CPP_EXAMPLES OFF)
 add_subdirectory(3rd-party/libgit2cpp)
 
-project(quokkagit VERSION 0.1.0)
+project(quokkagit VERSION 0.2.0)
 
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
