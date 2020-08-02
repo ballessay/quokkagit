@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "data/settings.h"
+#include "dialogs/aboutdialog.h"
 #include "dialogs/branchselectiondialog.h"
 #include "dialogs/blamedialog.h"
 #include "dialogs/settingsdialog.h"
@@ -156,7 +157,7 @@ CMainWindow::CMainWindow(CGit2& git,
             this, &CMainWindow::DiffCurrentIndex);
 
 
-    // menu
+    // file menu
     connect(m_ui->actionOpen_repository, &QAction::triggered,
             this, &CMainWindow::OnOpenActionTriggered);
 
@@ -165,6 +166,10 @@ CMainWindow::CMainWindow(CGit2& git,
 
     connect(m_ui->actionOpen_log, &QAction::triggered,
             this, &CMainWindow::OnOpenLogActionTriggered);
+
+    // help menu
+    connect(m_ui->actionAbout, &QAction::triggered,
+            this, &CMainWindow::OnAboutActionTriggered);
 
 
     // tool buttons
@@ -360,6 +365,13 @@ void CMainWindow::OnHistoryActionTriggered()
     const auto path = action->text();
 
     ChangeRepository(path);
+}
+
+
+void CMainWindow::OnAboutActionTriggered()
+{
+    CAboutDialog d(this);
+    d.exec();
 }
 
 

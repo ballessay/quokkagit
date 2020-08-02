@@ -32,6 +32,9 @@ add_executable(${PROJECT_NAME}
     src/data/logentry.h
     src/data/settings.cpp
     src/data/settings.h
+    src/dialogs/aboutdialog.cpp
+    src/dialogs/aboutdialog.h
+    src/dialogs/aboutdialog.ui
     src/dialogs/blamedialog.cpp
     src/dialogs/blamedialog.h
     src/dialogs/blamedialog.ui

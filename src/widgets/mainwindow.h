@@ -60,6 +60,8 @@ private slots:
 
     void OnHistoryActionTriggered();
 
+    void OnAboutActionTriggered();
+
 private:
     void CreateHistoryMenu();
     void ChangeRepository(const QString path);

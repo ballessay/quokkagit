@@ -16,5 +16,7 @@
         <file>renamed.png</file>
         <file>settings.png</file>
         <file>history.png</file>
+        <file>quokkagit.png</file>
+        <file>quokkagit-transparent.png</file>
     </qresource>
 </RCC>
