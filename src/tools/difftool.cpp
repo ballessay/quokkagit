@@ -11,8 +11,9 @@ CDiffTool::CDiffTool(const quokkagit::SDiffSettings& settings,
       m_old(new QTemporaryFile),
       m_new(new QTemporaryFile)
 {
-    connect(m_process.get(), SIGNAL(finished(int)),
-            this, SLOT(Finished(int)), Qt::UniqueConnection);
+    connect(m_process.get(),
+            qOverload<int, QProcess::ExitStatus>(&QProcess::finished),
+            this, &CDiffTool::Finished, Qt::UniqueConnection);
 
     if(m_old->open())
     {
@@ -37,8 +38,9 @@ CDiffTool::CDiffTool(const CDiffTool& diff)
       m_old(diff.m_old),
       m_new(diff.m_new)
 {
-    connect(m_process.get(), SIGNAL(finished(int)),
-            this, SLOT(Finished(int)), Qt::UniqueConnection);
+    connect(m_process.get(),
+            qOverload<int, QProcess::ExitStatus>(&QProcess::finished),
+            this, &CDiffTool::Finished, Qt::UniqueConnection);
 }
 
 
@@ -49,8 +51,9 @@ CDiffTool::CDiffTool(const CDiffTool&& diff)
       m_old(std::move(diff.m_old)),
       m_new(std::move(diff.m_new))
 {
-    connect(m_process.get(), SIGNAL(finished(int)),
-            this, SLOT(Finished(int)), Qt::UniqueConnection);
+    connect(m_process.get(),
+            qOverload<int, QProcess::ExitStatus>(&QProcess::finished),
+            this, &CDiffTool::Finished, Qt::UniqueConnection);
 
     //  diff.m_process.reset(nullptr);
     //  diff.m_old.reset(nullptr);
@@ -69,7 +72,7 @@ CDiffTool& CDiffTool::operator=(const CDiffTool& other)
 }
 
 
-void CDiffTool::Finished(int)
+void CDiffTool::Finished(int, QProcess::ExitStatus)
 {
     emit ProgrammFinished();
 }

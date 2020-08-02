@@ -33,7 +33,7 @@ signals:
     void ProgrammFinished();
 
 protected slots:
-    void Finished(int exitCode);
+    void Finished(int exitCode, QProcess::ExitStatus);
 
 public slots:
     void Open();
