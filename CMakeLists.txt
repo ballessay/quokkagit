@@ -69,6 +69,7 @@ add_executable(${PROJECT_NAME}
     src/widgets/tablewidget.cpp
     src/widgets/tablewidget.h
     resources/resources.qrc
+    .travis.yml
 )
 
 
