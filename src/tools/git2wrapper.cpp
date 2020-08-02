@@ -29,7 +29,7 @@ namespace
 {
     QString InvaliOid()
     {
-        static const QString c_invalidOid = "0000000000000000000000000000000000000000";
+        static const QString c_invalidOid = GIT_OID_HEX_ZERO;
 
         return c_invalidOid;
     }
@@ -351,8 +351,6 @@ void CGit2::DiffBlobs(int deltaIndex, const vDeltas& deltas)
     d->Open();
 
     m_diffs.insert(d);
-
-
 }
 
 
