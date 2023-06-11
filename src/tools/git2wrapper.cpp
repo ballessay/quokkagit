@@ -9,9 +9,9 @@
 
 #include "git2cpp/repo.h"
 #include "git2cpp/reference.h"
-#include "git2cpp/id_to_str.h"
 
 #include "git2/blame.h"
+#include "git2/deprecated.h"
 
 #include <QByteArray>
 #include <QMessageBox>
