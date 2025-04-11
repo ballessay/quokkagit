@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.10)
 
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 
@@ -75,19 +75,19 @@ add_executable(${PROJECT_NAME}
     .travis.yml
 )
 
-
-find_package(Qt5 COMPONENTS Core Widgets)
-
 target_include_directories(${PROJECT_NAME}
     PRIVATE
         src
 )
 
+find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core Widgets)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Widgets)
+
 target_link_libraries(${PROJECT_NAME}
     PRIVATE
         git2cpp
-        Qt5::Widgets
-        Qt5::Core
+        Qt::Widgets
+        Qt::Core
 )
 
 include(GNUInstallDirs)

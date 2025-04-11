@@ -3,12 +3,18 @@
 #include "git2cpp/commit.h"
 #include "git2cpp/id_to_str.h"
 
+#include <QTimeZone>
+
 
 namespace
 {
     QDateTime FromGitTime(git_time time)
     {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
         return QDateTime::fromSecsSinceEpoch(time.time, Qt::LocalTime, time.offset);
+#else
+        return QDateTime::fromSecsSinceEpoch(time.time, QTimeZone::systemTimeZone());
+#endif
     }
 }
 
