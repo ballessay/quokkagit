@@ -29,7 +29,7 @@ namespace
 {
     QString InvaliOid()
     {
-        static const QString c_invalidOid = GIT_OID_HEX_ZERO;
+        static const QString c_invalidOid = GIT_OID_SHA1_HEXZERO;
 
         return c_invalidOid;
     }
@@ -233,8 +233,7 @@ CGit2::vDeltas CGit2::DiffWithParent(int index,
 
         git::Tree parentTree = parentCommit.tree(); // resolve_to_tree(m_repo, parentId);
 
-        git_diff_options opts;
-        git_diff_init_options(&opts, GIT_DIFF_OPTIONS_VERSION);
+        git_diff_options opts = GIT_DIFF_OPTIONS_INIT;
         git::Diff diff = m_repo->diff(parentTree, commitTree, opts);
         git_diff_find_options findopts = GIT_DIFF_FIND_OPTIONS_INIT;
         diff.find_similar(findopts);
@@ -485,8 +484,7 @@ git::Tree CGit2::resolve_to_tree(git::Repository const & repo,
 git::Diff CGit2::find_diff(git::Repository const & repo,
                            git::Tree & t1, git::Tree & t2)
 {
-    git_diff_options opts;
-    git_diff_init_options(&opts, GIT_DIFF_OPTIONS_VERSION);
+    git_diff_options opts = GIT_DIFF_OPTIONS_INIT;
 
     if (t1 && t2)
     {
