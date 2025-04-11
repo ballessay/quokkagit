@@ -34,6 +34,8 @@ CSettingsDialog::~CSettingsDialog()
 
 quokkagit::SSettings CSettingsDialog::currentSettings() const
 {
+    static const QRegularExpression c_space(" ");
+
     quokkagit::SSettings settings{m_settings};
 
     settings.style.id = m_ui->styleComboBox->currentIndex();
@@ -44,8 +46,8 @@ quokkagit::SSettings CSettingsDialog::currentSettings() const
 
     settings.diff.path = m_ui->diffPathLineEdit->text();
     settings.diff.arguments =
-            m_ui->diffArgsPlainTextEdit->toPlainText().split(" ",
-                                                             QString::SkipEmptyParts);
+        m_ui->diffArgsPlainTextEdit->toPlainText().split(c_space,
+                                                         Qt::SkipEmptyParts);
 
     return settings;
 }
