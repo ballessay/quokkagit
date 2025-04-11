@@ -315,41 +315,49 @@ void CGit2::DiffBlobs(int deltaIndex, const vDeltas& deltas)
     if (nullptr == m_repo) return;
     if(deltaIndex < 0 || deltaIndex >= deltas.size()) return;
 
-    const auto& delta = deltas.at(static_cast<size_t>(deltaIndex));
-
-    SDiffEntry e;
-
-    if(delta.newFile.id != InvaliOid())
+    try
     {
-        e.newFilename = delta.newFile.path;
-        e.newHash = delta.newFile.id.left(10);
+        const auto& delta = deltas.at(static_cast<size_t>(deltaIndex));
 
-        git::Blob blobNew = m_repo->blob_lookup(delta.newFile.oid);
-        e.newData = QByteArray(reinterpret_cast<const char*>(blobNew.content()),
-                               static_cast<int>(blobNew.size()));
+        SDiffEntry e;
+
+        if(delta.newFile.id != InvaliOid())
+        {
+            e.newFilename = delta.newFile.path;
+            e.newHash = delta.newFile.id.left(10);
+
+            git::Blob blobNew = m_repo->blob_lookup(delta.newFile.oid);
+            e.newData = QByteArray(reinterpret_cast<const char*>(blobNew.content()),
+                                   static_cast<int>(blobNew.size()));
+        }
+
+        if(delta.oldFile.id != InvaliOid())
+        {
+            e.oldFilename = delta.oldFile.path;
+            e.oldHash = delta.oldFile.id.left(10);
+
+            git::Blob blobOld = m_repo->blob_lookup(delta.oldFile.oid);
+            e.oldData = QByteArray(reinterpret_cast<const char*>(blobOld.content()),
+                                   static_cast<int>(blobOld.size()));
+        }
+
+        CDiffTool* d = new CDiffTool(m_settings.diff, e, this);
+
+        connect(d, &CDiffTool::Message,
+                this, &CGit2::Message);
+
+        connect(d, &CDiffTool::ProgrammFinished,
+                this, &CGit2::DiffFinished);
+
+        d->Open();
+
+        m_diffs.insert(d);
     }
-
-    if(delta.oldFile.id != InvaliOid())
+    catch(std::exception& ex)
     {
-        e.oldFilename = delta.oldFile.path;
-        e.oldHash = delta.oldFile.id.left(10);
-
-        git::Blob blobOld = m_repo->blob_lookup(delta.oldFile.oid);
-        e.oldData = QByteArray(reinterpret_cast<const char*>(blobOld.content()),
-                               static_cast<int>(blobOld.size()));
+        QMessageBox::warning(nullptr, QObject::tr("Error"),
+                             QObject::tr("Exception occured: %1").arg(ex.what()));
     }
-
-    CDiffTool* d = new CDiffTool(m_settings.diff, e, this);
-
-    connect(d, &CDiffTool::Message,
-            this, &CGit2::Message);
-
-    connect(d, &CDiffTool::ProgrammFinished,
-            this, &CGit2::DiffFinished);
-
-    d->Open();
-
-    m_diffs.insert(d);
 }
 
 
