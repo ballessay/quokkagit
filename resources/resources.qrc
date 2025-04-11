@@ -12,11 +12,9 @@
         <file>log.png</file>
         <file>quit.png</file>
         <file>git.png</file>
-        <file>quokka.jpg</file>
         <file>renamed.png</file>
         <file>settings.png</file>
         <file>history.png</file>
-        <file>quokkagit.png</file>
-        <file>quokkagit-transparent.png</file>
+        <file>turtlegit.png</file>
     </qresource>
 </RCC>

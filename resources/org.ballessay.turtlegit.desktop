@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Comment=A git log viewer
+Name=turtlegit
+Exec=turtlegit
+Icon=turtlegit
+Categories=Development;
+Name[en_US]=org.ballessay.turtlegit.desktop

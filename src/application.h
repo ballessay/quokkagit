@@ -11,8 +11,8 @@ public:
     CApplication(int& argc, char** argv);
     ~CApplication() override;
 
-    quokkagit::SSettings& settings() { return m_settings; }
-    const quokkagit::SSettings& settings() const { return m_settings; }
+    turtlegit::SSettings& settings() { return m_settings; }
+    const turtlegit::SSettings& settings() const { return m_settings; }
 
 public slots:
     void OnSettingsChanged();
@@ -21,7 +21,7 @@ private:
     void SetFont();
     void SetStyle();
 
-    quokkagit::SSettings m_settings;
+    turtlegit::SSettings m_settings;
 };
 
 #endif // APPLICATION_H

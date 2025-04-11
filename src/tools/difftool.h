@@ -9,7 +9,7 @@
 #include <QTemporaryFile>
 #include <memory>
 
-namespace quokkagit
+namespace turtlegit
 {
     struct SDiffEntry;
     struct SDiffSettings;
@@ -21,8 +21,8 @@ class CDiffTool : public QObject
     Q_OBJECT
 
 public:
-    CDiffTool(const quokkagit::SDiffSettings& settings,
-              const quokkagit::SDiffEntry& entry,
+    CDiffTool(const turtlegit::SDiffSettings& settings,
+              const turtlegit::SDiffEntry& entry,
               QObject* pParent);
     CDiffTool(const CDiffTool& diff);
     CDiffTool(const CDiffTool&& diff);
@@ -41,8 +41,8 @@ public slots:
 protected:
     virtual QStringList args() const;
 
-    quokkagit::SDiffSettings m_settings;
-    quokkagit::SDiffEntry m_entry;
+    turtlegit::SDiffSettings m_settings;
+    turtlegit::SDiffEntry m_entry;
     std::shared_ptr<QProcess> m_process;
     std::shared_ptr<QTemporaryFile> m_old;
     std::shared_ptr<QTemporaryFile> m_new;

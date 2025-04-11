@@ -25,13 +25,13 @@ CLogFilesContextMenu::CLogFilesContextMenu(QWidget* parent)
 }
 
 
-CLogSearchContextMenu::CLogSearchContextMenu(const quokkagit::SSettings& settings,
+CLogSearchContextMenu::CLogSearchContextMenu(const turtlegit::SSettings& settings,
                                              QWidget* parent)
     : QMenu(parent),
       m_settings(settings)
 {
-    auto AddAction = [this](quokkagit::SLogEntry::Fields field) {
-        QAction* action = new QAction(quokkagit::SLogEntry::c_strings[field], this);
+    auto AddAction = [this](turtlegit::SLogEntry::Fields field) {
+        QAction* action = new QAction(turtlegit::SLogEntry::c_strings[field], this);
         action->setCheckable(true);
         action->setChecked(IsChecked(field));
         action->setData(field);
@@ -42,15 +42,15 @@ CLogSearchContextMenu::CLogSearchContextMenu(const quokkagit::SSettings& setting
         return action;
     };
 
-    AddAction(quokkagit::SLogEntry::Sha);
-    AddAction(quokkagit::SLogEntry::Summary);
-    AddAction(quokkagit::SLogEntry::Message);
-    AddAction(quokkagit::SLogEntry::Commiter);
-    AddAction(quokkagit::SLogEntry::CommiterEmail);
-    AddAction(quokkagit::SLogEntry::CommitDate);
-    AddAction(quokkagit::SLogEntry::Author);
-    AddAction(quokkagit::SLogEntry::AuthorEmail);
-    AddAction(quokkagit::SLogEntry::AuthorDate);
+    AddAction(turtlegit::SLogEntry::Sha);
+    AddAction(turtlegit::SLogEntry::Summary);
+    AddAction(turtlegit::SLogEntry::Message);
+    AddAction(turtlegit::SLogEntry::Commiter);
+    AddAction(turtlegit::SLogEntry::CommiterEmail);
+    AddAction(turtlegit::SLogEntry::CommitDate);
+    AddAction(turtlegit::SLogEntry::Author);
+    AddAction(turtlegit::SLogEntry::AuthorEmail);
+    AddAction(turtlegit::SLogEntry::AuthorDate);
 }
 
 
@@ -67,8 +67,8 @@ void CLogSearchContextMenu::Toggled(bool enabled)
 
 bool CLogSearchContextMenu::IsChecked(int id) const
 {
-    if (id < 0 || id >= quokkagit::SLogEntry::NumberOfFields) return false;
+    if (id < 0 || id >= turtlegit::SLogEntry::NumberOfFields) return false;
 
-    const QString name{quokkagit::SLogEntry::c_strings[id]};
+    const QString name{turtlegit::SLogEntry::c_strings[id]};
     return m_settings.enabledSearchColumns.contains(name);
 }

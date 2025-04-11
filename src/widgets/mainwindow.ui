@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>quokkagit</string>
+   <string>turtlegit</string>
   </property>
   <property name="windowIcon">
    <iconset resource="../../resources/resources.qrc">

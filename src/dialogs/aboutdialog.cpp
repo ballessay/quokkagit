@@ -10,15 +10,15 @@ CAboutDialog::CAboutDialog(QWidget *parent) :
 {
     m_ui->setupUi(this);
 
-    m_ui->pIconLabel->setPixmap(QPixmap(":/quokkagit-transparent.png"));
+    m_ui->pIconLabel->setPixmap(QPixmap(":/turtlegit.png"));
 
     m_ui->pApplicationNameLabel->setText(QString("<b>") +
-                                         quokkagit::project_name +
+                                         turtlegit::project_name +
                                          "</b>");
 
-    const QString sInfo = QString("Version: ") + quokkagit::project_version + "\n"
-                          "Branch: " + quokkagit::git_branch + "\n"
-                          "Hash: " + quokkagit::git_hash;
+    const QString sInfo = QString("Version: ") + turtlegit::project_version + "\n"
+                          "Branch: " + turtlegit::git_branch + "\n"
+                          "Hash: " + turtlegit::git_hash;
     m_ui->pInfoLabel->setText(sInfo);
 
     connect(m_ui->pOkPushButton, &QPushButton::pressed,

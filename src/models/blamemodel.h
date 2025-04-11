@@ -7,7 +7,7 @@
 #include <map>
 
 class CGit2;
-namespace quokkagit {
+namespace turtlegit {
     struct SSettings;
 }
 class QBrush;
@@ -29,11 +29,11 @@ public:
     };
 
     explicit CBlameModel(const CGit2& git,
-                         const quokkagit::SSettings& settings,
+                         const turtlegit::SSettings& settings,
                          QObject* parent = nullptr);
 
-    void SetData(const quokkagit::BlameData& Log);
-    const quokkagit::BlameData& Data() const { return m_data; }
+    void SetData(const turtlegit::BlameData& Log);
+    const turtlegit::BlameData& Data() const { return m_data; }
 
     void SetColors(const QColor& fg, const QColor& bg);
 
@@ -49,13 +49,13 @@ public:
 private:
     void CalculateBackgroundColors();
 
-    quokkagit::BlameData m_data;
+    turtlegit::BlameData m_data;
     std::map<QString, QBrush> m_colors;
     QColor m_fg;
     QColor m_bg;
     const CGit2& m_git;
     QString m_selectedHash;
-    const quokkagit::SSettings& m_settings;
+    const turtlegit::SSettings& m_settings;
 };
 
 #endif // BLAMEMODEL_H

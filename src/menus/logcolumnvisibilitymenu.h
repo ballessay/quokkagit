@@ -3,7 +3,7 @@
 
 #include <QMenu>
 
-namespace quokkagit { struct SSettings; }
+namespace turtlegit { struct SSettings; }
 
 
 class CLogColumnVisibilityMenu : public QMenu
@@ -11,7 +11,7 @@ class CLogColumnVisibilityMenu : public QMenu
     Q_OBJECT
 
 public:
-    CLogColumnVisibilityMenu(const quokkagit::SSettings& settings,
+    CLogColumnVisibilityMenu(const turtlegit::SSettings& settings,
                              QWidget* parent);
     ~CLogColumnVisibilityMenu();
 
@@ -27,7 +27,7 @@ private:
     void AddAction(int id);
     bool IsEnabled(int column) const;
 
-    const quokkagit::SSettings& m_settings;
+    const turtlegit::SSettings& m_settings;
 };
 
 #endif // LOGCOLUMNVISIBILITYMENU_H

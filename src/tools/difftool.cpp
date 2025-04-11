@@ -1,8 +1,8 @@
 #include "difftool.h"
 
 
-CDiffTool::CDiffTool(const quokkagit::SDiffSettings& settings,
-                     const quokkagit::SDiffEntry& entry,
+CDiffTool::CDiffTool(const turtlegit::SDiffSettings& settings,
+                     const turtlegit::SDiffEntry& entry,
                      QObject* pParent)
     : QObject(pParent),
       m_settings(settings),

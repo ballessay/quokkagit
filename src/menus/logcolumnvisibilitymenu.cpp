@@ -4,20 +4,20 @@
 #include <QAction>
 
 
-CLogColumnVisibilityMenu::CLogColumnVisibilityMenu(const quokkagit::SSettings& settings,
+CLogColumnVisibilityMenu::CLogColumnVisibilityMenu(const turtlegit::SSettings& settings,
                                                    QWidget* parent)
     : QMenu(parent),
       m_settings(settings)
 {
-    AddAction(quokkagit::SLogEntry::Sha);
-    AddAction(quokkagit::SLogEntry::Summary);
-    AddAction(quokkagit::SLogEntry::Message);
-    AddAction(quokkagit::SLogEntry::Commiter);
-    AddAction(quokkagit::SLogEntry::CommiterEmail);
-    AddAction(quokkagit::SLogEntry::CommitDate);
-    AddAction(quokkagit::SLogEntry::Author);
-    AddAction(quokkagit::SLogEntry::AuthorEmail);
-    AddAction(quokkagit::SLogEntry::AuthorDate);
+    AddAction(turtlegit::SLogEntry::Sha);
+    AddAction(turtlegit::SLogEntry::Summary);
+    AddAction(turtlegit::SLogEntry::Message);
+    AddAction(turtlegit::SLogEntry::Commiter);
+    AddAction(turtlegit::SLogEntry::CommiterEmail);
+    AddAction(turtlegit::SLogEntry::CommitDate);
+    AddAction(turtlegit::SLogEntry::Author);
+    AddAction(turtlegit::SLogEntry::AuthorEmail);
+    AddAction(turtlegit::SLogEntry::AuthorDate);
 }
 
 
@@ -51,7 +51,7 @@ void CLogColumnVisibilityMenu::AddAction(int id)
 {
     auto CreateAction = [this](int id)
     {
-        QAction* action = new QAction(tr(quokkagit::SLogEntry::c_strings[id]), this);
+        QAction* action = new QAction(tr(turtlegit::SLogEntry::c_strings[id]), this);
         action->setCheckable(true);
         action->setChecked(IsEnabled(id));
         action->setData(id);
@@ -71,7 +71,7 @@ void CLogColumnVisibilityMenu::AddAction(int id)
 
 bool CLogColumnVisibilityMenu::IsEnabled(int column) const
 {
-    if (column < 0 || column >= quokkagit::SLogEntry::NumberOfFields) return false;
+    if (column < 0 || column >= turtlegit::SLogEntry::NumberOfFields) return false;
 
-    return m_settings.enabledLogColumns.contains(quokkagit::SLogEntry::c_strings[column]);
+    return m_settings.enabledLogColumns.contains(turtlegit::SLogEntry::c_strings[column]);
 }

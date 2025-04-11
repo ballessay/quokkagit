@@ -4,7 +4,7 @@
 #include "data/logentry.h"
 #include <QAbstractTableModel>
 
-namespace quokkagit
+namespace turtlegit
 {
     struct SSettings;
 }
@@ -13,12 +13,12 @@ namespace quokkagit
 class CLogModel : public QAbstractTableModel
 {
 public:
-    CLogModel(const quokkagit::LogEntries& log,
-              const quokkagit::SSettings& settings,
+    CLogModel(const turtlegit::LogEntries& log,
+              const turtlegit::SSettings& settings,
               QObject* pParent = nullptr);
 
-    void SetLog(const quokkagit::LogEntries& Log);
-    const quokkagit::LogEntries& Log() const { return m_log; }
+    void SetLog(const turtlegit::LogEntries& Log);
+    const turtlegit::LogEntries& Log() const { return m_log; }
 
     int rowCount(const QModelIndex& parent = QModelIndex()) const override;
 
@@ -29,8 +29,8 @@ public:
     QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
 
 private:
-    quokkagit::LogEntries m_log;
-    const quokkagit::SSettings& m_settings;
+    turtlegit::LogEntries m_log;
+    const turtlegit::SSettings& m_settings;
 };
 
 #endif // LOGMODEL_H

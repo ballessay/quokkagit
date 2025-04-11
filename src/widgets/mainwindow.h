@@ -10,7 +10,7 @@
 #include <QMainWindow>
 #include <memory>
 
-namespace quokkagit { struct SSettings; }
+namespace turtlegit { struct SSettings; }
 class CGit2;
 class CLogModel;
 class CFileLogModel;
@@ -27,7 +27,7 @@ class CMainWindow : public QMainWindow
 
 public:
     explicit CMainWindow(CGit2& git,
-                         quokkagit::SSettings& settings,
+                         turtlegit::SSettings& settings,
                          QWidget *parent = nullptr);
     ~CMainWindow();
 
@@ -74,7 +74,7 @@ private:
     std::unique_ptr<CFileLogProxyModel> m_logFileProxy;
     CDebugLogDialog m_dbgLogDialog;
     CGit2::vDeltas m_deltas;
-    quokkagit::SSettings& m_settings;
+    turtlegit::SSettings& m_settings;
 };
 
 #endif // MAINWINDOW_H

@@ -14,7 +14,7 @@
 #include <memory>
 #include <set>
 
-namespace quokkagit { struct SSettings; }
+namespace turtlegit { struct SSettings; }
 class CDiffTool;
 class QString;
 
@@ -25,9 +25,9 @@ class CGit2 : public QObject
 
 public:
     using Branches = std::map<QString, QString>;
-    using vDeltas = std::vector<quokkagit::SDelta>;
+    using vDeltas = std::vector<turtlegit::SDelta>;
 
-    CGit2(const quokkagit::SSettings& settings);
+    CGit2(const turtlegit::SSettings& settings);
 
     void ChangeRepository(const QString& sPath);
 
@@ -38,17 +38,17 @@ public:
 
     Branches AllBranches() const;
 
-    quokkagit::LogEntries Log(const QString& branch,
+    turtlegit::LogEntries Log(const QString& branch,
                               const Branches& b,
                               const QString& path = QString()) const;
 
-    vDeltas DiffWithParent(int index, const quokkagit::LogEntries& entries);
+    vDeltas DiffWithParent(int index, const turtlegit::LogEntries& entries);
 
     void DiffBlobs(int deltaIndex, const vDeltas& deltas);
 
-    quokkagit::BlameData BlameFile(const QString& sPath, const QString& oid);
+    turtlegit::BlameData BlameFile(const QString& sPath, const QString& oid);
 
-    quokkagit::SLogEntry CommitLookup(const QString& hash) const;
+    turtlegit::SLogEntry CommitLookup(const QString& hash) const;
 
 signals:
     void NewFile(const QStringList& list);
@@ -66,7 +66,7 @@ private:
 private:
     std::unique_ptr<git::Repository> m_repo;
     std::set<CDiffTool*> m_diffs;
-    const quokkagit::SSettings& m_settings;
+    const turtlegit::SSettings& m_settings;
 };
 
 #endif // GIT2WRAPPER_H

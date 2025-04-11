@@ -10,7 +10,7 @@
 namespace git { class Commit; }
 
 
-namespace quokkagit
+namespace turtlegit
 {
     struct SLogEntry
     {

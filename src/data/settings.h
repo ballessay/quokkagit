@@ -9,7 +9,7 @@
 class QSettings;
 
 
-namespace quokkagit
+namespace turtlegit
 {
     struct SStyleSettings
     {

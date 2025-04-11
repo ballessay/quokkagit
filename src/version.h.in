@@ -2,7 +2,7 @@
 #define VERSION_H
 
 
-namespace quokkagit
+namespace turtlegit
 {
     const char project_name[] = "@PROJECT_NAME@";
     const char project_version[] = "@PROJECT_VERSION@";

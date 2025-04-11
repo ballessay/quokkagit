@@ -22,7 +22,7 @@
 #include <cassert>
 
 
-using namespace quokkagit;
+using namespace turtlegit;
 
 
 namespace
@@ -43,7 +43,7 @@ namespace
 }
 
 
-CGit2::CGit2(const quokkagit::SSettings& settings)
+CGit2::CGit2(const turtlegit::SSettings& settings)
     : m_repo(),
       m_settings(settings)
 {
@@ -107,7 +107,7 @@ CGit2::Branches CGit2::AllBranches() const
 }
 
 
-quokkagit::LogEntries CGit2::Log(const QString& branch,
+turtlegit::LogEntries CGit2::Log(const QString& branch,
                                  const CGit2::Branches& b,
                                  const QString& path) const
 {
@@ -208,7 +208,7 @@ void CGit2::DiffFinished()
 
 
 CGit2::vDeltas CGit2::DiffWithParent(int index,
-                                     const quokkagit::LogEntries& entries)
+                                     const turtlegit::LogEntries& entries)
 {
     vDeltas deltas;
     if (nullptr == m_repo) return deltas;
@@ -247,7 +247,7 @@ CGit2::vDeltas CGit2::DiffWithParent(int index,
                                                         git_diff_hunk const &,
                                                         git_diff_line const &) {
 
-            quokkagit::SDelta d;
+            turtlegit::SDelta d;
 
             d.oldFile.oid = delta.old_file.id;
             d.oldFile.path = QString::fromLocal8Bit(delta.old_file.path);
@@ -361,7 +361,7 @@ void CGit2::DiffBlobs(int deltaIndex, const vDeltas& deltas)
 }
 
 
-quokkagit::BlameData CGit2::BlameFile(const QString& path,
+turtlegit::BlameData CGit2::BlameFile(const QString& path,
                                       const QString& oid)
 {
     BlameData vData;
@@ -452,7 +452,7 @@ quokkagit::BlameData CGit2::BlameFile(const QString& path,
 }
 
 
-quokkagit::SLogEntry CGit2::CommitLookup(const QString& hash) const
+turtlegit::SLogEntry CGit2::CommitLookup(const QString& hash) const
 {
   if (nullptr == m_repo) return SLogEntry();
 

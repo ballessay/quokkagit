@@ -5,7 +5,7 @@
 #include <vector>
 
 
-namespace quokkagit
+namespace turtlegit
 {
     struct SBlameData
     {

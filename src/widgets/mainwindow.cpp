@@ -29,7 +29,7 @@ namespace
 
 
 CMainWindow::CMainWindow(CGit2& git,
-                         quokkagit::SSettings& settings,
+                         turtlegit::SSettings& settings,
                          QWidget *parent) :
     QMainWindow(parent),
     m_ui(new Ui::CMainWindow),
@@ -61,7 +61,7 @@ CMainWindow::CMainWindow(CGit2& git,
 
     m_ui->logTableView->setModel(m_logProxy.get());
 
-    m_ui->logTableView->horizontalHeader()->hideSection(quokkagit::SLogEntry::Message);
+    m_ui->logTableView->horizontalHeader()->hideSection(turtlegit::SLogEntry::Message);
     m_ui->logTableView->horizontalHeader()->setSectionsMovable(true);
     m_ui->logTableView->horizontalHeader()->setSizePolicy(QSizePolicy::Maximum,
                                                           QSizePolicy::Preferred);
@@ -69,7 +69,7 @@ CMainWindow::CMainWindow(CGit2& git,
     int columns = m_logModel->columnCount();
     for(int i = 0; i < columns; ++i)
     {
-        if(i != quokkagit::SLogEntry::Summary)
+        if(i != turtlegit::SLogEntry::Summary)
         {
             m_ui->logTableView->resizeColumnToContents(i);
         }
@@ -193,7 +193,7 @@ void CMainWindow::LogItemSelected(const QModelIndex& index)
     QModelIndex i = m_logProxy->mapToSource(index);
 
     int r = i.row();
-    QModelIndex msgIndex = m_logModel->index(r, quokkagit::SLogEntry::Message);
+    QModelIndex msgIndex = m_logModel->index(r, turtlegit::SLogEntry::Message);
 
     const QString msg = m_logModel->data(msgIndex).toString();
 
@@ -234,7 +234,7 @@ void CMainWindow::BlameFile(const QModelIndex& index)
     const auto& delta = m_deltas.at(r);
 
     const QModelIndex i = m_logModel->index(m_ui->logTableView->currentIndex().row(),
-                                             quokkagit::SLogEntry::Sha);
+                                             turtlegit::SLogEntry::Sha);
     const QString hash = m_logModel->data(i, Qt::UserRole).toString();
 
     CBlameDialog::SData data = {m_git, hash, delta.newFile.path, m_settings};
@@ -245,7 +245,7 @@ void CMainWindow::BlameFile(const QModelIndex& index)
 
 void CMainWindow::OnToggleLogColumn(int id, bool enabled)
 {
-    const QString name{quokkagit::SLogEntry::c_strings[id]};
+    const QString name{turtlegit::SLogEntry::c_strings[id]};
 
     if (enabled)
     {
@@ -265,7 +265,7 @@ void CMainWindow::OnToggleLogColumn(int id, bool enabled)
 
 void CMainWindow::OnToggleSearchColumn(int id, bool enabled)
 {
-    const QString name{quokkagit::SLogEntry::c_strings[id]};
+    const QString name{turtlegit::SLogEntry::c_strings[id]};
 
     if (enabled)
     {
@@ -309,7 +309,7 @@ void CMainWindow::OnBranchSelectionToolButtonClicked()
         const auto branch = d.currentSelection();
         if (branch.isEmpty()) return;
 
-        quokkagit::LogEntries entries = m_git.Log(branch, b);
+        turtlegit::LogEntries entries = m_git.Log(branch, b);
 
         m_logModel->SetLog(entries);
 
@@ -324,7 +324,7 @@ void CMainWindow::OnSearchLineEditReturnPressed()
 
     m_settings.enabledSearchColumns.clear();
     for (const auto action : actions)
-        m_settings.enabledSearchColumns.append(quokkagit::SLogEntry::c_strings[action->data().toInt()]);
+        m_settings.enabledSearchColumns.append(turtlegit::SLogEntry::c_strings[action->data().toInt()]);
 
     m_logProxy->SetFilter(m_ui->logSearchLineEdit->text(), actions);
 }
@@ -352,7 +352,7 @@ void CMainWindow::OnSettingsActionTriggered()
         // must be called after the settings change has propagated
         m_ui->logTableView->resizeColumnsToContents();
         m_ui->logTableView->horizontalHeader()->setStretchLastSection(true);
-        m_ui->logTableView->horizontalHeader()->resizeSection(quokkagit::SLogEntry::Summary, 350);
+        m_ui->logTableView->horizontalHeader()->resizeSection(turtlegit::SLogEntry::Summary, 350);
         m_ui->filesTableView->resizeColumnsToContents();
         m_ui->filesTableView->horizontalHeader()->setStretchLastSection(true);
     }

@@ -4,7 +4,7 @@
 #include <algorithm>
 #include <cassert>
 
-using namespace quokkagit;
+using namespace turtlegit;
 
 
 CLogModel::CLogModel(const LogEntries& log,

@@ -65,7 +65,7 @@ int CBlameDialog::exec(const QString& path, const QString& hash)
 
     setWindowTitle(tr("Blame: %1").arg(m_data.path));
 
-    const quokkagit::BlameData data{m_data.git.BlameFile(path, hash)};
+    const turtlegit::BlameData data{m_data.git.BlameFile(path, hash)};
 
     m_model->SetData(data);
 

@@ -4,7 +4,7 @@
 #include <QFontDialog>
 
 
-CSettingsDialog::CSettingsDialog(const quokkagit::SSettings& settings,
+CSettingsDialog::CSettingsDialog(const turtlegit::SSettings& settings,
                                  QWidget *parent) :
     QDialog(parent),
     m_ui(new Ui::CSettingsDialog),
@@ -12,7 +12,7 @@ CSettingsDialog::CSettingsDialog(const quokkagit::SSettings& settings,
 {
     m_ui->setupUi(this);
 
-    m_ui->styleComboBox->addItems(quokkagit::SStyleSettings::StyleNames());
+    m_ui->styleComboBox->addItems(turtlegit::SStyleSettings::StyleNames());
     m_ui->styleComboBox->setCurrentIndex(settings.style.id);
 
     m_ui->fontComboBox->setCurrentFont(settings.font);
@@ -32,11 +32,11 @@ CSettingsDialog::~CSettingsDialog()
 }
 
 
-quokkagit::SSettings CSettingsDialog::currentSettings() const
+turtlegit::SSettings CSettingsDialog::currentSettings() const
 {
     static const QRegularExpression c_space(" ");
 
-    quokkagit::SSettings settings{m_settings};
+    turtlegit::SSettings settings{m_settings};
 
     settings.style.id = m_ui->styleComboBox->currentIndex();
 

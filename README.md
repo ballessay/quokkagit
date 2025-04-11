@@ -1,6 +1,6 @@
 
-# quokkagit [![Build Status](https://travis-ci.org/ballessay/quokkagit.svg?branch=master)](https://travis-ci.org/ballessay/quokkagit)
+# turtlegit 
 
-quokkagit is a TortoiseGit inspired git log viewer, which provides basic repository operations.
+turtlegit is a TortoiseGit inspired git log viewer.
 
-![Screenshot](https://raw.githubusercontent.com/ballessay/quokkagit/master/resources/screenshot.png)
+![Screenshot](https://raw.githubusercontent.com/ballessay/turtlegit/master/resources/screenshot.png)

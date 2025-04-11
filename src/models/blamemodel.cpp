@@ -9,7 +9,7 @@
 
 
 CBlameModel::CBlameModel(const CGit2& git,
-                         const quokkagit::SSettings& settings,
+                         const turtlegit::SSettings& settings,
                          QObject* parent)
     : QAbstractTableModel(parent),
       m_data(),
@@ -19,7 +19,7 @@ CBlameModel::CBlameModel(const CGit2& git,
 }
 
 
-void CBlameModel::SetData(const quokkagit::BlameData& data)
+void CBlameModel::SetData(const turtlegit::BlameData& data)
 {
     beginResetModel();
 
@@ -99,7 +99,7 @@ QVariant CBlameModel::data(const QModelIndex& index, int role) const
                 if (Column::Sha == column ||
                     Column::Signature == column)
                 {
-                    quokkagit::SLogEntry e = m_git.CommitLookup(entry.hash);
+                    turtlegit::SLogEntry e = m_git.CommitLookup(entry.hash);
                     return QString("Author: %1 %2 %3\nCommiter: %4 %5 %6\n\n%7")
                               .arg(e.sAuthor)
                               .arg(e.sAuthorEmail)
@@ -114,7 +114,7 @@ QVariant CBlameModel::data(const QModelIndex& index, int role) const
             {
                 if (m_selectedHash == entry.hash)
                 {
-                    if (m_settings.style.id == quokkagit::SStyleSettings::Dark)
+                    if (m_settings.style.id == turtlegit::SStyleSettings::Dark)
                         return QColor(40, 40, 40);
                     else
                         return QColor(240, 240, 240);

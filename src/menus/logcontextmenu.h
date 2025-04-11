@@ -3,7 +3,7 @@
 
 #include <QMenu>
 
-namespace quokkagit { struct SSettings; }
+namespace turtlegit { struct SSettings; }
 
 
 class CLogContextMenu : public QMenu
@@ -27,7 +27,7 @@ class CLogSearchContextMenu : public QMenu
     Q_OBJECT
 
 public:
-    CLogSearchContextMenu(const quokkagit::SSettings& settings, QWidget* parent);
+    CLogSearchContextMenu(const turtlegit::SSettings& settings, QWidget* parent);
 
 public slots:
     void Toggled(bool enabled);
@@ -38,7 +38,7 @@ signals:
 private:
     bool IsChecked(int id) const;
 
-    const quokkagit::SSettings& m_settings;
+    const turtlegit::SSettings& m_settings;
 };
 
 #endif // LOGCONTEXTMENU_H

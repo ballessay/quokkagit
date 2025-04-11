@@ -19,7 +19,7 @@ namespace
 }
 
 
-namespace quokkagit
+namespace turtlegit
 {
     const char SLogEntry::sha[] = "Sha";
     const char SLogEntry::summary[] = "Summary";

@@ -3,7 +3,7 @@
 #include <QSettings>
 #include <QCoreApplication>
 
-using namespace quokkagit;
+using namespace turtlegit;
 
 
 namespace

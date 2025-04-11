@@ -7,7 +7,7 @@ option(BUNDLE_LIBGIT2 ON)
 option(BUILD_LIBGIT2CPP_EXAMPLES OFF)
 add_subdirectory(3rd-party/libgit2cpp)
 
-project(quokkagit VERSION 0.2.0)
+project(turtlegit VERSION 0.2.0)
 
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
@@ -119,9 +119,9 @@ endif()
 
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
-    install(FILES resources/org.ballessay.quokkagit.desktop DESTINATION share/applications)
-    install(FILES resources/quokkagit.png DESTINATION share/icons/hicolor/256x256/apps)
-    install(FILES resources/quokkagit.appdata.xml DESTINATION share/metainfo)
+    install(FILES resources/org.ballessay.turtlegit.desktop DESTINATION share/applications)
+    install(FILES resources/turtlegit.png DESTINATION share/icons/hicolor/256x256/apps)
+    install(FILES resources/turtlegit.appdata.xml DESTINATION share/metainfo)
 endif(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
 
 

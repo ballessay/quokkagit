@@ -7,7 +7,7 @@
 #include <QString>
 
 
-namespace quokkagit
+namespace turtlegit
 {
     struct SFile
     {

@@ -4,7 +4,7 @@
 #include <QDialog>
 #include <memory>
 
-namespace quokkagit { struct SSettings; }
+namespace turtlegit { struct SSettings; }
 namespace Ui {
     class CSettingsDialog;
 }
@@ -15,18 +15,18 @@ class CSettingsDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit CSettingsDialog(const quokkagit::SSettings& settings,
+    explicit CSettingsDialog(const turtlegit::SSettings& settings,
                              QWidget *parent = nullptr);
     ~CSettingsDialog();
 
-    quokkagit::SSettings currentSettings() const;
+    turtlegit::SSettings currentSettings() const;
 
 protected slots:
     void OnFontToolButtonTriggered();
 
 private:
     std::unique_ptr<Ui::CSettingsDialog> m_ui;
-    const quokkagit::SSettings& m_settings;
+    const turtlegit::SSettings& m_settings;
 };
 
 #endif // SETTINGSDIALOG_H

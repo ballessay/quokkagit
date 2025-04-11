@@ -1,0 +1,20 @@
+<component type="desktop-application">
+	<id>turtlegit</id>
+	<metadata_license>CC0-1.0</metadata_license>
+	<project_license>GPL-3.0</project_license>
+	<name>turtlegit</name>
+	<summary>A small, TortoiseGit inspired git log viewer for linux</summary>
+	<description>
+		<p>turtlegit is a TortoiseGit inspired git log viewer for linux.</p>
+	</description>
+	<launchable type="desktop-id">turtlegit.desktop</launchable>
+	<url type="homepage">https://github.com/ballessay/turtlegit</url>
+	<screenshots>
+		<screenshot type="default">
+			<image>https://raw.githubusercontent.com/ballessay/turtlegit/master/resources/screenshot.png</image>
+		</screenshot>
+	</screenshots>
+	<provides>
+		<id>turtlegit.desktop</id>
+	</provides>
+</component>

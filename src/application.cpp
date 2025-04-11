@@ -9,7 +9,7 @@ CApplication::CApplication(int& argc, char** argv)
 {
     setOrganizationName("ballessay");
     setOrganizationDomain("ballessay.de");
-    setApplicationName("quokkagit");
+    setApplicationName("turtlegit");
 
     m_settings.Load();
 
@@ -38,7 +38,7 @@ void CApplication::SetFont()
 
 void CApplication::SetStyle()
 {
-    if (quokkagit::SStyleSettings::Dark == m_settings.style.id)
+    if (turtlegit::SStyleSettings::Dark == m_settings.style.id)
     {
         QFile stylesheet(":/QTDark.stylesheet");
         if (stylesheet.open(QFile::ReadOnly | QFile::Text))
