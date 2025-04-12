@@ -2,9 +2,19 @@ cmake_minimum_required(VERSION 3.10)
 
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 
+
 option(BUILD_CLAR OFF)
+
 option(BUNDLE_LIBGIT2 ON)
+if (BUNDLE_LIBGIT2)
+    message("BUILD libgit2")
+    option(BUILD_TESTS OFF)
+    option(BUILD_SHARED_LIBS OFF)
+    option(BUILD_CLI OFF)
+endif()
+
 option(BUILD_LIBGIT2CPP_EXAMPLES OFF)
+
 add_subdirectory(3rd-party/libgit2cpp)
 
 project(turtlegit VERSION 0.2.0)
