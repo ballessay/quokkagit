@@ -1,0 +1,47 @@
+name: turtlegit cmake build
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+env:
+  BUILD_TYPE: RelWithDebInfo
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        submodules: recursive
+
+    - name: Install Qt
+      uses: jurplel/install-qt-action@v4
+      with:
+        version: '6.5.*'
+        cache: true
+
+    - name: Install needed packages - vulkan headers / workaround 4 Qt (fixme) + other libs/tools
+      run: sudo apt install -y libvulkan-dev ccache
+
+    - name: Install LinuxDeploy
+      id: install-linuxdeploy
+      uses: miurahr/install-linuxdeploy-action@v1
+      with:
+        plugins: qt appimage
+
+#    - name: ccache
+#      uses: hendrikmuhs/ccache-action@v1.2
+
+    - name: Configure CMake
+      run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DBUNDLE_LIBGIT2:BOOL=ON
+
+    - name: Build
+      run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
+
+#    - name: Test
+#      working-directory: ${{github.workspace}}/build
+#      run: ctest -C ${{env.BUILD_TYPE}}
