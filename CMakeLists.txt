@@ -17,7 +17,7 @@ option(BUILD_LIBGIT2CPP_EXAMPLES OFF)
 
 add_subdirectory(3rd-party/libgit2cpp)
 
-project(turtlegit VERSION 0.2.0)
+project(turtlegit VERSION 0.3.0)
 
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
