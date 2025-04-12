@@ -3,6 +3,8 @@ name: turtlegit cmake build
 on:
   push:
     branches: [ "master" ]
+    tags:
+      - 'v*.*.*'
   pull_request:
     branches: [ "master" ]
 
@@ -18,30 +20,48 @@ jobs:
       with:
         submodules: recursive
 
+    - name: Install and cache packages (inkl. fix 4 install-qt-action (vulkan headers / workaround 4 Qt (fixme)))
+      uses: awalsh128/cache-apt-pkgs-action@v1
+      with:
+        packages: libvulkan-dev ccache build-essential libgl1-mesa-dev libgstreamer-gl1.0-0 libpulse-dev libxcb-glx0 libxcb-icccm4 libxcb-image0 libxcb-keysyms1 libxcb-randr0 libxcb-render-util0 libxcb-render0 libxcb-shape0 libxcb-shm0 libxcb-sync1 libxcb-util1 libxcb-xfixes0 libxcb-xinerama0 libxcb1 libxkbcommon-dev libxkbcommon-x11-0 libxcb-xkb-dev libxcb-cursor0
+
     - name: Install Qt
       uses: jurplel/install-qt-action@v4
       with:
         version: '6.5.*'
         cache: true
-
-    - name: Install needed packages - vulkan headers / workaround 4 Qt (fixme) + other libs/tools
-      run: sudo apt install -y libvulkan-dev ccache
+        cache-key-prefix: 'qt6'
 
     - name: Install LinuxDeploy
-      id: install-linuxdeploy
+      id: installLinuxDeploy
       uses: miurahr/install-linuxdeploy-action@v1
       with:
         plugins: qt appimage
+        dir: ${{github.workspace}}
 
     - name: Use ccache
       uses: hendrikmuhs/ccache-action@v1.2
 
     - name: Configure CMake
-      run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DBUNDLE_LIBGIT2:BOOL=ON
+      run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DBUNDLE_LIBGIT2:BOOL=ON -DCMAKE_INSTALL_PREFIX=/usr
 
     - name: Build
       run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
 
-#    - name: Test
-#      working-directory: ${{github.workspace}}/build
-#      run: ctest -C ${{env.BUILD_TYPE}}
+    - name: Install into AppDir
+      run: DESTDIR=AppDir cmake --install ${{github.workspace}}/build
+
+    - name: Create AppImage
+      run: ${{github.workspace}}/linuxdeploy-x86_64.AppImage --plugin=qt --output=appimage  --appdir AppDir --icon-file=${{github.workspace}}/resources/turtle.svg
+      #run: ${{steps.installLinuxDeploy.outputs.linuxdeploy}} --plugin=qt --output=appimage  --appdir AppDir --icon-file=${{github.workspace}}/resources/turtle.svg
+
+    - name: DEBUG DIR
+      run: ls -la
+
+    - name: Release
+      uses: softprops/action-gh-release@v2
+      if: github.ref_type == 'tag'
+      with:
+        files: |
+          turtlegit*.AppImage
+        
